@@ -7,8 +7,8 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * Este archivo pertenece a la aplicación de prueba Cupon.
- * El código fuente de la aplicación incluye un archivo llamado LICENSE
+ * Este file pertenece a la application de prueba Cupon.
+ * El code fuente de la application incluye un file llamado LICENSE
  * con toda la información sobre el copyright y la licencia.
  */
 
@@ -19,23 +19,25 @@ use Symfony\Component\Form\FormBuilder;
 use Doctrine\ORM\EntityRepository;
 
 /**
- * Formulario para crear y manipular entidades de tipo Usuario.
+ * form para crear y manipular entidades de type user.
  * Como se utiliza en la parte pública del sitio, algunas propiedades de
- * la entidad no se incluyen en el formulario.
+ * la entity no se incluyen en el form.
  */
 class UsuarioType extends AbstractType
 {
     public function buildForm(FormBuilder $builder, array $options)
     {
         $builder
-            ->add('nombre')
+            ->add('name')
             ->add('apellidos')
-            ->add('email', 'email')
+            ->add('email', 'email',  array('label' => 'email electrónico', 'attr' => array(
+                'placeholder' => 'user@servidor'
+            )))
             
             ->add('password', 'repeated', array(
                 'type' => 'password',
                 'invalid_message' => 'Las dos contraseñas deben coincidir',
-                'options' => array('label' => 'Contraseña'),
+                'options' => array('label' => 'password'),
                 'required' => false
             ))
             
@@ -44,13 +46,17 @@ class UsuarioType extends AbstractType
             ->add('fecha_nacimiento', 'birthday')
             ->add('dni')
             ->add('numero_tarjeta')
+            ->add('numero_tarjeta', 'text', array('label' => 'Tarjeta de Crédito', 'attr' => array(
+                'pattern' => '^[0-9]{13,16}$',
+                'placeholder' => 'Entre 13 y 16 numeros'
+            )))
             
-            ->add('ciudad', 'entity', array(
-                'class' => 'Cupon\\CiudadBundle\\Entity\\Ciudad',
-                'empty_value' => 'Selecciona una ciudad',
-                'query_builder' => function(EntityRepository $repositorio) {
-                    return $repositorio->createQueryBuilder('c')
-                        ->orderBy('c.nombre', 'ASC');
+            ->add('city', 'entity', array(
+                'class' => 'Cupon\\CiudadBundle\\Entity\\city',
+                'empty_value' => 'Selecciona una city',
+                'query_builder' => function(EntityRepository $repository) {
+                    return $repository->createQueryBuilder('c')
+                        ->orderBy('c.name', 'ASC');
                 },
             ))
         ;
