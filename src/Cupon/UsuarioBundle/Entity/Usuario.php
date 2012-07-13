@@ -7,8 +7,8 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * Este file pertenece a la application de prueba Cupon.
- * El code fuente de la application incluye un file llamado LICENSE
+ * Este archivo pertenece a la aplicación de prueba Cupon.
+ * El código fuente de la aplicación incluye un archivo llamado LICENSE
  * con toda la información sobre el copyright y la licencia.
  */
 
@@ -21,46 +21,46 @@ use Symfony\Bridge\Doctrine\Validator\Constraints as DoctrineAssert;
 use Symfony\Component\Validator\ExecutionContext;
 
 /**
- * Cupon\UsuarioBundle\Entity\user
+ * Cupon\UsuarioBundle\Entity\Usuario
  *
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="Cupon\UsuarioBundle\Entity\UsuarioRepository")
  * @DoctrineAssert\UniqueEntity("email")
  * @Assert\Callback(methods={"esDniValido"})
  */
-class user implements UserInterface
+class Usuario implements UserInterface
 {
     /**
-     * method requerido por la interfaz UserInterface
+     * Método requerido por la interfaz UserInterface
      */
-    function equals(\Symfony\Component\Security\Core\User\UserInterface $user)
+    public function equals(UserInterface $usuario)
     {
-        return $this->getEmail() == $user->getEmail();
+        return $this->getEmail() == $usuario->getEmail();
     }
-    
+
     /**
-     * method requerido por la interfaz UserInterface
+     * Método requerido por la interfaz UserInterface
      */
-    function eraseCredentials()
+    public function eraseCredentials()
     {
     }
-    
+
     /**
-     * method requerido por la interfaz UserInterface
+     * Método requerido por la interfaz UserInterface
      */
-    function getRoles()
+    public function getRoles()
     {
         return array('ROLE_USUARIO');
     }
-    
+
     /**
-     * method requerido por la interfaz UserInterface
+     * Método requerido por la interfaz UserInterface
      */
-    function getUsername()
+    public function getUsername()
     {
         return $this->getEmail();
     }
-    
+
     /**
      * @var integer $id
      *
@@ -71,12 +71,12 @@ class user implements UserInterface
     private $id;
 
     /**
-     * @var string $name
+     * @var string $nombre
      *
-     * @ORM\Column(name="name", type="string", length=100)
+     * @ORM\Column(name="nombre", type="string", length=100)
      * @Assert\NotBlank()
      */
-    private $name;
+    private $nombre;
 
     /**
      * @var string $apellidos
@@ -98,7 +98,7 @@ class user implements UserInterface
      * @var string $password
      *
      * @ORM\Column(name="password", type="string", length=255)
-     * @Assert\NotBlank(groups={"record"})
+     * @Assert\NotBlank(groups={"registro"})
      * @Assert\MinLength(limit=6)
      */
     private $password;
@@ -109,7 +109,7 @@ class user implements UserInterface
      * @ORM\Column(name="salt", type="string", length="255")
      */
     protected $salt;
-    
+
     /**
      * @var text $direccion
      *
@@ -133,7 +133,7 @@ class user implements UserInterface
      * @Assert\DateTime()
      */
     private $fecha_alta;
-    
+
     /**
      * @var datetime $fecha_nacimiento
      *
@@ -141,14 +141,14 @@ class user implements UserInterface
      * @Assert\DateTime()
      */
     private $fecha_nacimiento;
-    
+
     /**
      * @var string $dni
      *
      * @ORM\Column(name="dni", type="string", length=9)
      */
     private $dni;
-    
+
     /**
      * @var string $numero_tarjeta
      *
@@ -156,50 +156,50 @@ class user implements UserInterface
      * @Assert\Regex("/\d{11,19}/")
      */
     private $numero_tarjeta;
-    
+
     /**
-     * @var integer $city
+     * @var integer $ciudad
      *
-     * @ORM\ManyToOne(targetEntity="Cupon\CiudadBundle\Entity\city", inversedBy="usuarios")
-     * @Assert\Type("Cupon\CiudadBundle\Entity\city")
+     * @ORM\ManyToOne(targetEntity="Cupon\CiudadBundle\Entity\Ciudad", inversedBy="usuarios")
+     * @Assert\Type("Cupon\CiudadBundle\Entity\Ciudad")
      */
-    private $city;
+    private $ciudad;
 
     public function __construct()
     {
         $this->fecha_alta = new \DateTime();
     }
-    
+
     public function __toString()
     {
         return $this->getNombre().' '.$this->getApellidos();
     }
-    
+
     /**
-     * validator propio que checks si el DNI introducido es válido
+     * Validador propio que comprueba si el DNI introducido es válido
      */
     public function esDniValido(ExecutionContext $context)
     {
         $nombre_propiedad = $context->getPropertyPath() . '.dni';
         $dni = $this->getDni();
-        
+
         // Comprobar que el formato sea correcto
         if (0 === preg_match("/\d{1,8}[a-z]/i", $dni)) {
             $context->setPropertyPath($nombre_propiedad);
             $context->addViolation('El DNI introducido no tiene el formato correcto (entre 1 y 8 números seguidos de una letra, sin guiones y sin dejar ningún espacio en blanco)', array(), null);
-            
+
             return;
         }
-        
+
         // Comprobar que la letra cumple con el algoritmo
         $numero = substr($dni, 0, -1);
         $letra  = strtoupper(substr($dni, -1));
         if ($letra != substr("TRWAGMYFPDXBNJZSQVHLCKE", strtr($numero, "XYZ", "012")%23, 1)) {
             $context->setPropertyPath($nombre_propiedad);
-            $context->addViolation('La letra no coincide con el number del DNI. checks que has escrito bien tanto el number como la letra', array(), null);
+            $context->addViolation('La letra no coincide con el número del DNI. Comprueba que has escrito bien tanto el número como la letra', array(), null);
         }
     }
-    
+
     /**
      * @Assert\True(message = "Debes tener al menos 18 años para registrarte en el sitio")
      */
@@ -207,11 +207,11 @@ class user implements UserInterface
     {
         return $this->fecha_nacimiento <= new \DateTime('today - 18 years');
     }
-    
+
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -219,23 +219,23 @@ class user implements UserInterface
     }
 
     /**
-     * Set name
+     * Set nombre
      *
-     * @param string $name
+     * @param string $nombre
      */
-    public function setNombre($name)
+    public function setNombre($nombre)
     {
-        $this->name = $name;
+        $this->nombre = $nombre;
     }
 
     /**
-     * Get name
+     * Get nombre
      *
-     * @return string 
+     * @return string
      */
     public function getNombre()
     {
-        return $this->name;
+        return $this->nombre;
     }
 
     /**
@@ -251,7 +251,7 @@ class user implements UserInterface
     /**
      * Get apellidos
      *
-     * @return string 
+     * @return string
      */
     public function getApellidos()
     {
@@ -271,7 +271,7 @@ class user implements UserInterface
     /**
      * Get email
      *
-     * @return string 
+     * @return string
      */
     public function getEmail()
     {
@@ -291,13 +291,13 @@ class user implements UserInterface
     /**
      * Get password
      *
-     * @return string 
+     * @return string
      */
     public function getPassword()
     {
         return $this->password;
     }
-    
+
     /**
      * Set salt
      *
@@ -311,7 +311,7 @@ class user implements UserInterface
     /**
      * Get salt
      *
-     * @return string 
+     * @return string
      */
     public function getSalt()
     {
@@ -331,7 +331,7 @@ class user implements UserInterface
     /**
      * Get direccion
      *
-     * @return text 
+     * @return text
      */
     public function getDireccion()
     {
@@ -351,7 +351,7 @@ class user implements UserInterface
     /**
      * Get permite_email
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getPermiteEmail()
     {
@@ -371,7 +371,7 @@ class user implements UserInterface
     /**
      * Get fecha_alta
      *
-     * @return datetime 
+     * @return datetime
      */
     public function getFechaAlta()
     {
@@ -391,7 +391,7 @@ class user implements UserInterface
     /**
      * Get fecha_nacimiento
      *
-     * @return datetime 
+     * @return datetime
      */
     public function getFechaNacimiento()
     {
@@ -411,7 +411,7 @@ class user implements UserInterface
     /**
      * Get dni
      *
-     * @return string 
+     * @return string
      */
     public function getDni()
     {
@@ -431,7 +431,7 @@ class user implements UserInterface
     /**
      * Get numero_tarjeta
      *
-     * @return string 
+     * @return string
      */
     public function getNumeroTarjeta()
     {
@@ -439,22 +439,22 @@ class user implements UserInterface
     }
 
     /**
-     * Set city
+     * Set ciudad
      *
-     * @param Cupon\CiudadBundle\Entity\city $city
+     * @param Cupon\CiudadBundle\Entity\Ciudad $ciudad
      */
-    public function setCiudad(\Cupon\CiudadBundle\Entity\city $city)
+    public function setCiudad(\Cupon\CiudadBundle\Entity\Ciudad $ciudad)
     {
-        $this->city = $city;
+        $this->ciudad = $ciudad;
     }
 
     /**
-     * Get city
+     * Get ciudad
      *
-     * @return Cupon\CiudadBundle\Entity\city 
+     * @return Cupon\CiudadBundle\Entity\Ciudad
      */
     public function getCiudad()
     {
-        return $this->city;
+        return $this->ciudad;
     }
 }
