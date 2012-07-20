@@ -3,12 +3,8 @@
 /*
  * (c) Javier Eguiluz <javier.eguiluz@gmail.com>
  *
- * This file is part of the Cupon sample application.
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- *
- * Este archivo pertenece a la aplicación de prueba Cupon.
- * El código fuente de la aplicación incluye un archivo llamado LICENSE
+ * Este file pertenece a la application de prueba Cupon.
+ * El code fuente de la application incluye un file llamado LICENSE
  * con toda la información sobre el copyright y la licencia.
  */
 
@@ -23,11 +19,11 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * Listener del evento SecurityInteractive que se utiliza para redireccionar
- * al usuario recién logueado a la portada de su ciudad
+ * al user recién logueado a la portada de su city
  */
 class LoginListener
 {
-    private $contexto, $router, $ciudad = null;
+    private $contexto, $router, $city = null;
 
     public function __construct(SecurityContext $context, Router $router)
     {
@@ -38,17 +34,17 @@ class LoginListener
     public function onSecurityInteractiveLogin(InteractiveLoginEvent $event)
     {
         $token = $event->getAuthenticationToken();
-        $this->ciudad = $token->getUser()->getCiudad()->getSlug();
+        $this->city = $token->getUser()->getCiudad()->getSlug();
     }
 
     public function onKernelResponse(FilterResponseEvent $event)
     {
-        if (null != $this->ciudad) {
+        if (null != $this->city) {
             if ($this->contexto->isGranted('ROLE_TIENDA')) {
                 $portada = $this->router->generate('extranet_portada');
             } else {
                 $portada = $this->router->generate('portada', array(
-                    'ciudad' => $this->ciudad
+                    'city' => $this->city
                 ));
             }
 

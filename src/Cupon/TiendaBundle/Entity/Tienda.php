@@ -3,12 +3,8 @@
 /*
  * (c) Javier Eguiluz <javier.eguiluz@gmail.com>
  *
- * This file is part of the Cupon sample application.
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- *
- * Este archivo pertenece a la aplicación de prueba Cupon.
- * El código fuente de la aplicación incluye un archivo llamado LICENSE
+ * Este file pertenece a la application de prueba Cupon.
+ * El code fuente de la application incluye un file llamado LICENSE
  * con toda la información sobre el copyright y la licencia.
  */
 
@@ -21,25 +17,25 @@ use Cupon\OfertaBundle\Util\Util;
 /**
  * @ORM\Entity(repositoryClass="Cupon\TiendaBundle\Entity\TiendaRepository")
  */
-class Tienda implements UserInterface
+class store implements UserInterface
 {
     /**
-     * Método requerido por la interfaz UserInterface
+     * method requerido por la interfaz UserInterface
      */
-    public function equals(\Symfony\Component\Security\Core\User\UserInterface $usuario)
+    public function equals(\Symfony\Component\Security\Core\User\UserInterface $user)
     {
-        return $this->getLogin() == $usuario->getLogin();
+        return $this->getLogin() == $user->getLogin();
     }
 
     /**
-     * Método requerido por la interfaz UserInterface
+     * method requerido por la interfaz UserInterface
      */
     public function eraseCredentials()
     {
     }
 
     /**
-     * Método requerido por la interfaz UserInterface
+     * method requerido por la interfaz UserInterface
      */
     public function getRoles()
     {
@@ -47,7 +43,7 @@ class Tienda implements UserInterface
     }
 
     /**
-     * Método requerido por la interfaz UserInterface
+     * method requerido por la interfaz UserInterface
      */
     public function getUsername()
     {
@@ -64,7 +60,7 @@ class Tienda implements UserInterface
     /**
      * @ORM\Column(type="string", length=100)
      */
-    protected $nombre;
+    protected $name;
 
     /**
      * @ORM\Column(type="string", length=100)
@@ -97,9 +93,9 @@ class Tienda implements UserInterface
     protected $direccion;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Cupon\CiudadBundle\Entity\Ciudad")
+     * @ORM\ManyToOne(targetEntity="Cupon\CiudadBundle\Entity\city")
      */
-    protected $ciudad;
+    protected $city;
 
     public function __toString()
     {
@@ -117,24 +113,24 @@ class Tienda implements UserInterface
     }
 
     /**
-     * Set nombre
+     * Set name
      *
-     * @param string $nombre
+     * @param string $name
      */
-    public function setNombre($nombre)
+    public function setNombre($name)
     {
-        $this->nombre = $nombre;
-        $this->slug = Util::getSlug($nombre);
+        $this->name = $name;
+        $this->slug = Util::getSlug($name);
     }
 
     /**
-     * Get nombre
+     * Get name
      *
      * @return string
      */
     public function getNombre()
     {
-        return $this->nombre;
+        return $this->name;
     }
 
     /**
@@ -258,22 +254,22 @@ class Tienda implements UserInterface
     }
 
     /**
-     * Set ciudad
+     * Set city
      *
-     * @param Cupon\CiudadBundle\Entity\Ciudad $ciudad
+     * @param Cupon\CiudadBundle\Entity\city $city
      */
-    public function setCiudad(\Cupon\CiudadBundle\Entity\Ciudad $ciudad)
+    public function setCiudad(\Cupon\CiudadBundle\Entity\city $city)
     {
-        $this->ciudad = $ciudad;
+        $this->city = $city;
     }
 
     /**
-     * Get ciudad
+     * Get city
      *
-     * @return Cupon\CiudadBundle\Entity\Ciudad
+     * @return Cupon\CiudadBundle\Entity\city
      */
     public function getCiudad()
     {
-        return $this->ciudad;
+        return $this->city;
     }
 }

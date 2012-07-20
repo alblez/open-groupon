@@ -3,12 +3,8 @@
 /*
  * (c) Javier Eguiluz <javier.eguiluz@gmail.com>
  *
- * This file is part of the Cupon sample application.
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- *
- * Este archivo pertenece a la aplicación de prueba Cupon.
- * El código fuente de la aplicación incluye un archivo llamado LICENSE
+ * Este file pertenece a la application de prueba Cupon.
+ * El code fuente de la application incluye un file llamado LICENSE
  * con toda la información sobre el copyright y la licencia.
  */
 
@@ -19,82 +15,82 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity
  */
-class Venta
+class sale
 {
     /**
      * @ORM\Column(type="datetime")
      */
-    protected $fecha;
+    protected $date;
 
     /**
      * @ORM\Id
-     * @ORM\ManyToOne(targetEntity="Cupon\OfertaBundle\Entity\Oferta")
+     * @ORM\ManyToOne(targetEntity="Cupon\OfertaBundle\Entity\offer")
      */
-    protected $oferta;
+    protected $offer;
 
     /**
      * @ORM\Id
-     * @ORM\ManyToOne(targetEntity="Cupon\UsuarioBundle\Entity\Usuario")
+     * @ORM\ManyToOne(targetEntity="Cupon\UsuarioBundle\Entity\user")
      */
-    protected $usuario;
+    protected $user;
 
     /**
-     * Set fecha
+     * Set date
      *
-     * @param datetime $fecha
+     * @param datetime $date
      */
-    public function setFecha($fecha)
+    public function setFecha($date)
     {
-        $this->fecha = $fecha;
+        $this->date = $date;
     }
 
     /**
-     * Get fecha
+     * Get date
      *
      * @return datetime
      */
     public function getFecha()
     {
-        return $this->fecha;
+        return $this->date;
     }
 
     /**
-     * Set oferta
+     * Set offer
      *
-     * @param Cupon\OfertaBundle\Entity\Oferta $oferta
+     * @param Cupon\OfertaBundle\Entity\offer $offer
      */
-    public function setOferta(\Cupon\OfertaBundle\Entity\Oferta $oferta)
+    public function setOferta(\Cupon\OfertaBundle\Entity\offer $offer)
     {
-        $this->oferta = $oferta;
+        $this->offer = $offer;
     }
 
     /**
-     * Get oferta
+     * Get offer
      *
-     * @return Cupon\OfertaBundle\Entity\Oferta
+     * @return Cupon\OfertaBundle\Entity\offer
      */
     public function getOferta()
     {
-        return $this->oferta;
+        return $this->offer;
     }
 
     /**
-     * Set usuario
+     * Set user
      *
-     * @param Cupon\UsuarioBundle\Entity\Usuario $usuario
+     * @param Cupon\UsuarioBundle\Entity\user $user
      */
-    public function setUsuario(\Cupon\UsuarioBundle\Entity\Usuario $usuario)
+    public function setUsuario(\Cupon\UsuarioBundle\Entity\user $user)
     {
-        $this->usuario = $usuario;
+        $this->user = $user;
     }
 
     /**
-     * Get usuario
+     * Get user
      *
-     * @return Cupon\UsuarioBundle\Entity\Usuario
+     * @return Cupon\UsuarioBundle\Entity\user
      */
     public function getUsuario()
     {
-        return $this->usuario;
+        return $this->user;
     }
 }
