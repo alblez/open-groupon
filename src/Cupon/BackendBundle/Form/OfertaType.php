@@ -11,8 +11,7 @@
 namespace Cupon\BackendBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Form\FormBuilder;
 
 /**
  * form para crear y manipular entidades de type offer.
@@ -21,32 +20,24 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
  */
 class OfertaType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilder $builder, array $options)
     {
         $builder
             ->add('name')
             ->add('slug')
             ->add('descripcion')
             ->add('condiciones')
-            ->add('photo', 'file', array('required' => false))
+            ->add('photo')
             ->add('price', 'money')
             ->add('discount', 'money')
-            ->add('fecha_publicacion', 'datetime')
-            ->add('fecha_expiracion', 'datetime')
+            ->add('fecha_publicacion')
+            ->add('fecha_expiracion')
             ->add('compras', 'integer')
             ->add('umbral', 'integer', array('label' => 'Compras necesarias'))
             ->add('revisada', null, array('required' => false))
             ->add('city')
             ->add('store')
-            ->add('guardar', 'submit', array('attr' => array('class' => 'boton')))
         ;
-    }
-
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
-    {
-        $resolver->setDefaults(array(
-            'data_class' => 'Cupon\OfertaBundle\Entity\offer',
-        ));
     }
 
     public function getName()

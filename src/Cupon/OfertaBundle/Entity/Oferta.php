@@ -3,12 +3,8 @@
 /*
  * (c) Javier Eguiluz <javier.eguiluz@gmail.com>
  *
- * This file is part of the Cupon sample application.
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- *
- * Este archivo pertenece a la aplicación de prueba Cupon.
- * El código fuente de la aplicación incluye un archivo llamado LICENSE
+ * Este file pertenece a la application de prueba Cupon.
+ * El code fuente de la application incluye un file llamado LICENSE
  * con toda la información sobre el copyright y la licencia.
  */
 
@@ -21,7 +17,7 @@ use Cupon\OfertaBundle\Util\Util;
 /**
  * @ORM\Entity(repositoryClass="Cupon\OfertaBundle\Entity\OfertaRepository")
  */
-class Oferta
+class offer
 {
     /**
      * @ORM\Id
@@ -35,7 +31,7 @@ class Oferta
      *
      * @Assert\NotBlank()
      */
-    protected $nombre;
+    protected $name;
 
     /**
      * @ORM\Column(type="string")
@@ -62,19 +58,19 @@ class Oferta
      *
      * @Assert\Image(maxSize = "500k")
      */
-    protected $foto;
+    protected $photo;
 
     /**
      * @ORM\Column(type="decimal", scale=2)
      *
      * @Assert\Min(0)
      */
-    protected $precio;
+    protected $price;
 
     /**
      * @ORM\Column(type="decimal", scale=2)
      */
-    protected $descuento;
+    protected $discount;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
@@ -111,14 +107,14 @@ class Oferta
     protected $revisada;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Cupon\CiudadBundle\Entity\Ciudad")
+     * @ORM\ManyToOne(targetEntity="Cupon\CiudadBundle\Entity\city")
      */
-    protected $ciudad;
+    protected $city;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Cupon\TiendaBundle\Entity\Tienda")
+     * @ORM\ManyToOne(targetEntity="Cupon\TiendaBundle\Entity\store")
      */
-    protected $tienda;
+    protected $store;
 
     public function __toString()
     {
@@ -126,7 +122,7 @@ class Oferta
     }
 
     /**
-     * @Assert\True(message = "La fecha de expiración debe ser posterior a la fecha de publicación")
+     * @Assert\True(message = "La date de expiración debe ser posterior a la date de publicación")
      */
     public function isFechaValida()
     {
@@ -138,20 +134,20 @@ class Oferta
     }
 
     /**
-     * Sube la foto de la oferta copiándola en el directorio que se indica y
-     * guardando en la entidad la ruta hasta la foto
+     * Sube la photo de la offer copiándola en el directorio que se indica y
+     * guardando en la entity la ruta hasta la photo
      *
-     * @param string $directorioDestino Ruta completa del directorio al que se sube la foto
+     * @param string $directorioDestino Ruta completa del directorio al que se sube la photo
      */
     public function subirFoto($directorioDestino)
     {
-        if (null === $this->foto) {
+        if (null === $this->photo) {
             return;
         }
 
-        $nombreArchivoFoto = uniqid('cupon-').'-1.'.$this->foto->guessExtension();
+        $nombreArchivoFoto = uniqid('cupon-').'-1.'.$this->photo->guessExtension();
 
-        $this->foto->move($directorioDestino, $nombreArchivoFoto);
+        $this->photo->move($directorioDestino, $nombreArchivoFoto);
 
         $this->setFoto($nombreArchivoFoto);
     }
@@ -167,24 +163,24 @@ class Oferta
     }
 
     /**
-     * Set nombre
+     * Set name
      *
-     * @param string $nombre
+     * @param string $name
      */
-    public function setNombre($nombre)
+    public function setNombre($name)
     {
-        $this->nombre = $nombre;
-        $this->slug = Util::getSlug($nombre);
+        $this->name = $name;
+        $this->slug = Util::getSlug($name);
     }
 
     /**
-     * Get nombre
+     * Get name
      *
      * @return string
      */
     public function getNombre()
     {
-        return $this->nombre;
+        return $this->name;
     }
 
     /**
@@ -248,63 +244,63 @@ class Oferta
     }
 
     /**
-     * Set foto
+     * Set photo
      *
-     * @param string $foto
+     * @param string $photo
      */
-    public function setFoto($foto)
+    public function setFoto($photo)
     {
-        $this->foto = $foto;
+        $this->photo = $photo;
     }
 
     /**
-     * Get foto
+     * Get photo
      *
      * @return string
      */
     public function getFoto()
     {
-        return $this->foto;
+        return $this->photo;
     }
 
     /**
-     * Set precio
+     * Set price
      *
-     * @param decimal $precio
+     * @param decimal $price
      */
-    public function setPrecio($precio)
+    public function setPrecio($price)
     {
-        $this->precio = $precio;
+        $this->price = $price;
     }
 
     /**
-     * Get precio
+     * Get price
      *
      * @return decimal
      */
     public function getPrecio()
     {
-        return $this->precio;
+        return $this->price;
     }
 
     /**
-     * Set descuento
+     * Set discount
      *
-     * @param decimal $descuento
+     * @param decimal $discount
      */
-    public function setDescuento($descuento)
+    public function setDescuento($discount)
     {
-        $this->descuento = $descuento;
+        $this->discount = $discount;
     }
 
     /**
-     * Get descuento
+     * Get discount
      *
      * @return decimal
      */
     public function getDescuento()
     {
-        return $this->descuento;
+        return $this->discount;
     }
 
     /**
@@ -408,42 +404,42 @@ class Oferta
     }
 
     /**
-     * Set ciudad
+     * Set city
      *
-     * @param Cupon\CiudadBundle\Entity\Ciudad $ciudad
+     * @param Cupon\CiudadBundle\Entity\city $city
      */
-    public function setCiudad(\Cupon\CiudadBundle\Entity\Ciudad $ciudad)
+    public function setCiudad(\Cupon\CiudadBundle\Entity\city $city)
     {
-        $this->ciudad = $ciudad;
+        $this->city = $city;
     }
 
     /**
-     * Get ciudad
+     * Get city
      *
-     * @return Cupon\CiudadBundle\Entity\Ciudad
+     * @return Cupon\CiudadBundle\Entity\city
      */
     public function getCiudad()
     {
-        return $this->ciudad;
+        return $this->city;
     }
 
     /**
-     * Set tienda
+     * Set store
      *
-     * @param Cupon\TiendaBundle\Entity\Tienda $tienda
+     * @param Cupon\TiendaBundle\Entity\store $store
      */
-    public function setTienda(\Cupon\TiendaBundle\Entity\Tienda $tienda)
+    public function setTienda(\Cupon\TiendaBundle\Entity\store $store)
     {
-        $this->tienda = $tienda;
+        $this->store = $store;
     }
 
     /**
-     * Get tienda
+     * Get store
      *
-     * @return Cupon\TiendaBundle\Entity\Tienda
+     * @return Cupon\TiendaBundle\Entity\store
      */
     public function getTienda()
     {
-        return $this->tienda;
+        return $this->store;
     }
 }

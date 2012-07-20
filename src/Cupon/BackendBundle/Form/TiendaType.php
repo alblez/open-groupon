@@ -11,8 +11,7 @@
 namespace Cupon\BackendBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Form\FormBuilder;
 
 /**
  * form para crear y manipular entidades de type store.
@@ -21,7 +20,7 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
  */
 class TiendaType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilder $builder, array $options)
     {
         $builder
             ->add('name')
@@ -32,15 +31,7 @@ class TiendaType extends AbstractType
             ->add('descripcion')
             ->add('direccion')
             ->add('city')
-            ->add('guardar', 'submit', array('attr' => array('class' => 'boton')))
         ;
-    }
-
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
-    {
-        $resolver->setDefaults(array(
-            'data_class' => 'Cupon\TiendaBundle\Entity\store',
-        ));
     }
 
     public function getName()

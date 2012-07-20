@@ -3,12 +3,8 @@
 /*
  * (c) Javier Eguiluz <javier.eguiluz@gmail.com>
  *
- * This file is part of the Cupon sample application.
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- *
- * Este archivo pertenece a la aplicación de prueba Cupon.
- * El código fuente de la aplicación incluye un archivo llamado LICENSE
+ * Este file pertenece a la application de prueba Cupon.
+ * El code fuente de la application incluye un file llamado LICENSE
  * con toda la información sobre el copyright y la licencia.
  */
 
@@ -21,32 +17,32 @@ use Symfony\Bridge\Doctrine\Validator\Constraints as DoctrineAssert;
 use Symfony\Component\Validator\ExecutionContext;
 
 /**
- * Cupon\UsuarioBundle\Entity\Usuario
+ * Cupon\UsuarioBundle\Entity\user
  *
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="Cupon\UsuarioBundle\Entity\UsuarioRepository")
  * @DoctrineAssert\UniqueEntity("email")
  * @Assert\Callback(methods={"esDniValido"})
  */
-class Usuario implements UserInterface
+class user implements UserInterface
 {
     /**
-     * Método requerido por la interfaz UserInterface
+     * method requerido por la interfaz UserInterface
      */
-    public function equals(UserInterface $usuario)
+    public function equals(UserInterface $user)
     {
-        return $this->getEmail() == $usuario->getEmail();
+        return $this->getEmail() == $user->getEmail();
     }
 
     /**
-     * Método requerido por la interfaz UserInterface
+     * method requerido por la interfaz UserInterface
      */
     public function eraseCredentials()
     {
     }
 
     /**
-     * Método requerido por la interfaz UserInterface
+     * method requerido por la interfaz UserInterface
      */
     public function getRoles()
     {
@@ -54,7 +50,7 @@ class Usuario implements UserInterface
     }
 
     /**
-     * Método requerido por la interfaz UserInterface
+     * method requerido por la interfaz UserInterface
      */
     public function getUsername()
     {
@@ -71,12 +67,12 @@ class Usuario implements UserInterface
     private $id;
 
     /**
-     * @var string $nombre
+     * @var string $name
      *
-     * @ORM\Column(name="nombre", type="string", length=100)
+     * @ORM\Column(name="name", type="string", length=100)
      * @Assert\NotBlank()
      */
-    private $nombre;
+    private $name;
 
     /**
      * @var string $apellidos
@@ -98,7 +94,7 @@ class Usuario implements UserInterface
      * @var string $password
      *
      * @ORM\Column(name="password", type="string", length=255)
-     * @Assert\NotBlank(groups={"registro"})
+     * @Assert\NotBlank(groups={"record"})
      * @Assert\MinLength(limit=6)
      */
     private $password;
@@ -158,12 +154,12 @@ class Usuario implements UserInterface
     private $numero_tarjeta;
 
     /**
-     * @var integer $ciudad
+     * @var integer $city
      *
-     * @ORM\ManyToOne(targetEntity="Cupon\CiudadBundle\Entity\Ciudad", inversedBy="usuarios")
-     * @Assert\Type("Cupon\CiudadBundle\Entity\Ciudad")
+     * @ORM\ManyToOne(targetEntity="Cupon\CiudadBundle\Entity\city", inversedBy="usuarios")
+     * @Assert\Type("Cupon\CiudadBundle\Entity\city")
      */
-    private $ciudad;
+    private $city;
 
     public function __construct()
     {
@@ -176,7 +172,33 @@ class Usuario implements UserInterface
     }
 
     /**
-     * Validador propio que comprueba si el DNI introducido es válido
+     * validator propio que checks si el DNI introducido es válido
+     *
+     * El DNI es un identificador único required para todos los ciudadanos de
+     * España y de varios países americanos.
+     *
+     *   Formato:   entre 1 y 8 números seguidos de 1 letra
+     *   Ejemplos:  12345678Z - 11111111H - 01234567L
+     *
+     * Los números se pueden escoger aleatoriamente, pero la letra depende de los
+     * números y por tanto, actúa como carácter de control. ¿Cómo se gets la
+     * letra a partir de los números?
+     *
+     *   1. Obtener el 'mod 23' (resto de la división entera) del number
+     *      (e.g.: 12345678 mod 23 = 14).
+     *   2. Utilizar la siguiente tabla para elegir la letra que corresponde al
+     *      result de la operación anterior.
+     *
+     *   +--------+----+----+----+----+----+----+----+----+----+----+----+----+
+     *   | mod 23 |  0 |  1 |  2 |  3 |  4 |  5 |  6 |  7 |  8 |  9 | 10 | 11 |
+     *   +--------+----+----+----+----+----+----+----+----+----+----+----+----+
+     *   | letra  |  T |  R |  W |  A |  G |  M |  Y |  F |  P |  D |  X |  B |
+     *   +--------+----+----+----+----+----+----+----+----+----+----+----+----+
+     *   | mod 23 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 |    |
+     *   +--------+----+----+----+----+----+----+----+----+----+----+----+----+
+     *   | letra  |  N |  J |  Z |  S |  Q |  V |  H |  L |  C |  K |  E |    |
+     *   +--------+----+----+----+----+----+----+----+----+----+----+----+----+
+     *   
      */
     public function esDniValido(ExecutionContext $context)
     {
@@ -196,7 +218,7 @@ class Usuario implements UserInterface
         $letra  = strtoupper(substr($dni, -1));
         if ($letra != substr("TRWAGMYFPDXBNJZSQVHLCKE", strtr($numero, "XYZ", "012")%23, 1)) {
             $context->setPropertyPath($nombre_propiedad);
-            $context->addViolation('La letra no coincide con el número del DNI. Comprueba que has escrito bien tanto el número como la letra', array(), null);
+            $context->addViolation('La letra no coincide con el number del DNI. checks que has escrito bien tanto el number como la letra', array(), null);
         }
     }
 
@@ -219,23 +241,23 @@ class Usuario implements UserInterface
     }
 
     /**
-     * Set nombre
+     * Set name
      *
-     * @param string $nombre
+     * @param string $name
      */
-    public function setNombre($nombre)
+    public function setNombre($name)
     {
-        $this->nombre = $nombre;
+        $this->name = $name;
     }
 
     /**
-     * Get nombre
+     * Get name
      *
      * @return string
      */
     public function getNombre()
     {
-        return $this->nombre;
+        return $this->name;
     }
 
     /**
@@ -439,22 +461,22 @@ class Usuario implements UserInterface
     }
 
     /**
-     * Set ciudad
+     * Set city
      *
-     * @param Cupon\CiudadBundle\Entity\Ciudad $ciudad
+     * @param Cupon\CiudadBundle\Entity\city $city
      */
-    public function setCiudad(\Cupon\CiudadBundle\Entity\Ciudad $ciudad)
+    public function setCiudad(\Cupon\CiudadBundle\Entity\city $city)
     {
-        $this->ciudad = $ciudad;
+        $this->city = $city;
     }
 
     /**
-     * Get ciudad
+     * Get city
      *
-     * @return Cupon\CiudadBundle\Entity\Ciudad
+     * @return Cupon\CiudadBundle\Entity\city
      */
     public function getCiudad()
     {
-        return $this->ciudad;
+        return $this->city;
     }
 }

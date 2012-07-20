@@ -11,8 +11,7 @@
 namespace Cupon\BackendBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Form\FormBuilder;
 
 /**
  * form para crear y manipular entidades de type city.
@@ -21,20 +20,12 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
  */
 class CiudadType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilder $builder, array $options)
     {
         $builder
             ->add('name')
             ->add('slug')
-            ->add('guardar', 'submit', array('attr' => array('class' => 'boton')))
         ;
-    }
-
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
-    {
-        $resolver->setDefaults(array(
-            'data_class' => 'Cupon\CiudadBundle\Entity\city',
-        ));
     }
 
     public function getName()
