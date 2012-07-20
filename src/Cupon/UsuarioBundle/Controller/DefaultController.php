@@ -7,8 +7,8 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * Este file pertenece a la application de prueba Cupon.
- * El code fuente de la application incluye un file llamado LICENSE
+ * Este archivo pertenece a la aplicación de prueba Cupon.
+ * El código fuente de la aplicación incluye un archivo llamado LICENSE
  * con toda la información sobre el copyright y la licencia.
  */
 
@@ -16,16 +16,17 @@ namespace Cupon\UsuarioBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Security\Core\SecurityContext;
-use Cupon\UsuarioBundle\Entity\user;
-use Cupon\OfertaBundle\Entity\sale;
-use Cupon\UsuarioBundle\Form\Frontend\UsuarioType;
+use Cupon\UsuarioBundle\Entity\Usuario;
+use Cupon\OfertaBundle\Entity\Venta;
+use Cupon\UsuarioBundle\Form\Frontend\UsuarioPerfilType;
+use Cupon\UsuarioBundle\Form\Frontend\UsuarioRegistroType;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class DefaultController extends Controller
 {
     /**
-     * Muestra el form de login
+     * Muestra el formulario de login
      */
     public function loginAction()
     {
@@ -45,29 +46,29 @@ class DefaultController extends Controller
     
     /**
      * Muestra la caja de login que se incluye en el lateral de la mayoría de páginas del sitio web.
-     * Esta caja se transforma en información y enlaces cuando el user se loguea en la application.
-     * La response se marca como privada para que no se añada a la cache pública. El trozo de template
-     * que llama a esta function se sirve a través de ESI
+     * Esta caja se transforma en información y enlaces cuando el usuario se loguea en la aplicación.
+     * La respuesta se marca como privada para que no se añada a la cache pública. El trozo de plantilla
+     * que llama a esta función se sirve a través de ESI
      *
-     * @param string $id El value del bloque `id` de la template,
-     *                   que coincide con el value del atributo `id` del elemento <body>
+     * @param string $id El valor del bloque `id` de la plantilla,
+     *                   que coincide con el valor del atributo `id` del elemento <body>
      */
     public function cajaLoginAction($id = '')
     {
-        $user = $this->get('security.context')->getToken()->getUser();
+        $usuario = $this->get('security.context')->getToken()->getUser();
         
-        $response = $this->render('UsuarioBundle:Default:cajaLogin.html.twig', array(
+        $respuesta = $this->render('UsuarioBundle:Default:cajaLogin.html.twig', array(
             'id'      => $id,
-            'user' => $user
+            'usuario' => $usuario
         ));
         
-        $response->setMaxAge(30);
+        $respuesta->setMaxAge(30);
         
-        return $response;
+        return $respuesta;
     }
     
     /**
-     * Muestra el form para que se registren los nuevos usuarios. Además
+     * Muestra el formulario para que se registren los nuevos usuarios. Además
      * se encarga de procesar la información y de guardar la información en la base de datos
      */
     public function registroAction()
@@ -75,84 +76,84 @@ class DefaultController extends Controller
         $peticion = $this->getRequest();
         $em = $this->getDoctrine()->getEntityManager();
         
-        $user = new user();
-        $user->setPermiteEmail(true);
+        $usuario = new Usuario();
+        $usuario->setPermiteEmail(true);
         
-        $form = $this->createForm(new UsuarioType(), $user);
+        $formulario = $this->createForm(new UsuarioRegistroType(), $usuario);
         
         if ($peticion->getMethod() == 'POST') {
             
-            $form->bindRequest($peticion);
+            $formulario->bindRequest($peticion);
             
-            if ($form->isValid()) {
-                // Completar las propiedades que el user no rellena en el form
-                $user->setSalt(md5(time()));
+            if ($formulario->isValid()) {
+                // Completar las propiedades que el usuario no rellena en el formulario
+                $usuario->setSalt(md5(time()));
                 
-                $encoder = $this->get('security.encoder_factory')->getEncoder($user);
+                $encoder = $this->get('security.encoder_factory')->getEncoder($usuario);
                 $passwordCodificado = $encoder->encodePassword(
-                    $user->getPassword(),
-                    $user->getSalt()
+                    $usuario->getPassword(),
+                    $usuario->getSalt()
                 );
-                $user->setPassword($passwordCodificado);
+                $usuario->setPassword($passwordCodificado);
                 
-                // Guardar el nuevo user en la base de datos
-                $em->persist($user);
+                // Guardar el nuevo usuario en la base de datos
+                $em->persist($usuario);
                 $em->flush();
                 
-                // Crear un message flash para notificar al user que se ha registrado correctamente
+                // Crear un mensaje flash para notificar al usuario que se ha registrado correctamente
                 $this->get('session')->setFlash('info',
                     '¡Enhorabuena! Te has registrado correctamente en Cupon'
                 );
                 
-                // Loguear al user automáticamente
-                $token = new UsernamePasswordToken($user, $user->getPassword(), 'usuarios', $user->getRoles());
+                // Loguear al usuario automáticamente
+                $token = new UsernamePasswordToken($usuario, $usuario->getPassword(), 'usuarios', $usuario->getRoles());
                 $this->container->get('security.context')->setToken($token);
                 
                 return $this->redirect($this->generateUrl('portada', array(
-                    'city' => $user->getCiudad()->getSlug()
+                    'ciudad' => $usuario->getCiudad()->getSlug()
                 )));
             }
         }
         
-        return $this->render('UsuarioBundle:Default:record.html.twig', array(
-            'form' => $form->createView()
+        return $this->render('UsuarioBundle:Default:registro.html.twig', array(
+            'formulario' => $formulario->createView()
         ));
     }
     
     /**
-     * Muestra el form con toda la información del perfil del user logueado.
-     * También permite modificar la información y saves los cambios en la base de datos
+     * Muestra el formulario con toda la información del perfil del usuario logueado.
+     * También permite modificar la información y guarda los cambios en la base de datos
      */
     public function perfilAction()
     {
         $peticion = $this->getRequest();
         $em = $this->getDoctrine()->getEntityManager();
         
-        $user = $this->get('security.context')->getToken()->getUser();
-        $form = $this->createForm(new UsuarioType(), $user);
+        $usuario = $this->get('security.context')->getToken()->getUser();
+        $formulario = $this->createForm(new UsuarioPerfilType(), $usuario);
         
         if ($peticion->getMethod() == 'POST') {
-            $passwordOriginal = $form->getData()->getPassword();
+            $passwordOriginal = $formulario->getData()->getPassword();
             
-            $form->bindRequest($peticion);
+            $formulario->bindRequest($peticion);
             
-            if ($form->isValid()) {
-                // Si el user no ha cambiado el password, su value es null después
-                // de hacer el ->bindRequest(), por lo que hay que recuperar el value original
-                if (null == $user->getPassword()) {
-                    $user->setPassword($passwordOriginal);
+            if ($formulario->isValid()) {
+                // Si el usuario no ha cambiado el password, su valor es null después
+                // de hacer el ->bindRequest(), por lo que hay que recuperar el valor original
+                if (null == $usuario->getPassword()) {
+                    $usuario->setPassword($passwordOriginal);
                 }
-                // Si el user ha cambiado su password, hay que codificarlo antes de guardarlo
+                // Si el usuario ha cambiado su password, hay que codificarlo antes de guardarlo
                 else {
-                    $encoder = $this->get('security.encoder_factory')->getEncoder($user);
+                    $encoder = $this->get('security.encoder_factory')->getEncoder($usuario);
                     $passwordCodificado = $encoder->encodePassword(
-                        $user->getPassword(),
-                        $user->getSalt()
+                        $usuario->getPassword(),
+                        $usuario->getSalt()
                     );
-                    $user->setPassword($passwordCodificado);
+                    $usuario->setPassword($passwordCodificado);
                 }
                 
-                $em->persist($user);
+                $em->persist($usuario);
                 $em->flush();
                 
                 $this->get('session')->setFlash('info',
@@ -163,24 +164,24 @@ class DefaultController extends Controller
         }
         
         return $this->render('UsuarioBundle:Default:perfil.html.twig', array(
-            'user'    => $user,
-            'form' => $form->createView()
+            'usuario'    => $usuario,
+            'formulario' => $formulario->createView()
         ));
     }
     
     /**
-     * Muestra todas las compras del user logueado
+     * Muestra todas las compras del usuario logueado
      */
     public function comprasAction()
     {
         $em = $this->getDoctrine()->getEntityManager();
-        $user = $this->get('security.context')->getToken()->getUser();
+        $usuario = $this->get('security.context')->getToken()->getUser();
         
-        $cercanas = $em->getRepository('CiudadBundle:city')->findCercanas(
-            $user->getCiudad()->getId()
+        $cercanas = $em->getRepository('CiudadBundle:Ciudad')->findCercanas(
+            $usuario->getCiudad()->getId()
         );
         
-        $compras = $em->getRepository('UsuarioBundle:user')->findTodasLasCompras($user->getId());
+        $compras = $em->getRepository('UsuarioBundle:Usuario')->findTodasLasCompras($usuario->getId());
         
         return $this->render('UsuarioBundle:Default:compras.html.twig', array(
             'compras'  => $compras,
@@ -189,44 +190,44 @@ class DefaultController extends Controller
     }
     
     /**
-     * Registra una nueva purchase de la offer indicada por parte del user logueado
+     * Registra una nueva compra de la oferta indicada por parte del usuario logueado
      *
-     * @param string $city El slug de la city a la que pertenece la offer
-     * @param string $slug El slug de la offer
+     * @param string $ciudad El slug de la ciudad a la que pertenece la oferta
+     * @param string $slug El slug de la oferta
      */
-    public function comprarAction($city, $slug)
+    public function comprarAction($ciudad, $slug)
     {
         $em = $this->getDoctrine()->getEntityManager();
-        $user = $this->get('security.context')->getToken()->getUser();
+        $usuario = $this->get('security.context')->getToken()->getUser();
         
         // Solo pueden comprar los usuarios registrados y logueados
-        if (null == $user || !$this->get('security.context')->isGranted('ROLE_USUARIO')) {
+        if (null == $usuario || !$this->get('security.context')->isGranted('ROLE_USUARIO')) {
             $this->get('session')->setFlash('info',
-                'Antes de comprar debes registrarte o conectarte con tu user y password.'
+                'Antes de comprar debes registrarte o conectarte con tu usuario y contraseña.'
             );
             return $this->redirect($this->generateUrl('usuario_login'));
         }
         
-        // Comprobar que existe la city indicada
-        $city = $em->getRepository('CiudadBundle:city')->findOneBySlug($city);
-        if (!$city) {
-            throw $this->createNotFoundException('La city indicada no está disponible');
+        // Comprobar que existe la ciudad indicada
+        $ciudad = $em->getRepository('CiudadBundle:Ciudad')->findOneBySlug($ciudad);
+        if (!$ciudad) {
+            throw $this->createNotFoundException('La ciudad indicada no está disponible');
         }
         
-        // Comprobar que existe la offer indicada
-        $offer = $em->getRepository('OfertaBundle:offer')->findOneBy(array('city' => $city->getId(), 'slug' => $slug));
-        if (!$offer) {
-            throw $this->createNotFoundException('La offer indicada no está disponible');
+        // Comprobar que existe la oferta indicada
+        $oferta = $em->getRepository('OfertaBundle:Oferta')->findOneBy(array('ciudad' => $ciudad->getId(), 'slug' => $slug));
+        if (!$oferta) {
+            throw $this->createNotFoundException('La oferta indicada no está disponible');
         }
         
-        // Un mismo user no puede comprar dos veces la misma offer
-        $sale = $em->getRepository('OfertaBundle:sale')->findOneBy(array(
-            'offer'  => $offer->getId(),
-            'user' => $user->getId()
+        // Un mismo usuario no puede comprar dos veces la misma oferta
+        $venta = $em->getRepository('OfertaBundle:Venta')->findOneBy(array(
+            'oferta'  => $oferta->getId(),
+            'usuario' => $usuario->getId()
         ));
         
-        if (null != $sale) {
-            $fechaVenta = $sale->getFecha();
+        if (null != $venta) {
+            $fechaVenta = $venta->getFecha();
             
             $formateador = \IntlDateFormatter::create(
                 $this->get('translator')->getLocale(),
@@ -235,7 +236,7 @@ class DefaultController extends Controller
             );
             
             $this->get('session')->setFlash('error',
-                'No puedes volver a comprar la misma offer (la compraste el '.$formateador->format($fechaVenta).').'
+                'No puedes volver a comprar la misma oferta (la compraste el '.$formateador->format($fechaVenta).').'
             );
             
             return $this->redirect(
@@ -243,22 +244,22 @@ class DefaultController extends Controller
             );
         }
         
-        // Guardar la nueva sale e incrementar el contador de compras de la offer
-        $sale = new sale();
+        // Guardar la nueva venta e incrementar el contador de compras de la oferta
+        $venta = new Venta();
         
-        $sale->setOferta($offer);
-        $sale->setUsuario($user);
-        $sale->setFecha(new \DateTime());
+        $venta->setOferta($oferta);
+        $venta->setUsuario($usuario);
+        $venta->setFecha(new \DateTime());
         
-        $em->persist($sale);
+        $em->persist($venta);
         
-        $offer->setCompras($offer->getCompras()+1);
+        $oferta->setCompras($oferta->getCompras()+1);
         
         $em->flush();
         
         return $this->render('UsuarioBundle:Default:comprar.html.twig', array(
-            'offer'  => $offer,
-            'user' => $user
+            'oferta'  => $oferta,
+            'usuario' => $usuario
         ));
     }
     
@@ -268,9 +269,9 @@ class DefaultController extends Controller
      */
     public function bajaAction()
     {
-        $user = $this->get('security.context')->getToken()->getUser();
+        $usuario = $this->get('security.context')->getToken()->getUser();
         
-        if (null == $user || 
+        if (null == $usuario || 
             !$this->get('security.context')->isGranted('ROLE_USUARIO')) {
             $this->get('session')->setFlash('info',
                 'Para darte de baja primero tienes que conectarte.'
@@ -282,7 +283,7 @@ class DefaultController extends Controller
         $this->get('security.context')->setToken(null);
         
         $em = $this->getDoctrine()->getEntityManager();
-        $em->remove($user);
+        $em->remove($usuario);
         $em->flush();
         
         return $this->redirect($this->generateUrl('portada'));

@@ -7,8 +7,8 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * Este file pertenece a la application de prueba Cupon.
- * El code fuente de la application incluye un file llamado LICENSE
+ * Este archivo pertenece a la aplicación de prueba Cupon.
+ * El código fuente de la aplicación incluye un archivo llamado LICENSE
  * con toda la información sobre el copyright y la licencia.
  */
 
@@ -19,28 +19,29 @@ use Symfony\Component\Form\FormBuilder;
 use Doctrine\ORM\EntityRepository;
 
 /**
- * form para crear y manipular entidades de type user.
+ * Formulario para crear entidades de tipo Usuario cuando los usuarios se
+ * registran en el sitio.
  * Como se utiliza en la parte pública del sitio, algunas propiedades de
- * la entity no se incluyen en el form.
+ * la entidad no se incluyen en el formulario.
  */
-class UsuarioType extends AbstractType
+class UsuarioRegistroType extends AbstractType
 {
     public function buildForm(FormBuilder $builder, array $options)
     {
         $builder
-            ->add('name')
+            ->add('nombre')
             ->add('apellidos')
-            ->add('email', 'email',  array('label' => 'email electrónico', 'attr' => array(
-                'placeholder' => 'user@servidor'
+            ->add('email', 'email',  array('label' => 'Correo electrónico', 'attr' => array(
+                'placeholder' => 'usuario@servidor'
             )))
-            
+
             ->add('password', 'repeated', array(
                 'type' => 'password',
                 'invalid_message' => 'Las dos contraseñas deben coincidir',
-                'options' => array('label' => 'password'),
+                'options' => array('label' => 'Contraseña'),
                 'required' => false
             ))
-            
+
             ->add('direccion')
             ->add('permite_email', 'checkbox', array('required' => false))
             ->add('fecha_nacimiento', 'birthday', array(
@@ -52,18 +53,25 @@ class UsuarioType extends AbstractType
                 'pattern' => '^[0-9]{13,16}$',
                 'placeholder' => 'Entre 13 y 16 numeros'
             )))
-            
-            ->add('city', 'entity', array(
-                'class' => 'Cupon\\CiudadBundle\\Entity\\city',
-                'empty_value' => 'Selecciona una city',
-                'query_builder' => function(EntityRepository $repository) {
-                    return $repository->createQueryBuilder('c')
-                        ->orderBy('c.name', 'ASC');
+
+            ->add('ciudad', 'entity', array(
+                'class' => 'Cupon\\CiudadBundle\\Entity\\Ciudad',
+                'empty_value' => 'Selecciona una ciudad',
+                'query_builder' => function(EntityRepository $repositorio) {
+                    return $repositorio->createQueryBuilder('c')
+                        ->orderBy('c.nombre', 'ASC');
                 },
             ))
         ;
     }
-    
+
+    public function getDefaultOptions(array $options)
+    {
+        return array(
+            'validation_groups' => array('default', 'registro')
+        );
+    }
+
     public function getName()
     {
         return 'frontend_usuario';
