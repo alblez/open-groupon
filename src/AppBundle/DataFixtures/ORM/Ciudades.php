@@ -3,21 +3,25 @@
 /*
  * (c) Javier Eguiluz <javier.eguiluz@gmail.com>
  *
- * Este file pertenece a la application de prueba Cupon.
- * El code fuente de la application incluye un file llamado LICENSE
+ * This file is part of the Cupon sample application.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * Este archivo pertenece a la aplicación de prueba Cupon.
+ * El código fuente de la aplicación incluye un archivo llamado LICENSE
  * con toda la información sobre el copyright y la licencia.
  */
 
-namespace AppBundle\DataFixtures\ORM;
+namespace Cupon\CiudadBundle\DataFixtures\ORM;
 
-use AppBundle\Entity\city;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
+use Cupon\CiudadBundle\Entity\Ciudad;
 
 /**
- * Fixtures de la entity city.
- * creates 25 ciudades para poder probar la application.
+ * Fixtures de la entidad Ciudad.
+ * Crea 25 ciudades para poder probar la aplicación.
  */
 class Ciudades extends AbstractFixture implements OrderedFixtureInterface
 {
@@ -59,11 +63,11 @@ class Ciudades extends AbstractFixture implements OrderedFixtureInterface
             'Tarrasa',
         );
 
-        foreach ($ciudades as $name) {
-            $city = new city();
-            $city->setNombre($name);
+        foreach ($ciudades as $nombre) {
+            $ciudad = new Ciudad();
+            $ciudad->setNombre($nombre);
 
-            $manager->persist($city);
+            $manager->persist($ciudad);
         }
 
         $manager->flush();

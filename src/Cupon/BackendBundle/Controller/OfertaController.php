@@ -3,91 +3,93 @@
 /*
  * (c) Javier Eguiluz <javier.eguiluz@gmail.com>
  *
- * Este file pertenece a la application de prueba Cupon.
- * El code fuente de la application incluye un file llamado LICENSE
+ * This file is part of the Cupon sample application.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * Este archivo pertenece a la aplicación de prueba Cupon.
+ * El código fuente de la aplicación incluye un archivo llamado LICENSE
  * con toda la información sobre el copyright y la licencia.
  */
 
 namespace Cupon\BackendBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Cupon\OfertaBundle\Entity\offer;
+use Cupon\OfertaBundle\Entity\Oferta;
 use Cupon\BackendBundle\Form\OfertaType;
-use Symfony\Component\HttpFoundation\File\File;
-use Symfony\Component\Filesystem\Filesystem;
 
 /**
- * offer controller.
+ * Oferta controller.
  *
  */
 class OfertaController extends Controller
 {
     /**
-     * Lists all offer entities.
+     * Lists all Oferta entities.
      *
      */
     public function indexAction()
     {
-        // Si el user no ha seleccionado ninguna city, seleccionar
-        // la city por defecto
+        // Si el usuario no ha seleccionado ninguna ciudad, seleccionar
+        // la ciudad por defecto
         $sesion = $this->getRequest()->getSession();
-        if (null == $slug = $sesion->get('city')) {
+        if (null == $slug = $sesion->get('ciudad')) {
             $slug = $this->container->getParameter('cupon.ciudad_por_defecto');
-            $sesion->set('city', $slug);
+            $sesion->set('ciudad', $slug);
         }
 
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getDoctrine()->getEntityManager();
         $paginador = $this->get('ideup.simple_paginator');
         $paginador->setItemsPerPage(19);
 
         $entities  = $paginador->paginate(
-            $em->getRepository('CiudadBundle:city')->queryTodasLasOfertas($slug)
+            $em->getRepository('CiudadBundle:Ciudad')->queryTodasLasOfertas($slug)
         )->getResult();
 
-        return $this->render('BackendBundle:offer:index.html.twig', array(
+        return $this->render('BackendBundle:Oferta:index.html.twig', array(
             'entities'  => $entities,
             'paginador' => $paginador
         ));
     }
 
     /**
-     * Finds and displays a offer entity.
+     * Finds and displays a Oferta entity.
      *
      */
     public function showAction($id)
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getDoctrine()->getEntityManager();
 
-        $entity = $em->getRepository('OfertaBundle:offer')->find($id);
+        $entity = $em->getRepository('OfertaBundle:Oferta')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('No se ha encontrado la offer solicitada');
+            throw $this->createNotFoundException('No se ha encontrado la oferta solicitada');
         }
 
         $deleteForm = $this->createDeleteForm($id);
 
-        return $this->render('BackendBundle:offer:show.html.twig', array(
+        return $this->render('BackendBundle:Oferta:show.html.twig', array(
             'entity'      => $entity,
             'delete_form' => $deleteForm->createView(),
         ));
     }
 
     /**
-     * Displays a form to create a new offer entity.
+     * Displays a form to create a new Oferta entity.
      *
      */
     public function newAction()
     {
-        $entity = new offer();
+        $entity = new Oferta();
 
         // Rellenar con valores adecuados algunas propiedades
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getDoctrine()->getEntityManager();
 
-        $city = $em->getRepository('CiudadBundle:city')->findOneBySlug(
-            $this->getRequest()->getSession()->get('city')
+        $ciudad = $em->getRepository('CiudadBundle:Ciudad')->findOneBySlug(
+            $this->getRequest()->getSession()->get('ciudad')
         );
 
-        $entity->setCiudad($city);
+        $entity->setCiudad($ciudad);
         $entity->setCompras(0);
         $entity->setUmbral(0);
         $entity->setFechaPublicacion(new \DateTime('now'));
@@ -95,59 +97,55 @@ class OfertaController extends Controller
 
         $form = $this->createForm(new OfertaType(), $entity);
 
-        return $this->render('BackendBundle:offer:new.html.twig', array(
+        return $this->render('BackendBundle:Oferta:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView()
         ));
     }
 
     /**
-     * Creates a new offer entity.
+     * Creates a new Oferta entity.
      *
      */
     public function createAction()
     {
-        $entity  = new offer();
+        $entity  = new Oferta();
         $request = $this->getRequest();
         $form    = $this->createForm(new OfertaType(), $entity);
-
-        $form->handleRequest($request);
+        $form->bindRequest($request);
 
         if ($form->isValid()) {
-            // Copiar la foto subida y guardar la ruta
-            $entity->subirFoto($this->container->getParameter('cupon.directorio.imagenes'));
-
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->getDoctrine()->getEntityManager();
             $em->persist($entity);
             $em->flush();
 
             return $this->redirect($this->generateUrl('backend_oferta_show', array('id' => $entity->getId())));
         }
 
-        return $this->render('BackendBundle:offer:new.html.twig', array(
+        return $this->render('BackendBundle:Oferta:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView()
         ));
     }
 
     /**
-     * Displays a form to edit an existing offer entity.
+     * Displays a form to edit an existing Oferta entity.
      *
      */
     public function editAction($id)
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getDoctrine()->getEntityManager();
 
-        $entity = $em->getRepository('OfertaBundle:offer')->find($id);
+        $entity = $em->getRepository('OfertaBundle:Oferta')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('No se ha encontrado la offer solicitada');
+            throw $this->createNotFoundException('No se ha encontrado la oferta solicitada');
         }
 
         $editForm = $this->createForm(new OfertaType(), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
-        return $this->render('BackendBundle:offer:edit.html.twig', array(
+        return $this->render('BackendBundle:Oferta:edit.html.twig', array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
@@ -155,17 +153,17 @@ class OfertaController extends Controller
     }
 
     /**
-     * Edits an existing offer entity.
+     * Edits an existing Oferta entity.
      *
      */
     public function updateAction($id)
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getDoctrine()->getEntityManager();
 
-        $entity = $em->getRepository('OfertaBundle:offer')->find($id);
+        $entity = $em->getRepository('OfertaBundle:Oferta')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('No se ha encontrado la offer solicitada');
+            throw $this->createNotFoundException('No se ha encontrado la oferta solicitada');
         }
 
         $editForm   = $this->createForm(new OfertaType(), $entity);
@@ -173,34 +171,16 @@ class OfertaController extends Controller
 
         $request = $this->getRequest();
 
-        // Guardar la ruta de la foto original de la oferta
-        $rutaFotoOriginal = $editForm->getData()->getRutaFoto();
-
-        $editForm->handleRequest($request);
+        $editForm->bindRequest($request);
 
         if ($editForm->isValid()) {
-            if (null == $entity->getFoto()) {
-                    // el usuario no ha modificado la foto original
-                    $entity->setRutaFoto($rutaFotoOriginal);
-            } else {
-                // el usuario ha modificado la foto: copiar la foto subida y
-                // guardar la nueva ruta
-                $entity->subirFoto($this->container->getParameter('cupon.directorio.imagenes'));
-
-                // borrar la foto anterior
-                if (!empty($rutaFotoOriginal)) {
-                    $fs = new Filesystem();
-                    $fs->remove($this->container->getParameter('cupon.directorio.imagenes').$rutaFotoOriginal);
-                }
-            }
-
             $em->persist($entity);
             $em->flush();
 
             return $this->redirect($this->generateUrl('backend_oferta_edit', array('id' => $id)));
         }
 
-        return $this->render('BackendBundle:offer:edit.html.twig', array(
+        return $this->render('BackendBundle:Oferta:edit.html.twig', array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
@@ -208,7 +188,7 @@ class OfertaController extends Controller
     }
 
     /**
-     * Deletes a offer entity.
+     * Deletes a Oferta entity.
      *
      */
     public function deleteAction($id)
@@ -216,14 +196,14 @@ class OfertaController extends Controller
         $form = $this->createDeleteForm($id);
         $request = $this->getRequest();
 
-        $form->handleRequest($request);
+        $form->bindRequest($request);
 
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('OfertaBundle:offer')->find($id);
+            $em = $this->getDoctrine()->getEntityManager();
+            $entity = $em->getRepository('OfertaBundle:Oferta')->find($id);
 
             if (!$entity) {
-                throw $this->createNotFoundException('No se ha encontrado la offer solicitada');
+                throw $this->createNotFoundException('No se ha encontrado la oferta solicitada');
             }
 
             $em->remove($entity);

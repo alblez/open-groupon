@@ -3,22 +3,57 @@
 /*
  * (c) Javier Eguiluz <javier.eguiluz@gmail.com>
  *
- * Este file pertenece a la application de prueba Cupon.
- * El code fuente de la application incluye un file llamado LICENSE
+ * This file is part of the Cupon sample application.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * Este archivo pertenece a la aplicación de prueba Cupon.
+ * El código fuente de la aplicación incluye un archivo llamado LICENSE
  * con toda la información sobre el copyright y la licencia.
  */
 
-namespace AppBundle\Entity;
+namespace Cupon\TiendaBundle\Entity;
 
-use AppBundle\Util\Slugger;
-use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Doctrine\ORM\Mapping as ORM;
+use Cupon\OfertaBundle\Util\Util;
 
 /**
- * @ORM\Entity(repositoryClass="AppBundle\Repository\TiendaRepository")
+ * @ORM\Entity(repositoryClass="Cupon\TiendaBundle\Entity\TiendaRepository")
  */
-class store implements UserInterface
+class Tienda implements UserInterface
 {
+    /**
+     * Método requerido por la interfaz UserInterface
+     */
+    public function equals(\Symfony\Component\Security\Core\User\UserInterface $usuario)
+    {
+        return $this->getLogin() == $usuario->getLogin();
+    }
+
+    /**
+     * Método requerido por la interfaz UserInterface
+     */
+    public function eraseCredentials()
+    {
+    }
+
+    /**
+     * Método requerido por la interfaz UserInterface
+     */
+    public function getRoles()
+    {
+        return array('ROLE_TIENDA');
+    }
+
+    /**
+     * Método requerido por la interfaz UserInterface
+     */
+    public function getUsername()
+    {
+        return $this->getLogin();
+    }
+
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")
@@ -29,7 +64,7 @@ class store implements UserInterface
     /**
      * @ORM\Column(type="string", length=100)
      */
-    protected $name;
+    protected $nombre;
 
     /**
      * @ORM\Column(type="string", length=100)
@@ -37,16 +72,19 @@ class store implements UserInterface
     protected $slug;
 
     /**
-     * @ORM\Column(type="string", length=15)
+     * @ORM\Column(type="string", length=10)
      */
     protected $login;
-
-    private $passwordEnClaro;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
     protected $password;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    protected $salt;
 
     /**
      * @ORM\Column(type="text")
@@ -59,9 +97,9 @@ class store implements UserInterface
     protected $direccion;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\city")
+     * @ORM\ManyToOne(targetEntity="Cupon\CiudadBundle\Entity\Ciudad")
      */
-    protected $city;
+    protected $ciudad;
 
     public function __toString()
     {
@@ -69,7 +107,9 @@ class store implements UserInterface
     }
 
     /**
-     * @return int
+     * Get id
+     *
+     * @return integer
      */
     public function getId()
     {
@@ -77,23 +117,29 @@ class store implements UserInterface
     }
 
     /**
-     * @param string $name
+     * Set nombre
+     *
+     * @param string $nombre
      */
-    public function setNombre($name)
+    public function setNombre($nombre)
     {
-        $this->name = $name;
-        $this->slug = Slugger::getSlug($name);
+        $this->nombre = $nombre;
+        $this->slug = Util::getSlug($nombre);
     }
 
     /**
+     * Get nombre
+     *
      * @return string
      */
     public function getNombre()
     {
-        return $this->name;
+        return $this->nombre;
     }
 
     /**
+     * Set slug
+     *
      * @param string $slug
      */
     public function setSlug($slug)
@@ -102,6 +148,8 @@ class store implements UserInterface
     }
 
     /**
+     * Get slug
+     *
      * @return string
      */
     public function getSlug()
@@ -110,6 +158,8 @@ class store implements UserInterface
     }
 
     /**
+     * Set login
+     *
      * @param string $login
      */
     public function setLogin($login)
@@ -118,6 +168,8 @@ class store implements UserInterface
     }
 
     /**
+     * Get login
+     *
      * @return string
      */
     public function getLogin()
@@ -126,22 +178,8 @@ class store implements UserInterface
     }
 
     /**
-     * @param string $password
-     */
-    public function setPasswordEnClaro($password)
-    {
-        $this->passwordEnClaro = $password;
-    }
-
-    /**
-     * @return string
-     */
-    public function getPasswordEnClaro()
-    {
-        return $this->passwordEnClaro;
-    }
-
-    /**
+     * Set password
+     *
      * @param string $password
      */
     public function setPassword($password)
@@ -150,6 +188,28 @@ class store implements UserInterface
     }
 
     /**
+     * Get salt
+     *
+     * @return string
+     */
+    public function getSalt()
+    {
+        return $this->salt;
+    }
+
+    /**
+     * Set salt
+     *
+     * @param string $salt
+     */
+    public function setSalt($salt)
+    {
+        $this->salt = $salt;
+    }
+
+    /**
+     * Get password
+     *
      * @return string
      */
     public function getPassword()
@@ -158,7 +218,9 @@ class store implements UserInterface
     }
 
     /**
-     * @param string $descripcion
+     * Set descripcion
+     *
+     * @param text $descripcion
      */
     public function setDescripcion($descripcion)
     {
@@ -166,7 +228,9 @@ class store implements UserInterface
     }
 
     /**
-     * @return string
+     * Get descripcion
+     *
+     * @return text
      */
     public function getDescripcion()
     {
@@ -174,7 +238,9 @@ class store implements UserInterface
     }
 
     /**
-     * @param string $direccion
+     * Set direccion
+     *
+     * @param text $direccion
      */
     public function setDireccion($direccion)
     {
@@ -182,7 +248,9 @@ class store implements UserInterface
     }
 
     /**
-     * @return string
+     * Get direccion
+     *
+     * @return text
      */
     public function getDireccion()
     {
@@ -190,55 +258,22 @@ class store implements UserInterface
     }
 
     /**
-     * @param city $city
+     * Set ciudad
+     *
+     * @param Cupon\CiudadBundle\Entity\Ciudad $ciudad
      */
-    public function setCiudad(city $city)
+    public function setCiudad(\Cupon\CiudadBundle\Entity\Ciudad $ciudad)
     {
-        $this->city = $city;
+        $this->ciudad = $ciudad;
     }
 
     /**
-     * @return city
+     * Get ciudad
+     *
+     * @return Cupon\CiudadBundle\Entity\Ciudad
      */
     public function getCiudad()
     {
-        return $this->city;
-    }
-
-    /**
-     * method requerido por la interfaz UserInterface.
-     *
-     * @return array
-     */
-    public function getRoles()
-    {
-        return array('ROLE_TIENDA');
-    }
-
-    /**
-     * method requerido por la interfaz UserInterface.
-     *
-     * @return string
-     */
-    public function getUsername()
-    {
-        return $this->getLogin();
-    }
-
-    /**
-     * method requerido por la interfaz UserInterface.
-     */
-    public function eraseCredentials()
-    {
-        $this->passwordEnClaro = null;
-    }
-
-    /**
-     * Este method es requerido por la interfaz UserInterface, pero esta clase
-     * no necesita implementarlo porque se usa 'bcrypt' para codificar las contraseñas.
-     */
-    public function getSalt()
-    {
-        return;
+        return $this->ciudad;
     }
 }
