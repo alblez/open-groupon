@@ -134,7 +134,6 @@ class Basico implements FixtureInterface, ContainerAwareInterface
                 $offer->setFechaPublicacion($fechaPublicacion);
                 $offer->setFechaExpiracion($fechaExpiracion);
 
-                $offer->setCompras(0);
                 $offer->setUmbral(rand(25, 100));
 
                 $offer->setCiudad($city);

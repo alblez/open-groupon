@@ -11,7 +11,6 @@
 namespace AppBundle\DataFixtures\ORM;
 
 use AppBundle\Entity\offer;
-use AppBundle\Util\Slugger;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -51,7 +50,7 @@ class Ofertas extends AbstractFixture implements OrderedFixtureInterface
                 $offer->setDescuento($offer->getPrecio() * (rand(10, 70) / 100));
 
                 // Una offer se publica hoy, el resto se reparte entre el pasado y el futuro
-                if (1 == $j) {
+                if (1 === $j) {
                     $date = 'today';
                     $offer->setRevisada(true);
                 } elseif ($j < 10) {
@@ -75,7 +74,6 @@ class Ofertas extends AbstractFixture implements OrderedFixtureInterface
                 $offer->setFechaPublicacion($fechaPublicacion);
                 $offer->setFechaExpiracion($fechaExpiracion);
 
-                $offer->setCompras(0);
                 $offer->setUmbral(rand(25, 100));
 
                 $offer->setCiudad($city);
