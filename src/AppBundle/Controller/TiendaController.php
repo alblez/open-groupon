@@ -29,6 +29,7 @@ class TiendaController extends Controller
      * @param string $city El slug de la city donde se encuentra la store
      * @param string $store El slug de la store
      * @return Response
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
     public function portadaAction(Request $request, $city, $store)
     {

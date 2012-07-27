@@ -165,6 +165,7 @@ class UsuarioController extends Controller
      * @param string $city El slug de la city a la que pertenece la offer
      * @param string $slug El slug de la offer
      * @return Response
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
     public function comprarAction(Request $request, $city, $slug)
     {

@@ -43,9 +43,9 @@ class TiendaRepository extends EntityRepository
      * Las ofertas devueltas, además de publicadas, también han sido revisadas.
      *
      * @param $tiendaId
-     * @param int|string $limite number de ofertas a devolver (por defecto, diez)
+     * @param int $limite number de ofertas a devolver (por defecto, diez)
+     *
      * @return array
-     * @internal param string $tienda_id El id de la store
      */
     public function findUltimasOfertasPublicadas($tiendaId, $limite = 10)
     {

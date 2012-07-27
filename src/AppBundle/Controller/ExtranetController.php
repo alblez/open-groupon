@@ -125,6 +125,7 @@ class ExtranetController extends Controller
      * @param Request $request
      * @param offer $offer
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
      */
     public function ofertaEditarAction(Request $request, offer $offer)
     {
