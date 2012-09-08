@@ -1,63 +1,13 @@
 {
     "name": "javiereguiluz/cupon",
-    "description": "Aplicación de prueba para aprender a programar con Symfony 2.8",
-    "type": "project",
-    "license": "MIT",
+    "description": "Aplicación de prueba para aprender a programar con Symfony 2.1",
     "autoload": {
-        "psr-4": {
-            "": "src/"
-        },
-        "classmap": [
-            "app/AppKernel.php",
-            "app/AppCache.php"
-        ]
+        "psr-0": { "": "src/" }
     },
     "require": {
-        "php"                                  : ">=5.3.3",
-        "symfony/symfony"                      : "2.8.*",
-        "doctrine/orm"                         : "^2.4.8",
-        "doctrine/doctrine-bundle"             : "~1.4",
-        "incenteev/composer-parameter-handler" : "~2.0",
-        "javiereguiluz/easyadmin-bundle"       : "^1.11",
-        "sensio/distribution-bundle"           : "~5.0",
-        "sensio/framework-extra-bundle"        : "^3.0.2",
-        "symfony/monolog-bundle"               : "~2.4",
-        "symfony/swiftmailer-bundle"           : "~2.3",
-        "vich/uploader-bundle"                 : "^0.14.0"
+        "symfony/symfony": "2.1.*",
+        "doctrine/doctrine-fixtures-bundle": "dev-master",
+        "ideup/simple-paginator-bundle": "dev-master"
     },
-    "require-dev": {
-        "sensio/generator-bundle"              : "~3.0",
-        "symfony/phpunit-bridge"               : "^2.8",
-        "doctrine/doctrine-fixtures-bundle"    : "^2.3"
-    },
-    "scripts": {
-        "symfony-scripts": [
-            "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::prepareDeploymentTarget"
-        ],
-        "post-install-cmd": [
-            "@symfony-scripts"
-        ],
-        "post-update-cmd": [
-            "@symfony-scripts"
-        ]
-    },
-    "config": {
-        "bin-dir": "bin",
-        "platform": {
-            "php": "5.3.9"
-        }
-    },
-    "extra": {
-        "symfony-app-dir": "app",
-        "symfony-web-dir": "web",
-        "symfony-assets-install": "relative",
-        "incenteev-parameters": {
-            "file": "app/config/parameters.yml"
-        }
-    }
+    "minimum-stability": "dev"
 }
