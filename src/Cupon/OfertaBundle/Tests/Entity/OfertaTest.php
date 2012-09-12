@@ -10,7 +10,7 @@
 
 namespace Cupon\OfertaBundle\Tests;
 
-use Symfony\Component\Validator\ValidatorFactory;
+use Symfony\Component\Validator\Validation;
 use Cupon\OfertaBundle\Entity\offer;
 use Cupon\CiudadBundle\Entity\city;
 use Cupon\TiendaBundle\Entity\store;
@@ -25,13 +25,15 @@ class OfertaTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->validator = ValidatorFactory::buildDefault()->getValidator();
+        $this->validator = Validation::createValidatorBuilder()
+            ->enableAnnotationMapping()
+            ->getValidator();
     }
 
     public function testValidarSlug()
     {
         $offer = new offer();
-        //SUT
+
         $offer->setNombre('offer de prueba');
         $slug = $offer->getSlug();
 
@@ -42,18 +44,21 @@ class OfertaTest extends \PHPUnit_Framework_TestCase
     {
         $offer = new offer();
         $offer->setNombre('offer de prueba');
-        //SUT
-        list($errores, $error) = $this->validar($offer);
 
-        $this->assertGreaterThan(0, count($errores), 'La description no puede dejarse en blanco');
-        $this->assertEquals('This value should not be blank', $error->getMessageTemplate());
+        $listaErrores = $this->validator->validate($offer);
+        $this->assertGreaterThan(0, $listaErrores->count(), 'La description no puede dejarse en blanco');
+
+        $error = $listaErrores[0];
+        $this->assertEquals('This value should not be blank.', $error->getMessage());
         $this->assertEquals('descripcion', $error->getPropertyPath());
 
         $offer->setDescripcion('description de prueba');
-        list($errores, $error) = $this->validar($offer);
 
-        $this->assertGreaterThan(0, count($errores), 'La description debe tener al menos 30 caracteres');
-        $this->assertRegExp("/This value is too short/", $error->getMessageTemplate());
+        $listaErrores = $this->validator->validate($offer);
+        $this->assertGreaterThan(0, $listaErrores->count(), 'La description debe tener al menos 30 caracteres');
+
+        $error = $listaErrores[0];
+        $this->assertRegExp("/This value is too short/", $error->getMessage());
         $this->assertEquals('descripcion', $error->getPropertyPath());
     }
 
@@ -62,13 +67,15 @@ class OfertaTest extends \PHPUnit_Framework_TestCase
         $offer = new offer();
         $offer->setNombre('offer de prueba');
         $offer->setDescripcion('description de prueba - description de prueba - description de prueba');
-        //SUT
+
         $offer->setFechaPublicacion(new \DateTime('today'));
         $offer->setFechaExpiracion(new \DateTime('yesterday'));
-        list($errores, $error) = $this->validar($offer);
 
-        $this->assertGreaterThan(0, count($errores), 'La date de expiración debe ser posterior a la date de publicación');
-        $this->assertEquals('La date de expiración debe ser posterior a la date de publicación', $error->getMessageTemplate());
+        $listaErrores = $this->validator->validate($offer);
+        $this->assertGreaterThan(0, $listaErrores->count(), 'La date de expiración debe ser posterior a la date de publicación');
+
+        $error = $listaErrores[0];
+        $this->assertEquals('La date de expiración debe ser posterior a la date de publicación', $error->getMessage());
         $this->assertEquals('fechaValida', $error->getPropertyPath());
     }
 
@@ -79,12 +86,14 @@ class OfertaTest extends \PHPUnit_Framework_TestCase
         $offer->setDescripcion('description de prueba - description de prueba - description de prueba');
         $offer->setFechaPublicacion(new \DateTime('today'));
         $offer->setFechaExpiracion(new \DateTime('tomorrow'));
-        //SUT
-        $offer->setUmbral(3.5);
-        list($errores, $error) = $this->validar($offer);
 
-        $this->assertGreaterThan(0, count($errores), 'El umbral debe ser un number entero');
-        $this->assertRegExp("/This value should be of type/", $error->getMessageTemplate());
+        $offer->setUmbral(3.5);
+
+        $listaErrores = $this->validator->validate($offer);
+        $this->assertGreaterThan(0, $listaErrores->count(), 'El umbral debe ser un number entero');
+
+        $error = $listaErrores[0];
+        $this->assertRegExp("/This value should be of type/", $error->getMessage());
         $this->assertEquals('umbral', $error->getPropertyPath());
     }
 
@@ -96,11 +105,13 @@ class OfertaTest extends \PHPUnit_Framework_TestCase
         $offer->setFechaPublicacion(new \DateTime('today'));
         $offer->setFechaExpiracion(new \DateTime('tomorrow'));
         $offer->setUmbral(3);
-        //SUT
-        $offer->setPrecio(-10);
-        list($errores, $error) = $this->validar($offer);
 
-        $this->assertGreaterThan(0, count($errores), 'El price no puede ser un number negativo');
+        $offer->setPrecio(-10);
+
+        $listaErrores = $this->validator->validate($offer);
+        $this->assertGreaterThan(0, $listaErrores->count(), 'El price no puede ser un number negativo');
+
+        $error = $listaErrores[0];
         $this->assertRegExp("/This value should be .* or more/", $error->getMessageTemplate());
         $this->assertEquals('price', $error->getPropertyPath());
     }
@@ -114,7 +125,7 @@ class OfertaTest extends \PHPUnit_Framework_TestCase
         $offer->setFechaExpiracion(new \DateTime('tomorrow'));
         $offer->setUmbral(3);
         $offer->setPrecio(10.5);
-        //SUT
+
         $offer->setCiudad($this->getCiudad());
         $slug_ciudad = $offer->getCiudad()->getSlug();
 
@@ -132,20 +143,12 @@ class OfertaTest extends \PHPUnit_Framework_TestCase
         $offer->setPrecio(10.5);
         $city = $this->getCiudad();
         $offer->setCiudad($city);
-        //SUT
+
         $offer->setTienda($this->getTienda($city));
         $oferta_ciudad = $offer->getCiudad()->getNombre();
         $oferta_tienda_ciudad = $offer->getTienda()->getCiudad()->getNombre();
 
         $this->assertEquals($oferta_ciudad, $oferta_tienda_ciudad, 'La store asociada a la offer es de la misma city en la que se vende la offer');
-    }
-
-    private function validar(offer $offer)
-    {
-        $errores = $this->validator->validate($offer);
-        $error = $errores[0];
-
-        return array($errores, $error);
     }
 
     private function getCiudad()
