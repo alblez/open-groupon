@@ -1,41 +1,34 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>{% block title %}{% endblock %} | Cupon</title>
-    {% block stylesheets %}
-        <link rel="stylesheet" href="{{ asset('css/normalizar.css') }}" />
-        <link rel="stylesheet" href="{{ asset('css/comun.css') }}" />
-    {% endblock %}
+    {% block stylesheets %}{% endblock %}
     {% block rss %}{% endblock %}
     <link rel="shortcut icon" href="{{ asset('favicon.png') }}" />
-    {% block javascripts %}
-        <!--[if lt IE 9]>
-        <script src="{{ asset('js/lt_ie9/html5.js') }}"></script>
-        <![endif]-->
-    {% endblock %}
+    {% block javascripts %}{% endblock %}
 </head>
 
-<body id="{% block id '' %}">
-    <div id="contenedor">
-        {% block body %}{% endblock %}
+<body id="{% block id '' %}"><div id="contenedor">
+    {% block body %}{% endblock %}
+    
+    <footer>
+        &copy; {{ 'now'|date('Y') }} - Cupon
+        <a href="{{ path('estatica', { 'pagina': 'ayuda' }) }}">{{ "Ayuda" | trans }}</a>
+        <a href="{{ path('contacto') }}">{{ "Contacto" | trans }}</a>
+        <a href="{{ path('estatica', { 'pagina': 'privacidad' }) }}">{{ "Privacidad" | trans }}</a>
+        <a href="{{ path('estatica', { 'pagina': 'sobre-nosotros' }) }}">{{ "Sobre nosotros" | trans }}</a>
+        
+        {% set locale = app.request.locale %}
+        <section id="idioma">
+        {% if locale == 'es' %}
+            <span>Español</span> - <a href="{{ path('portada', { '_locale': 'en' }) }}">English</a>
+        {% elseif locale == 'en' %}
+            <a href="{{ path('portada', { '_locale': 'es' }) }}">Español</a> - <span>English</span>
+        {% endif %}
+        </section>
+    </footer>
+</div></body>
 
-        <footer>
-            &copy; {{ 'now'|date('Y') }} - Cupon
-            <a href="{{ path('pagina', { slug: 'ayuda' }) }}">{{ 'Ayuda'|trans }}</a>
-            <a href="{{ path('contacto') }}">{{ 'Contacto'|trans }}</a>
-            <a href="{{ path('pagina', { slug: 'privacidad' }) }}">{{ 'Privacidad'|trans }}</a>
-            <a href="{{ path('pagina', { slug: 'sobre_nosotros' }) }}">{{ 'Sobre nosotros'|trans }}</a>
-
-            {% set locale = app.request.locale %}
-            <section id="idioma">
-            {% if locale == 'es' %}
-                <span>Español</span> - <a href="{{ path('portada', { _locale: 'en' }) }}">English</a>
-            {% elseif locale == 'en' %}
-                <a href="{{ path('portada', { _locale: 'es' }) }}">Español</a> - <span>English</span>
-            {% endif %}
-            </section>
-        </footer>
-    </div>
-</body>
 </html>
