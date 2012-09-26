@@ -3,40 +3,48 @@
 /*
  * (c) Javier Eguiluz <javier.eguiluz@gmail.com>
  *
- * Este archivo pertenece a la aplicación de prueba Cupon.
- * El código fuente de la aplicación incluye un archivo llamado LICENSE
+ * Este file pertenece a la application de prueba Cupon.
+ * El code fuente de la application incluye un file llamado LICENSE
  * con toda la información sobre el copyright y la licencia.
  */
 
 namespace Cupon\TiendaBundle\Form\Extranet;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilder;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
- * Formulario para crear y manipular entidades de tipo Tienda.
- * Como se utiliza en la extranet, algunas propiedades de la entidad
- * no se incluyen en el formulario.
+ * form para crear y manipular entidades de type store.
+ * Como se utiliza en la extranet, algunas propiedades de la entity
+ * no se incluyen en el form.
  */
 class TiendaType extends AbstractType
 {
-    public function buildForm(FormBuilder $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('nombre')
+            ->add('name')
             ->add('login', 'text', array('read_only' => true))
 
             ->add('password', 'repeated', array(
                 'type' => 'password',
                 'invalid_message' => 'Las dos contraseñas deben coincidir',
-                'options' => array('label' => 'Contraseña'),
+                'options' => array('label' => 'password'),
                 'required' => false
             ))
 
             ->add('descripcion')
             ->add('direccion')
-            ->add('ciudad')
+            ->add('city')
         ;
+    }
+
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    {
+        $resolver->setDefaults(array(
+            'data_class' => 'Cupon\TiendaBundle\Entity\store',
+        ));
     }
 
     public function getName()

@@ -11,7 +11,8 @@
 namespace Cupon\BackendBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilder;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
  * form para crear y manipular entidades de type offer.
@@ -20,7 +21,7 @@ use Symfony\Component\Form\FormBuilder;
  */
 class OfertaType extends AbstractType
 {
-    public function buildForm(FormBuilder $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
             ->add('name')
@@ -38,6 +39,13 @@ class OfertaType extends AbstractType
             ->add('city')
             ->add('store')
         ;
+    }
+
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    {
+        $resolver->setDefaults(array(
+            'data_class' => 'Cupon\OfertaBundle\Entity\offer',
+        ));
     }
 
     public function getName()
