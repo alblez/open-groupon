@@ -44,7 +44,7 @@ class offer
      * @ORM\Column(type="text")
      *
      * @Assert\NotBlank()
-     * @Assert\MinLength(30)
+     * @Assert\Length(min = 30)
      */
     protected $descripcion;
 
@@ -63,7 +63,7 @@ class offer
     /**
      * @ORM\Column(type="decimal", scale=2)
      *
-     * @Assert\Min(0)
+     * @Assert\Range(min = 0)
      */
     protected $price;
 
@@ -95,7 +95,7 @@ class offer
      * @ORM\Column(type="integer")
      *
      * @Assert\Type(type="integer")
-     * @Assert\Min(0)
+     * @Assert\Range(min = 0)
      */
     protected $umbral;
 

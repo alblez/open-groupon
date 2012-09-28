@@ -29,14 +29,6 @@ class user implements UserInterface
     /**
      * method requerido por la interfaz UserInterface
      */
-    public function equals(UserInterface $user)
-    {
-        return $this->getEmail() == $user->getEmail();
-    }
-
-    /**
-     * method requerido por la interfaz UserInterface
-     */
     public function eraseCredentials()
     {
     }
@@ -95,14 +87,14 @@ class user implements UserInterface
      *
      * @ORM\Column(name="password", type="string", length=255)
      * @Assert\NotBlank(groups={"record"})
-     * @Assert\MinLength(limit=6)
+     * @Assert\Length(min = 6)
      */
     private $password;
 
     /**
      * @var string salt
      *
-     * @ORM\Column(name="salt", type="string", length="255")
+     * @ORM\Column(name="salt", type="string", length=255)
      */
     protected $salt;
 
@@ -202,13 +194,11 @@ class user implements UserInterface
      */
     public function esDniValido(ExecutionContext $context)
     {
-        $nombre_propiedad = $context->getPropertyPath() . '.dni';
         $dni = $this->getDni();
 
         // Comprobar que el formato sea correcto
         if (0 === preg_match("/\d{1,8}[a-z]/i", $dni)) {
-            $context->setPropertyPath($nombre_propiedad);
-            $context->addViolation('El DNI introducido no tiene el formato correcto (entre 1 y 8 números seguidos de una letra, sin guiones y sin dejar ningún espacio en blanco)', array(), null);
+            $context->addViolationAtSubPath('dni', 'El DNI introducido no tiene el formato correcto (entre 1 y 8 números seguidos de una letra, sin guiones y sin dejar ningún espacio en blanco)', array(), null);
 
             return;
         }
@@ -217,8 +207,7 @@ class user implements UserInterface
         $numero = substr($dni, 0, -1);
         $letra  = strtoupper(substr($dni, -1));
         if ($letra != substr("TRWAGMYFPDXBNJZSQVHLCKE", strtr($numero, "XYZ", "012")%23, 1)) {
-            $context->setPropertyPath($nombre_propiedad);
-            $context->addViolation('La letra no coincide con el number del DNI. checks que has escrito bien tanto el number como la letra', array(), null);
+            $context->addViolationAtSubPath('dni', 'La letra no coincide con el number del DNI. checks que has escrito bien tanto el number como la letra', array(), null);
         }
     }
 

@@ -22,14 +22,6 @@ class store implements UserInterface
     /**
      * method requerido por la interfaz UserInterface
      */
-    public function equals(\Symfony\Component\Security\Core\User\UserInterface $user)
-    {
-        return $this->getLogin() == $user->getLogin();
-    }
-
-    /**
-     * method requerido por la interfaz UserInterface
-     */
     public function eraseCredentials()
     {
     }
