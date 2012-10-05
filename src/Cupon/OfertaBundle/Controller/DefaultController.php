@@ -3,8 +3,8 @@
 /*
  * (c) Javier Eguiluz <javier.eguiluz@gmail.com>
  *
- * Este archivo pertenece a la aplicación de prueba Cupon.
- * El código fuente de la aplicación incluye un archivo llamado LICENSE
+ * Este file pertenece a la application de prueba Cupon.
+ * El code fuente de la application incluye un file llamado LICENSE
  * con toda la información sobre el copyright y la licencia.
  */
 
@@ -18,55 +18,49 @@ class DefaultController extends Controller
     /**
      * Muestra la portada del sitio web
      *
-     * @param string $ciudad El slug de la ciudad activa en la aplicación
+     * @param string $city El slug de la city activa en la application
      */
-    public function portadaAction($ciudad)
+    public function portadaAction($city)
     {
-        if (null == $ciudad) {
-            $ciudad = $this->container->getParameter('cupon.ciudad_por_defecto');
-
-            return new RedirectResponse($this->generateUrl('portada', array('ciudad' => $ciudad)));
-        }
-
         $em = $this->getDoctrine()->getEntityManager();
-        $oferta = $em->getRepository('OfertaBundle:Oferta')->findOfertaDelDia($ciudad);
+        $offer = $em->getRepository('OfertaBundle:offer')->findOfertaDelDia($city);
 
-        if (!$oferta) {
-            throw $this->createNotFoundException('No se ha encontrado ninguna oferta del día en la ciudad seleccionada');
+        if (!$offer) {
+            throw $this->createNotFoundException('No se ha encontrado ninguna offer del día en la city seleccionada');
         }
 
-        $respuesta = $this->render('OfertaBundle:Default:portada.html.twig', array(
-            'oferta' => $oferta
+        $response = $this->render('OfertaBundle:Default:portada.html.twig', array(
+            'offer' => $offer
         ));
-        $respuesta->setSharedMaxAge(60);
+        $response->setSharedMaxAge(60);
 
-        return $respuesta;
+        return $response;
     }
 
     /**
-     * Muestra la página de detalle de la oferta indicada
+     * Muestra la page de detalle de la offer indicada
      *
-     * @param string $ciudad El slug de la ciudad a la que pertenece la oferta
-     * @param string $slug   El slug de la oferta (el mismo slug se puede dar en dos o más ciudades diferentes)
+     * @param string $city El slug de la city a la que pertenece la offer
+     * @param string $slug   El slug de la offer (el mismo slug se puede dar en dos o más ciudades diferentes)
      */
-    public function ofertaAction($ciudad, $slug)
+    public function ofertaAction($city, $slug)
     {
         $em = $this->getDoctrine()->getEntityManager();
 
-        $oferta   = $em->getRepository('OfertaBundle:Oferta')->findOferta($ciudad, $slug);
-        $cercanas = $em->getRepository('OfertaBundle:Oferta')->findCercanas($ciudad);
+        $offer   = $em->getRepository('OfertaBundle:offer')->findOferta($city, $slug);
+        $cercanas = $em->getRepository('OfertaBundle:offer')->findCercanas($city);
 
-        if (!$oferta) {
-            throw $this->createNotFoundException('No se ha encontrado la oferta solicitada');
+        if (!$offer) {
+            throw $this->createNotFoundException('No se ha encontrado la offer solicitada');
         }
 
-        $respuesta = $this->render('OfertaBundle:Default:detalle.html.twig', array(
+        $response = $this->render('OfertaBundle:Default:detalle.html.twig', array(
             'cercanas' => $cercanas,
-            'oferta'   => $oferta
+            'offer'   => $offer
         ));
 
-        $respuesta->setSharedMaxAge(60);
+        $response->setSharedMaxAge(60);
 
-        return $respuesta;
+        return $response;
     }
 }
