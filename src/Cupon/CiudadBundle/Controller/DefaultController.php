@@ -3,8 +3,8 @@
 /*
  * (c) Javier Eguiluz <javier.eguiluz@gmail.com>
  *
- * Este archivo pertenece a la aplicación de prueba Cupon.
- * El código fuente de la aplicación incluye un archivo llamado LICENSE
+ * Este file pertenece a la application de prueba Cupon.
+ * El code fuente de la application incluye un file llamado LICENSE
  * con toda la información sobre el copyright y la licencia.
  */
 
@@ -17,60 +17,60 @@ class DefaultController extends Controller
 {
     /**
      * Busca todas las ciudades disponibles en la base de datos y pasa la lista
-     * a una plantilla muy sencilla que simplemente muestra una lista desplegable
-     * para seleccionar la ciudad activa.
+     * a una template muy sencilla que simplemente muestra una lista desplegable
+     * para seleccionar la city activa.
      *
-     * @param string $ciudad El slug de la ciudad seleccionada
+     * @param string $city El slug de la city seleccionada
      */
-    public function listaCiudadesAction($ciudad = null)
+    public function listaCiudadesAction($city = null)
     {
-        $em = $this->getDoctrine()->getEntityManager();
-        $ciudades = $em->getRepository('CiudadBundle:Ciudad')->findListaCiudades();
+        $em = $this->getDoctrine()->getManager();
+        $ciudades = $em->getRepository('CiudadBundle:city')->findListaCiudades();
 
         return $this->render('CiudadBundle:Default:listaCiudades.html.twig', array(
-            'ciudadActual' => $ciudad,
+            'ciudadActual' => $city,
             'ciudades'     => $ciudades
         ));
     }
 
     /**
-     * Cambia la ciudad activa por la que se indica. En la parte frontal de la
-     * aplicación esto simplemente significa que se le redirige al usuario a la
-     * portada de la nueva ciudad seleccionada.
+     * Cambia la city activa por la que se indica. En la parte frontal de la
+     * application esto simplemente significa que se le redirige al user a la
+     * portada de la nueva city seleccionada.
      *
-     * @param string $ciudad El slug de la ciudad a la que se cambia
+     * @param string $city El slug de la city a la que se cambia
      */
-    public function cambiarAction($ciudad)
+    public function cambiarAction($city)
     {
-        return new RedirectResponse($this->generateUrl('portada', array('ciudad' => $ciudad)));
+        return new RedirectResponse($this->generateUrl('portada', array('city' => $city)));
     }
 
     /**
-     * Muestra las ofertas más recientes de la ciudad indicada
+     * Muestra las ofertas más recientes de la city indicada
      *
-     * @param string $ciudad El slug de la ciudad
+     * @param string $city El slug de la city
      */
-    public function recientesAction($ciudad)
+    public function recientesAction($city)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
-        $ciudad = $em->getRepository('CiudadBundle:Ciudad')->findOneBySlug($ciudad);
-        if (!$ciudad) {
-            throw $this->createNotFoundException('La ciudad indicada no está disponible');
+        $city = $em->getRepository('CiudadBundle:city')->findOneBySlug($city);
+        if (!$city) {
+            throw $this->createNotFoundException('La city indicada no está disponible');
         }
 
-        $cercanas = $em->getRepository('CiudadBundle:Ciudad')->findCercanas($ciudad->getId());
-        $ofertas  = $em->getRepository('OfertaBundle:Oferta')->findRecientes($ciudad->getId());
+        $cercanas = $em->getRepository('CiudadBundle:city')->findCercanas($city->getId());
+        $ofertas  = $em->getRepository('OfertaBundle:offer')->findRecientes($city->getId());
 
         $formato = $this->get('request')->getRequestFormat();
-        $respuesta = $this->render('CiudadBundle:Default:recientes.'.$formato.'.twig', array(
-            'ciudad'   => $ciudad,
+        $response = $this->render('CiudadBundle:Default:recientes.'.$formato.'.twig', array(
+            'city'   => $city,
             'cercanas' => $cercanas,
             'ofertas'  => $ofertas
         ));
 
-        $respuesta->setSharedMaxAge(3600);
+        $response->setSharedMaxAge(3600);
 
-        return $respuesta;
+        return $response;
     }
 }

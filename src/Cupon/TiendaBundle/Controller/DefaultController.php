@@ -3,8 +3,8 @@
 /*
  * (c) Javier Eguiluz <javier.eguiluz@gmail.com>
  *
- * Este archivo pertenece a la aplicación de prueba Cupon.
- * El código fuente de la aplicación incluye un archivo llamado LICENSE
+ * Este file pertenece a la application de prueba Cupon.
+ * El code fuente de la application incluye un file llamado LICENSE
  * con toda la información sobre el copyright y la licencia.
  */
 
@@ -15,41 +15,41 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 class DefaultController extends Controller
 {
     /**
-     * Muestra la portada de cada tienda, que muestra su información y las
+     * Muestra la portada de cada store, que muestra su información y las
      * ofertas que ha publicado recientemente
      *
-     * @param string $ciudad El slug de la ciudad donde se encuentra la tienda
-     * @param string $tienda El slug de la tienda
+     * @param string $city El slug de la city donde se encuentra la store
+     * @param string $store El slug de la store
      */
-    public function portadaAction($ciudad, $tienda)
+    public function portadaAction($city, $store)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
-        $ciudad = $em->getRepository('CiudadBundle:Ciudad')->findOneBySlug($ciudad);
-        $tienda = $em->getRepository('TiendaBundle:Tienda')->findOneBy(array(
-            'slug' => $tienda,
-            'ciudad' => $ciudad->getId()
+        $city = $em->getRepository('CiudadBundle:city')->findOneBySlug($city);
+        $store = $em->getRepository('TiendaBundle:store')->findOneBy(array(
+            'slug' => $store,
+            'city' => $city->getId()
         ));
 
-        if (!$tienda) {
-            throw $this->createNotFoundException('La tienda indicada no está disponible');
+        if (!$store) {
+            throw $this->createNotFoundException('La store indicada no está disponible');
         }
 
-        $ofertas = $em->getRepository('TiendaBundle:Tienda')->findUltimasOfertasPublicadas($tienda->getId());
-        $cercanas = $em->getRepository('TiendaBundle:Tienda')->findCercanas(
-            $tienda->getSlug(),
-            $tienda->getCiudad()->getSlug()
+        $ofertas = $em->getRepository('TiendaBundle:store')->findUltimasOfertasPublicadas($store->getId());
+        $cercanas = $em->getRepository('TiendaBundle:store')->findCercanas(
+            $store->getSlug(),
+            $store->getCiudad()->getSlug()
         );
 
         $formato = $this->get('request')->getRequestFormat();
-        $respuesta = $this->render('TiendaBundle:Default:portada.'.$formato.'.twig', array(
-            'tienda'   => $tienda,
+        $response = $this->render('TiendaBundle:Default:portada.'.$formato.'.twig', array(
+            'store'   => $store,
             'ofertas'  => $ofertas,
             'cercanas' => $cercanas
         ));
 
-        $respuesta->setSharedMaxAge(3600);
+        $response->setSharedMaxAge(3600);
 
-        return $respuesta;
+        return $response;
     }
 }

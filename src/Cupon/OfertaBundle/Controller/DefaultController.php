@@ -22,7 +22,7 @@ class DefaultController extends Controller
      */
     public function portadaAction($city)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $offer = $em->getRepository('OfertaBundle:offer')->findOfertaDelDia($city);
 
         if (!$offer) {
@@ -45,7 +45,7 @@ class DefaultController extends Controller
      */
     public function ofertaAction($city, $slug)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         $offer   = $em->getRepository('OfertaBundle:offer')->findOferta($city, $slug);
         $cercanas = $em->getRepository('OfertaBundle:offer')->findCercanas($city);

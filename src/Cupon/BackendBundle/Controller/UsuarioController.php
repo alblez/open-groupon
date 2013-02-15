@@ -3,94 +3,94 @@
 /*
  * (c) Javier Eguiluz <javier.eguiluz@gmail.com>
  *
- * Este archivo pertenece a la aplicación de prueba Cupon.
- * El código fuente de la aplicación incluye un archivo llamado LICENSE
+ * Este file pertenece a la application de prueba Cupon.
+ * El code fuente de la application incluye un file llamado LICENSE
  * con toda la información sobre el copyright y la licencia.
  */
 
 namespace Cupon\BackendBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Cupon\UsuarioBundle\Entity\Usuario;
+use Cupon\UsuarioBundle\Entity\user;
 use Cupon\BackendBundle\Form\UsuarioType;
 
 /**
- * Usuario controller.
+ * user controller.
  *
  */
 class UsuarioController extends Controller
 {
     /**
-     * Lists all Usuario entities.
+     * Lists all user entities.
      *
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $paginador = $this->get('ideup.simple_paginator');
 
-        $slug = $this->getRequest()->getSession()->get('ciudad');
+        $slug = $this->getRequest()->getSession()->get('city');
 
         $entities  = $paginador->paginate(
-            $em->getRepository('CiudadBundle:Ciudad')->queryTodosLosUsuarios($slug)
+            $em->getRepository('CiudadBundle:city')->queryTodosLosUsuarios($slug)
         )->getResult();
 
-        return $this->render('BackendBundle:Usuario:index.html.twig', array(
+        return $this->render('BackendBundle:user:index.html.twig', array(
             'entities'  => $entities,
             'paginador' => $paginador
         ));
     }
 
     /**
-     * Finds and displays a Usuario entity.
+     * Finds and displays a user entity.
      *
      */
     public function showAction($id)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('UsuarioBundle:Usuario')->find($id);
+        $entity = $em->getRepository('UsuarioBundle:user')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('No se ha encontrado el usuario solicitado');
+            throw $this->createNotFoundException('No se ha encontrado el user solicitado');
         }
 
         $deleteForm = $this->createDeleteForm($id);
 
-        return $this->render('BackendBundle:Usuario:show.html.twig', array(
+        return $this->render('BackendBundle:user:show.html.twig', array(
             'entity'      => $entity,
             'delete_form' => $deleteForm->createView(),
         ));
     }
 
     /**
-     * Displays a form to create a new Usuario entity.
+     * Displays a form to create a new user entity.
      *
      */
     public function newAction()
     {
-        $entity = new Usuario();
+        $entity = new user();
         $form   = $this->createForm(new UsuarioType(), $entity);
 
-        return $this->render('BackendBundle:Usuario:new.html.twig', array(
+        return $this->render('BackendBundle:user:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView()
         ));
     }
 
     /**
-     * Creates a new Usuario entity.
+     * Creates a new user entity.
      *
      */
     public function createAction()
     {
-        $entity  = new Usuario();
+        $entity  = new user();
         $request = $this->getRequest();
         $form    = $this->createForm(new UsuarioType(), $entity);
         $form->bindRequest($request);
 
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getEntityManager();
+            $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
 
@@ -98,30 +98,30 @@ class UsuarioController extends Controller
 
         }
 
-        return $this->render('BackendBundle:Usuario:new.html.twig', array(
+        return $this->render('BackendBundle:user:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView()
         ));
     }
 
     /**
-     * Displays a form to edit an existing Usuario entity.
+     * Displays a form to edit an existing user entity.
      *
      */
     public function editAction($id)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('UsuarioBundle:Usuario')->find($id);
+        $entity = $em->getRepository('UsuarioBundle:user')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('No se ha encontrado el usuario solicitado');
+            throw $this->createNotFoundException('No se ha encontrado el user solicitado');
         }
 
         $editForm = $this->createForm(new UsuarioType(), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
-        return $this->render('BackendBundle:Usuario:edit.html.twig', array(
+        return $this->render('BackendBundle:user:edit.html.twig', array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
@@ -129,17 +129,17 @@ class UsuarioController extends Controller
     }
 
     /**
-     * Edits an existing Usuario entity.
+     * Edits an existing user entity.
      *
      */
     public function updateAction($id)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('UsuarioBundle:Usuario')->find($id);
+        $entity = $em->getRepository('UsuarioBundle:user')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('No se ha encontrado el usuario solicitado');
+            throw $this->createNotFoundException('No se ha encontrado el user solicitado');
         }
 
         $editForm   = $this->createForm(new UsuarioType(), $entity);
@@ -156,7 +156,7 @@ class UsuarioController extends Controller
             return $this->redirect($this->generateUrl('backend_usuario_edit', array('id' => $id)));
         }
 
-        return $this->render('BackendBundle:Usuario:edit.html.twig', array(
+        return $this->render('BackendBundle:user:edit.html.twig', array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
@@ -164,7 +164,7 @@ class UsuarioController extends Controller
     }
 
     /**
-     * Deletes a Usuario entity.
+     * Deletes a user entity.
      *
      */
     public function deleteAction($id)
@@ -175,11 +175,11 @@ class UsuarioController extends Controller
         $form->bindRequest($request);
 
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getEntityManager();
-            $entity = $em->getRepository('UsuarioBundle:Usuario')->find($id);
+            $em = $this->getDoctrine()->getManager();
+            $entity = $em->getRepository('UsuarioBundle:user')->find($id);
 
             if (!$entity) {
-                throw $this->createNotFoundException('No se ha encontrado el usuario solicitado');
+                throw $this->createNotFoundException('No se ha encontrado el user solicitado');
             }
 
             $em->remove($entity);

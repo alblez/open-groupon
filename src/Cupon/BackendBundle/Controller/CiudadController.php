@@ -3,88 +3,88 @@
 /*
  * (c) Javier Eguiluz <javier.eguiluz@gmail.com>
  *
- * Este archivo pertenece a la aplicación de prueba Cupon.
- * El código fuente de la aplicación incluye un archivo llamado LICENSE
+ * Este file pertenece a la application de prueba Cupon.
+ * El code fuente de la application incluye un file llamado LICENSE
  * con toda la información sobre el copyright y la licencia.
  */
 
 namespace Cupon\BackendBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Cupon\CiudadBundle\Entity\Ciudad;
+use Cupon\CiudadBundle\Entity\city;
 use Cupon\BackendBundle\Form\CiudadType;
 
 /**
- * Ciudad controller.
+ * city controller.
  *
  */
 class CiudadController extends Controller
 {
     /**
-     * Lists all Ciudad entities.
+     * Lists all city entities.
      *
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('CiudadBundle:Ciudad')->findAll();
+        $entities = $em->getRepository('CiudadBundle:city')->findAll();
 
-        return $this->render('BackendBundle:Ciudad:index.html.twig', array(
+        return $this->render('BackendBundle:city:index.html.twig', array(
             'entities' => $entities
         ));
     }
 
     /**
-     * Finds and displays a Ciudad entity.
+     * Finds and displays a city entity.
      *
      */
     public function showAction($id)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('CiudadBundle:Ciudad')->find($id);
+        $entity = $em->getRepository('CiudadBundle:city')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('No se ha encontrado la ciudad solicitada');
+            throw $this->createNotFoundException('No se ha encontrado la city solicitada');
         }
 
         $deleteForm = $this->createDeleteForm($id);
 
-        return $this->render('BackendBundle:Ciudad:show.html.twig', array(
+        return $this->render('BackendBundle:city:show.html.twig', array(
             'entity'      => $entity,
             'delete_form' => $deleteForm->createView(),
         ));
     }
 
     /**
-     * Displays a form to create a new Ciudad entity.
+     * Displays a form to create a new city entity.
      *
      */
     public function newAction()
     {
-        $entity = new Ciudad();
+        $entity = new city();
         $form   = $this->createForm(new CiudadType(), $entity);
 
-        return $this->render('BackendBundle:Ciudad:new.html.twig', array(
+        return $this->render('BackendBundle:city:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView()
         ));
     }
 
     /**
-     * Creates a new Ciudad entity.
+     * Creates a new city entity.
      *
      */
     public function createAction()
     {
-        $entity  = new Ciudad();
+        $entity  = new city();
         $request = $this->getRequest();
         $form    = $this->createForm(new CiudadType(), $entity);
         $form->bindRequest($request);
 
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getEntityManager();
+            $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
 
@@ -92,30 +92,30 @@ class CiudadController extends Controller
 
         }
 
-        return $this->render('BackendBundle:Ciudad:new.html.twig', array(
+        return $this->render('BackendBundle:city:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView()
         ));
     }
 
     /**
-     * Displays a form to edit an existing Ciudad entity.
+     * Displays a form to edit an existing city entity.
      *
      */
     public function editAction($id)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('CiudadBundle:Ciudad')->find($id);
+        $entity = $em->getRepository('CiudadBundle:city')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('No se ha encontrado la ciudad solicitada');
+            throw $this->createNotFoundException('No se ha encontrado la city solicitada');
         }
 
         $editForm = $this->createForm(new CiudadType(), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
-        return $this->render('BackendBundle:Ciudad:edit.html.twig', array(
+        return $this->render('BackendBundle:city:edit.html.twig', array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
@@ -123,17 +123,17 @@ class CiudadController extends Controller
     }
 
     /**
-     * Edits an existing Ciudad entity.
+     * Edits an existing city entity.
      *
      */
     public function updateAction($id)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('CiudadBundle:Ciudad')->find($id);
+        $entity = $em->getRepository('CiudadBundle:city')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('No se ha encontrado la ciudad solicitada');
+            throw $this->createNotFoundException('No se ha encontrado la city solicitada');
         }
 
         $editForm   = $this->createForm(new CiudadType(), $entity);
@@ -150,7 +150,7 @@ class CiudadController extends Controller
             return $this->redirect($this->generateUrl('backend_ciudad_edit', array('id' => $id)));
         }
 
-        return $this->render('BackendBundle:Ciudad:edit.html.twig', array(
+        return $this->render('BackendBundle:city:edit.html.twig', array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
@@ -158,7 +158,7 @@ class CiudadController extends Controller
     }
 
     /**
-     * Deletes a Ciudad entity.
+     * Deletes a city entity.
      *
      */
     public function deleteAction($id)
@@ -169,11 +169,11 @@ class CiudadController extends Controller
         $form->bindRequest($request);
 
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getEntityManager();
-            $entity = $em->getRepository('CiudadBundle:Ciudad')->find($id);
+            $em = $this->getDoctrine()->getManager();
+            $entity = $em->getRepository('CiudadBundle:city')->find($id);
 
             if (!$entity) {
-                throw $this->createNotFoundException('No se ha encontrado la ciudad solicitada');
+                throw $this->createNotFoundException('No se ha encontrado la city solicitada');
             }
 
             $em->remove($entity);
