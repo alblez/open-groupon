@@ -3,89 +3,89 @@
 /*
  * (c) Javier Eguiluz <javier.eguiluz@gmail.com>
  *
- * Este archivo pertenece a la aplicación de prueba Cupon.
- * El código fuente de la aplicación incluye un archivo llamado LICENSE
+ * Este file pertenece a la application de prueba Cupon.
+ * El code fuente de la application incluye un file llamado LICENSE
  * con toda la información sobre el copyright y la licencia.
  */
 
 namespace Cupon\BackendBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Cupon\TiendaBundle\Entity\Tienda;
+use Cupon\TiendaBundle\Entity\store;
 use Cupon\BackendBundle\Form\TiendaType;
 
 /**
- * Tienda controller.
+ * store controller.
  *
  */
 class TiendaController extends Controller
 {
     /**
-     * Lists all Tienda entities.
+     * Lists all store entities.
      *
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
-        $slug = $this->getRequest()->getSession()->get('ciudad');
-        $entities = $em->getRepository('CiudadBundle:Ciudad')->findTodasLasTiendas($slug);
+        $slug = $this->getRequest()->getSession()->get('city');
+        $entities = $em->getRepository('CiudadBundle:city')->findTodasLasTiendas($slug);
 
-        return $this->render('BackendBundle:Tienda:index.html.twig', array(
+        return $this->render('BackendBundle:store:index.html.twig', array(
             'entities' => $entities
         ));
     }
 
     /**
-     * Finds and displays a Tienda entity.
+     * Finds and displays a store entity.
      *
      */
     public function showAction($id)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('TiendaBundle:Tienda')->find($id);
+        $entity = $em->getRepository('TiendaBundle:store')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('No se ha encontrado la tienda solicitada');
+            throw $this->createNotFoundException('No se ha encontrado la store solicitada');
         }
 
         $deleteForm = $this->createDeleteForm($id);
 
-        return $this->render('BackendBundle:Tienda:show.html.twig', array(
+        return $this->render('BackendBundle:store:show.html.twig', array(
             'entity'      => $entity,
             'delete_form' => $deleteForm->createView(),
         ));
     }
 
     /**
-     * Displays a form to create a new Tienda entity.
+     * Displays a form to create a new store entity.
      *
      */
     public function newAction()
     {
-        $entity = new Tienda();
+        $entity = new store();
         $form   = $this->createForm(new TiendaType(), $entity);
 
-        return $this->render('BackendBundle:Tienda:new.html.twig', array(
+        return $this->render('BackendBundle:store:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView()
         ));
     }
 
     /**
-     * Creates a new Tienda entity.
+     * Creates a new store entity.
      *
      */
     public function createAction()
     {
-        $entity  = new Tienda();
+        $entity  = new store();
         $request = $this->getRequest();
         $form    = $this->createForm(new TiendaType(), $entity);
         $form->bindRequest($request);
 
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getEntityManager();
+            $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
 
@@ -93,30 +93,30 @@ class TiendaController extends Controller
 
         }
 
-        return $this->render('BackendBundle:Tienda:new.html.twig', array(
+        return $this->render('BackendBundle:store:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView()
         ));
     }
 
     /**
-     * Displays a form to edit an existing Tienda entity.
+     * Displays a form to edit an existing store entity.
      *
      */
     public function editAction($id)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('TiendaBundle:Tienda')->find($id);
+        $entity = $em->getRepository('TiendaBundle:store')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('No se ha encontrado la tienda solicitada');
+            throw $this->createNotFoundException('No se ha encontrado la store solicitada');
         }
 
         $editForm = $this->createForm(new TiendaType(), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
-        return $this->render('BackendBundle:Tienda:edit.html.twig', array(
+        return $this->render('BackendBundle:store:edit.html.twig', array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
@@ -124,17 +124,17 @@ class TiendaController extends Controller
     }
 
     /**
-     * Edits an existing Tienda entity.
+     * Edits an existing store entity.
      *
      */
     public function updateAction($id)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('TiendaBundle:Tienda')->find($id);
+        $entity = $em->getRepository('TiendaBundle:store')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('No se ha encontrado la tienda solicitada');
+            throw $this->createNotFoundException('No se ha encontrado la store solicitada');
         }
 
         $editForm   = $this->createForm(new TiendaType(), $entity);
@@ -151,7 +151,7 @@ class TiendaController extends Controller
             return $this->redirect($this->generateUrl('backend_tienda_edit', array('id' => $id)));
         }
 
-        return $this->render('BackendBundle:Tienda:edit.html.twig', array(
+        return $this->render('BackendBundle:store:edit.html.twig', array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
@@ -159,7 +159,7 @@ class TiendaController extends Controller
     }
 
     /**
-     * Deletes a Tienda entity.
+     * Deletes a store entity.
      *
      */
     public function deleteAction($id)
@@ -170,11 +170,11 @@ class TiendaController extends Controller
         $form->bindRequest($request);
 
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getEntityManager();
-            $entity = $em->getRepository('TiendaBundle:Tienda')->find($id);
+            $em = $this->getDoctrine()->getManager();
+            $entity = $em->getRepository('TiendaBundle:store')->find($id);
 
             if (!$entity) {
-                throw $this->createNotFoundException('No se ha encontrado la tienda solicitada');
+                throw $this->createNotFoundException('No se ha encontrado la store solicitada');
             }
 
             $em->remove($entity);

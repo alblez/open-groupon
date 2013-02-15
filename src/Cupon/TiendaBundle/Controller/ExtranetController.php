@@ -3,8 +3,8 @@
 /*
  * (c) Javier Eguiluz <javier.eguiluz@gmail.com>
  *
- * Este archivo pertenece a la aplicación de prueba Cupon.
- * El código fuente de la aplicación incluye un archivo llamado LICENSE
+ * Este file pertenece a la application de prueba Cupon.
+ * El code fuente de la application incluye un file llamado LICENSE
  * con toda la información sobre el copyright y la licencia.
  */
 
@@ -16,14 +16,14 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
 use Symfony\Component\Security\Acl\Domain\UserSecurityIdentity;
 use Symfony\Component\Security\Acl\Permission\MaskBuilder;
-use Cupon\OfertaBundle\Entity\Oferta;
+use Cupon\OfertaBundle\Entity\offer;
 use Cupon\OfertaBundle\Form\Extranet\OfertaType;
 use Cupon\TiendaBundle\Form\Extranet\TiendaType;
 
 class ExtranetController extends Controller
 {
     /**
-     * Muestra el formulario de login
+     * Muestra el form de login
      */
     public function loginAction()
     {
@@ -41,15 +41,15 @@ class ExtranetController extends Controller
     }
 
     /**
-     * Muestra la portada de la extranet de la tienda que está logueada en
-     * la aplicación
+     * Muestra la portada de la extranet de la store que está logueada en
+     * la application
      */
     public function portadaAction()
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
-        $tienda = $this->get('security.context')->getToken()->getUser();
-        $ofertas = $em->getRepository('TiendaBundle:Tienda')->findOfertasRecientes($tienda->getId(), 50);
+        $store = $this->get('security.context')->getToken()->getUser();
+        $ofertas = $em->getRepository('TiendaBundle:store')->findOfertasRecientes($store->getId(), 50);
 
         return $this->render('TiendaBundle:Extranet:portada.html.twig', array(
             'ofertas' => $ofertas
@@ -57,55 +57,55 @@ class ExtranetController extends Controller
     }
 
     /**
-     * Muestra las ventas registradas para la oferta indicada
+     * Muestra las ventas registradas para la offer indicada
      *
-     * @param string $id El id de la oferta para la que se buscan sus ventas
+     * @param string $id El id de la offer para la que se buscan sus ventas
      */
     public function ofertaVentasAction($id)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
-        $ventas = $em->getRepository('OfertaBundle:Oferta')->findVentasByOferta($id);
+        $ventas = $em->getRepository('OfertaBundle:offer')->findVentasByOferta($id);
 
         return $this->render('TiendaBundle:Extranet:ventas.html.twig', array(
-            'oferta' => $ventas[0]->getOferta(),
+            'offer' => $ventas[0]->getOferta(),
             'ventas' => $ventas
         ));
     }
 
     /**
-     * Muestra el formulario para crear una nueva oferta y se encarga del
+     * Muestra el form para crear una nueva offer y se encarga del
      * procesamiento de la información recibida y la creación de las nuevas
-     * entidades de tipo Oferta
+     * entidades de type offer
      */
     public function ofertaNuevaAction()
     {
         $peticion = $this->getRequest();
 
-        $oferta = new Oferta();
-        $formulario = $this->createForm(new OfertaType(), $oferta);
+        $offer = new offer();
+        $form = $this->createForm(new OfertaType(), $offer);
 
         if ($peticion->getMethod() == 'POST') {
-           $formulario->bindRequest($peticion);
+           $form->bindRequest($peticion);
 
-           if ($formulario->isValid()) {
-               // Completar las propiedades de la oferta que una tienda no puede establecer
-               $tienda = $this->get('security.context')->getToken()->getUser();
-               $oferta->setCompras(0);
-               $oferta->setRevisada(false);
-               $oferta->setTienda($tienda);
-               $oferta->setCiudad($tienda->getCiudad());
+           if ($form->isValid()) {
+               // Completar las propiedades de la offer que una store no puede establecer
+               $store = $this->get('security.context')->getToken()->getUser();
+               $offer->setCompras(0);
+               $offer->setRevisada(false);
+               $offer->setTienda($store);
+               $offer->setCiudad($store->getCiudad());
 
-               // Copiar la foto subida y guardar la ruta
-               $oferta->subirFoto($this->container->getParameter('cupon.directorio.imagenes'));
+               // Copiar la photo subida y guardar la ruta
+               $offer->subirFoto($this->container->getParameter('cupon.directorio.imagenes'));
 
-               $em = $this->getDoctrine()->getEntityManager();
-               $em->persist($oferta);
+               $em = $this->getDoctrine()->getManager();
+               $em->persist($offer);
                $em->flush();
 
-               // Asignar el permiso necesario para que la tienda pueda modificar esta oferta
-               $idObjeto  = ObjectIdentity::fromDomainObject($oferta);
-               $idUsuario = UserSecurityIdentity::fromAccount($tienda);
+               // Asignar el permiso necesario para que la store pueda modificar esta offer
+               $idObjeto  = ObjectIdentity::fromDomainObject($offer);
+               $idUsuario = UserSecurityIdentity::fromAccount($store);
 
                $acl = $this->get('security.acl.provider')->createAcl($idObjeto);
                $acl->insertObjectAce($idUsuario, MaskBuilder::MASK_OPERATOR);
@@ -115,116 +115,116 @@ class ExtranetController extends Controller
            }
        }
 
-        return $this->render('TiendaBundle:Extranet:formulario.html.twig', array(
+        return $this->render('TiendaBundle:Extranet:form.html.twig', array(
             'accion'     => 'crear',
-            'formulario' => $formulario->createView()
+            'form' => $form->createView()
         ));
     }
 
     /**
-     * Muestra el formulario para editar una oferta y se encarga del
+     * Muestra el form para editar una offer y se encarga del
      * procesamiento de la información recibida y la modificación de los
-     * datos de las entidades de tipo Oferta
+     * datos de las entidades de type offer
      *
-     * @param string $id El id de la oferta a modificar
+     * @param string $id El id de la offer a modificar
      */
     public function ofertaEditarAction($id)
     {
         $peticion = $this->getRequest();
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
-        $oferta = $em->getRepository('OfertaBundle:Oferta')->find($id);
+        $offer = $em->getRepository('OfertaBundle:offer')->find($id);
 
-        if (!$oferta) {
-            throw $this->createNotFoundException('La oferta indicada no está disponible');
+        if (!$offer) {
+            throw $this->createNotFoundException('La offer indicada no está disponible');
         }
 
-        // Comprobar que el usuario tiene permiso para editar esta oferta concreta
-        if (false === $this->get('security.context')->isGranted('EDIT', $oferta)) {
+        // Comprobar que el user tiene permiso para editar esta offer concreta
+        if (false === $this->get('security.context')->isGranted('EDIT', $offer)) {
             throw new AccessDeniedException();
         }
 
-        // Una oferta sólo se puede modificar si todavía no ha sido revisada por los administradores
-        if ($oferta->getRevisada()) {
+        // Una offer sólo se puede modificar si todavía no ha sido revisada por los administradores
+        if ($offer->getRevisada()) {
             $this->get('session')->setFlash('error',
-                'La oferta indicada no se puede modificar porque ya ha sido revisada por los administradores'
+                'La offer indicada no se puede modificar porque ya ha sido revisada por los administradores'
             );
 
             return $this->redirect($this->generateUrl('extranet_portada'));
         }
 
-        $formulario = $this->createForm(new OfertaType(), $oferta);
+        $form = $this->createForm(new OfertaType(), $offer);
 
         if ($peticion->getMethod() == 'POST') {
-            // Guardar la ruta de la foto original de la oferta
-            $fotoOriginal = $formulario->getData()->getFoto();
+            // Guardar la ruta de la photo original de la offer
+            $fotoOriginal = $form->getData()->getFoto();
 
-            $formulario->bindRequest($peticion);
+            $form->bindRequest($peticion);
 
-            if ($formulario->isValid()) {
-                // Si el usuario no ha modificado la foto, su valor actual es null
-                if (null == $oferta->getFoto()) {
-                    // Guardar la ruta original de la foto en la oferta y no hacer nada más
-                    $oferta->setFoto($fotoOriginal);
+            if ($form->isValid()) {
+                // Si el user no ha modificado la photo, su value actual es null
+                if (null == $offer->getFoto()) {
+                    // Guardar la ruta original de la photo en la offer y no hacer nada más
+                    $offer->setFoto($fotoOriginal);
                 }
-                // El usuario ha cambiado la foto
+                // El user ha cambiado la photo
                 else {
-                    // Copiar la foto subida y guardar la nueva ruta
-                    $oferta->subirFoto($this->container->getParameter('cupon.directorio.imagenes'));
+                    // Copiar la photo subida y guardar la nueva ruta
+                    $offer->subirFoto($this->container->getParameter('cupon.directorio.imagenes'));
 
-                    // Borrar la foto anterior
+                    // Borrar la photo anterior
                     unlink($this->container->getParameter('cupon.directorio.imagenes').$fotoOriginal);
                 }
 
-                $em->persist($oferta);
+                $em->persist($offer);
                 $em->flush();
 
                 return $this->redirect($this->generateUrl('extranet_portada'));
             }
         }
 
-        return $this->render('TiendaBundle:Extranet:formulario.html.twig', array(
+        return $this->render('TiendaBundle:Extranet:form.html.twig', array(
             'accion'     => 'editar',
-            'oferta'     => $oferta,
-            'formulario' => $formulario->createView()
+            'offer'     => $offer,
+            'form' => $form->createView()
         ));
     }
 
     /**
-     * Muestra el formulario para editar los datos del perfil de la tienda que está
-     * logueada en la aplicación. También se encarga de procesar la información y
+     * Muestra el form para editar los datos del perfil de la store que está
+     * logueada en la application. También se encarga de procesar la información y
      * guardar las modificaciones en la base de datos
      */
     public function perfilAction()
     {
         $peticion = $this->getRequest();
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
-        $tienda = $this->get('security.context')->getToken()->getUser();
-        $formulario = $this->createForm(new TiendaType(), $tienda);
+        $store = $this->get('security.context')->getToken()->getUser();
+        $form = $this->createForm(new TiendaType(), $store);
 
         if ($peticion->getMethod() == 'POST') {
-            $passwordOriginal = $formulario->getData()->getPassword();
+            $passwordOriginal = $form->getData()->getPassword();
 
-            $formulario->bindRequest($peticion);
+            $form->bindRequest($peticion);
 
-            if ($formulario->isValid()) {
-                // Si el usuario no ha cambiado el password, su valor es null después de
-                // hacer el ->bindRequest(), por lo que hay que recuperar el valor original
-                if (null == $tienda->getPassword()) {
-                    $tienda->setPassword($passwordOriginal);
+            if ($form->isValid()) {
+                // Si el user no ha cambiado el password, su value es null después de
+                // hacer el ->bindRequest(), por lo que hay que recuperar el value original
+                if (null == $store->getPassword()) {
+                    $store->setPassword($passwordOriginal);
                 }
-                // Si el usuario ha cambiado su password, hay que codificarlo antes de guardarlo
+                // Si el user ha cambiado su password, hay que codificarlo antes de guardarlo
                 else {
-                    $encoder = $this->get('security.encoder_factory')->getEncoder($tienda);
+                    $encoder = $this->get('security.encoder_factory')->getEncoder($store);
                     $passwordCodificado = $encoder->encodePassword(
-                        $tienda->getPassword(),
-                        $tienda->getSalt()
+                        $store->getPassword(),
+                        $store->getSalt()
                     );
-                    $tienda->setPassword($passwordCodificado);
+                    $store->setPassword($passwordCodificado);
                 }
 
-                $em->persist($tienda);
+                $em->persist($store);
                 $em->flush();
 
                 $this->get('session')->setFlash('info',
@@ -236,8 +236,8 @@ class ExtranetController extends Controller
         }
 
         return $this->render('TiendaBundle:Extranet:perfil.html.twig', array(
-            'tienda'     => $tienda,
-            'formulario' => $formulario->createView()
+            'store'     => $store,
+            'form' => $form->createView()
         ));
     }
 }
