@@ -30,8 +30,9 @@ class TiendaType extends AbstractType
             ->add('password', 'repeated', array(
                 'type' => 'password',
                 'invalid_message' => 'Las dos contraseñas deben coincidir',
-                'options' => array('label' => 'password'),
-                'required' => false
+                'first_options'   => array('label' => 'password'),
+                'second_options'  => array('label' => 'Repite password'),
+                'required'        => false
             ))
 
             ->add('descripcion')
