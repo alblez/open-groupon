@@ -3,8 +3,8 @@
 /*
  * (c) Javier Eguiluz <javier.eguiluz@gmail.com>
  *
- * Este file pertenece a la application de prueba Cupon.
- * El code fuente de la application incluye un file llamado LICENSE
+ * Este archivo pertenece a la aplicación de prueba Cupon.
+ * El código fuente de la aplicación incluye un archivo llamado LICENSE
  * con toda la información sobre el copyright y la licencia.
  */
 
@@ -15,17 +15,11 @@ use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
-use Symfony\Component\Security\Acl\Domain\UserSecurityIdentity;
-use Symfony\Component\Security\Acl\Permission\MaskBuilder;
-use Symfony\Component\Security\Acl\Exception\AclNotFoundException;
-use Cupon\CiudadBundle\Entity\city;
-use Cupon\OfertaBundle\Entity\offer;
-use Cupon\TiendaBundle\Entity\store;
+use Cupon\OfertaBundle\Entity\Oferta;
 
 /**
- * Fixtures de la entity offer.
- * creates para cada city 20 ofertas con información muy realista.
+ * Fixtures de la entidad Oferta.
+ * Crea para cada ciudad 20 ofertas con información muy realista.
  */
 class Ofertas extends AbstractFixture implements OrderedFixtureInterface, ContainerAwareInterface
 {
@@ -44,85 +38,60 @@ class Ofertas extends AbstractFixture implements OrderedFixtureInterface, Contai
     public function load(ObjectManager $manager)
     {
         // Obtener todas las tiendas y ciudades de la base de datos
-        $ciudades = $manager->getRepository('CiudadBundle:city')->findAll();
-        $tiendas = $manager->getRepository('TiendaBundle:store')->findAll();
+        $ciudades = $manager->getRepository('CiudadBundle:Ciudad')->findAll();
+        $tiendas = $manager->getRepository('TiendaBundle:Tienda')->findAll();
 
-        foreach ($ciudades as $city) {
-            $tiendas = $manager->getRepository('TiendaBundle:store')->findByCiudad(
-                $city->getId()
+        foreach ($ciudades as $ciudad) {
+            $tiendas = $manager->getRepository('TiendaBundle:Tienda')->findByCiudad(
+                $ciudad->getId()
             );
 
             for ($j=1; $j<=20; $j++) {
-                $offer = new offer();
+                $oferta = new Oferta();
 
-                $offer->setNombre($this->getNombre());
-                $offer->setDescripcion($this->getDescripcion());
-                $offer->setCondiciones($this->getCondiciones());
-                $offer->setFoto('photo'.rand(1,20).'.jpg');
-                $offer->setPrecio(number_format(rand(100, 10000)/100, 2));
-                $offer->setDescuento($offer->getPrecio() * (rand(10, 70)/100));
+                $oferta->setNombre($this->getNombre());
+                $oferta->setDescripcion($this->getDescripcion());
+                $oferta->setCondiciones($this->getCondiciones());
+                $oferta->setFoto('foto'.rand(1,20).'.jpg');
+                $oferta->setPrecio(number_format(rand(100, 10000)/100, 2));
+                $oferta->setDescuento($oferta->getPrecio() * (rand(10, 70)/100));
 
-                // Una offer se publica hoy, el resto se reparte entre el pasado y el futuro
+                // Una oferta se publica hoy, el resto se reparte entre el pasado y el futuro
                 if (1 == $j) {
-                    $date = 'today';
-                    $offer->setRevisada(true);
+                    $fecha = 'today';
+                    $oferta->setRevisada(true);
                 } elseif ($j < 10) {
-                    $date = 'now - '.($j-1).' days';
+                    $fecha = 'now - '.($j-1).' days';
                     // el 80% de las ofertas pasadas se marcan como revisadas
-                    $offer->setRevisada((rand(1, 1000) % 10) < 8);
+                    $oferta->setRevisada((rand(1, 1000) % 10) < 8);
                 } else {
-                    $date = 'now + '.($j - 10 + 1).' days';
-                    $offer->setRevisada(true);
+                    $fecha = 'now + '.($j - 10 + 1).' days';
+                    $oferta->setRevisada(true);
                 }
 
-                $fechaPublicacion = new \DateTime($date);
+                $fechaPublicacion = new \DateTime($fecha);
                 $fechaPublicacion->setTime(23, 59, 59);
 
-                // Se debe clonar el value de la fechaPublicacion porque si se usa directamente
-                // el method ->add(), se modificaría el value original, que no se saves en la BD
+                // Se debe clonar el valor de la fechaPublicacion porque si se usa directamente
+                // el método ->add(), se modificaría el valor original, que no se guarda en la BD
                 // hasta que se hace el ->flush()
                 $fechaExpiracion = clone $fechaPublicacion;
                 $fechaExpiracion->add(\DateInterval::createFromDateString('24 hours'));
 
-                $offer->setFechaPublicacion($fechaPublicacion);
-                $offer->setFechaExpiracion($fechaExpiracion);
+                $oferta->setFechaPublicacion($fechaPublicacion);
+                $oferta->setFechaExpiracion($fechaExpiracion);
 
-                $offer->setCompras(0);
-                $offer->setUmbral(rand(25, 100));
+                $oferta->setCompras(0);
+                $oferta->setUmbral(rand(25, 100));
 
-                $offer->setCiudad($city);
+                $oferta->setCiudad($ciudad);
 
-                // Seleccionar aleatoriamente una store que pertenezca a la city anterior
-                $store = $tiendas[array_rand($tiendas)];
-                $offer->setTienda($store);
+                // Seleccionar aleatoriamente una tienda que pertenezca a la ciudad anterior
+                $tienda = $tiendas[array_rand($tiendas)];
+                $oferta->setTienda($tienda);
 
-                $manager->persist($offer);
+                $manager->persist($oferta);
                 $manager->flush();
-
-                // Otorgar el permiso adecuado a cada offer utilizando la ACL
-
-                // Obtener la identidad del objeto offer y del user
-                $idObjeto  = ObjectIdentity::fromDomainObject($offer);
-                $idUsuario = UserSecurityIdentity::fromAccount($store);
-
-                // Buscar si la offer ya dispone de una ACL previa
-                $proveedor = $this->container->get('security.acl.provider');
-
-                try {
-                    $acl = $proveedor->findAcl($idObjeto, array($idUsuario));
-                } catch (AclNotFoundException $e) {
-                    // El objeto no disponía de ninguna ACL, crearla
-                    $acl = $proveedor->createAcl($idObjeto);
-                }
-
-                // Borrar los ACEs previos que (a lo mejor) dispone este objeto
-                $aces = $acl->getObjectAces();
-                foreach ($aces as $index => $ace) {
-                    $acl->deleteObjectAce($index);
-                }
-
-                $acl->insertObjectAce($idUsuario, MaskBuilder::MASK_OPERATOR);
-                $proveedor->updateAcl($acl);
             }
         }
     }
@@ -130,7 +99,7 @@ class Ofertas extends AbstractFixture implements OrderedFixtureInterface, Contai
     /**
      * Generador aleatorio de nombres de ofertas.
      *
-     * @return string name/título aletorio generado para la offer.
+     * @return string Nombre/título aletorio generado para la oferta.
      */
     private function getNombre()
     {
@@ -150,7 +119,7 @@ class Ofertas extends AbstractFixture implements OrderedFixtureInterface, Contai
     /**
      * Generador aleatorio de descripciones de ofertas.
      *
-     * @return string description aletoria generada para la offer.
+     * @return string Descripción aletoria generada para la oferta.
      */
     private function getDescripcion()
     {
@@ -180,7 +149,7 @@ class Ofertas extends AbstractFixture implements OrderedFixtureInterface, Contai
     /**
      * Generador aleatorio de condiciones de ofertas.
      *
-     * @return string Condiciones aletorias generadas para la offer.
+     * @return string Condiciones aletorias generadas para la oferta.
      */
     private function getCondiciones()
     {
@@ -193,7 +162,7 @@ class Ofertas extends AbstractFixture implements OrderedFixtureInterface, Contai
             'Válido para cualquier día entre semana.',
             'No válido en festivos ni fines de semana.',
             'Reservado el derecho de admisión.',
-            'offer válida si se realizan consumiciones adicionales por value de 50 euros.',
+            'Oferta válida si se realizan consumiciones adicionales por valor de 50 euros.',
             'Válido solamente para comidas, no para cenas.',
         ));
 
