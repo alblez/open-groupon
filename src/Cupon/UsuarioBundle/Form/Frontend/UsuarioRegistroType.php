@@ -3,8 +3,8 @@
 /*
  * (c) Javier Eguiluz <javier.eguiluz@gmail.com>
  *
- * Este archivo pertenece a la aplicación de prueba Cupon.
- * El código fuente de la aplicación incluye un archivo llamado LICENSE
+ * Este file pertenece a la application de prueba Cupon.
+ * El code fuente de la application incluye un file llamado LICENSE
  * con toda la información sobre el copyright y la licencia.
  */
 
@@ -16,27 +16,28 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Doctrine\ORM\EntityRepository;
 
 /**
- * Formulario para crear entidades de tipo Usuario cuando los usuarios se
+ * form para crear entidades de type user cuando los usuarios se
  * registran en el sitio.
  * Como se utiliza en la parte pública del sitio, algunas propiedades de
- * la entidad no se incluyen en el formulario.
+ * la entity no se incluyen en el form.
  */
 class UsuarioRegistroType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('nombre')
+            ->add('name')
             ->add('apellidos')
-            ->add('email', 'email',  array('label' => 'Correo electrónico', 'attr' => array(
-                'placeholder' => 'usuario@servidor'
+            ->add('email', 'email',  array('label' => 'email electrónico', 'attr' => array(
+                'placeholder' => 'user@servidor'
             )))
 
             ->add('password', 'repeated', array(
                 'type' => 'password',
                 'invalid_message' => 'Las dos contraseñas deben coincidir',
-                'options' => array('label' => 'Contraseña'),
-                'required' => false
+                'first_options'   => array('label' => 'password'),
+                'second_options'  => array('label' => 'Repite password'),
+                'required'        => false
             ))
 
             ->add('direccion')
@@ -46,16 +47,16 @@ class UsuarioRegistroType extends AbstractType
             ))
             ->add('dni')
             ->add('numero_tarjeta', 'text', array('label' => 'Tarjeta de Crédito', 'attr' => array(
-                'pattern' => '^[0-9]{13,16}$',
+                'pattern'     => '^[0-9]{13,16}$',
                 'placeholder' => 'Entre 13 y 16 numeros'
             )))
 
-            ->add('ciudad', 'entity', array(
-                'class' => 'Cupon\\CiudadBundle\\Entity\\Ciudad',
-                'empty_value' => 'Selecciona una ciudad',
-                'query_builder' => function(EntityRepository $repositorio) {
-                    return $repositorio->createQueryBuilder('c')
-                        ->orderBy('c.nombre', 'ASC');
+            ->add('city', 'entity', array(
+                'class'         => 'Cupon\\CiudadBundle\\Entity\\city',
+                'empty_value'   => 'Selecciona una city',
+                'query_builder' => function(EntityRepository $repository) {
+                    return $repository->createQueryBuilder('c')
+                        ->orderBy('c.name', 'ASC');
                 },
             ))
         ;
@@ -64,8 +65,8 @@ class UsuarioRegistroType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Cupon\UsuarioBundle\Entity\Usuario',
-            'validation_groups' => array('default', 'registro')
+            'data_class' => 'Cupon\UsuarioBundle\Entity\user',
+            'validation_groups' => array('default', 'record')
         ));
     }
 
