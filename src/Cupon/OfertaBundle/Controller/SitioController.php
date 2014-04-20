@@ -11,6 +11,7 @@
 namespace Cupon\OfertaBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 
 class SitioController extends Controller
 {
@@ -18,10 +19,8 @@ class SitioController extends Controller
      * Muestra el form de contacto y también procesa el envío de emails
      *
      */
-    public function contactoAction()
+    public function contactoAction(Request $peticion)
     {
-        $peticion = $this->getRequest();
-
         // Se creates un form "in situ", sin clase asociada
         $form = $this->createFormBuilder()
             ->add('remitente', 'email')
