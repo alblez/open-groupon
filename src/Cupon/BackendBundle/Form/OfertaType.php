@@ -38,6 +38,7 @@ class OfertaType extends AbstractType
             ->add('revisada', null, array('required' => false))
             ->add('city')
             ->add('store')
+            ->add('guardar', 'submit', array('attr' => array('class' => 'boton')))
         ;
     }
 

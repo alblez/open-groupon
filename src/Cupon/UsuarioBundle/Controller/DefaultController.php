@@ -121,6 +121,13 @@ class DefaultController extends Controller
 
         $user = $this->get('security.context')->getToken()->getUser();
         $form = $this->createForm(new UsuarioPerfilType(), $user);
+        $form
+            ->remove('registrarme')
+            ->add('guardar', 'submit', array(
+                'label' => 'Guardar cambios',
+                'attr'  => array('class' => 'boton')
+            ))
+        ;
 
         $passwordOriginal = $form->getData()->getPassword();
 
