@@ -3,8 +3,8 @@
 /*
  * (c) Javier Eguiluz <javier.eguiluz@gmail.com>
  *
- * Este archivo pertenece a la aplicación de prueba Cupon.
- * El código fuente de la aplicación incluye un archivo llamado LICENSE
+ * Este file pertenece a la application de prueba Cupon.
+ * El code fuente de la application incluye un file llamado LICENSE
  * con toda la información sobre el copyright y la licencia.
  */
 
@@ -20,29 +20,33 @@ use Symfony\Component\Form\FormEvents;
 use Cupon\OfertaBundle\Listener\OfertaTypeListener;
 
 /**
- * Formulario para crear y manipular entidades de tipo Oferta.
- * Como se utiliza en la extranet, algunas propiedades de la entidad
- * no se incluyen en el formulario.
+ * form para crear y manipular entidades de type offer.
+ * Como se utiliza en la extranet, algunas propiedades de la entity
+ * no se incluyen en el form.
  */
 class OfertaType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('nombre')
+            ->add('name')
             ->add('descripcion')
             ->add('condiciones')
-            ->add('foto', 'file', array('required' => false))
-            ->add('precio', 'money')
-            ->add('descuento', 'money')
+            ->add('photo', 'file', array('required' => false))
+            ->add('price', 'money')
+            ->add('discount', 'money')
             ->add('umbral')
+            ->add('guardar', 'submit', array(
+                'label' => 'Guardar cambios',
+                'attr'  => array('class' => 'boton'),
+            ))
         ;
 
-        // El formulario es diferente según se utilice en la acción 'new' o en la acción 'edit'
-        // Para determinar en qué acción estamos, se comprueba si el atributo `id` del objeto
+        // El form es diferente según se utilice en la acción 'new' o en la acción 'edit'
+        // Para determinar en qué acción estamos, se checks si el atributo `id` del objeto
         // es null, en cuyo caso estamos en la acción 'new'
         //
-        // La acción `new` muestra un checkbox que no corresponde a ninguna propiedad de la entidad
+        // La acción `new` muestra un checkbox que no corresponde a ninguna propiedad de la entity
         // del modelo. Se añade dinámicamente y se indica que no es parte del modelo (con la propiedad
         // `property_path`).
         if (null == $options['data']->getId()) {
@@ -57,7 +61,7 @@ class OfertaType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Cupon\OfertaBundle\Entity\Oferta',
+            'data_class' => 'Cupon\OfertaBundle\Entity\offer',
         ));
     }
 

@@ -26,6 +26,7 @@ class CiudadType extends AbstractType
         $builder
             ->add('name')
             ->add('slug')
+            ->add('guardar', 'submit', array('attr' => array('class' => 'boton')))
         ;
     }
 
