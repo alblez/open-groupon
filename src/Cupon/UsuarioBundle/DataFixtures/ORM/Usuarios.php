@@ -20,7 +20,7 @@ use Cupon\UsuarioBundle\Entity\user;
 
 /**
  * Fixtures de la entity user.
- * creates 500 usuarios de prueba con información muy realista.
+ * creates 200 usuarios de prueba con información muy realista.
  */
 class Usuarios extends AbstractFixture implements OrderedFixtureInterface, ContainerAwareInterface
 {
@@ -41,7 +41,7 @@ class Usuarios extends AbstractFixture implements OrderedFixtureInterface, Conta
         // Obtener todas las ciudades de la base de datos
         $ciudades = $manager->getRepository('CiudadBundle:city')->findAll();
 
-        for ($i=1; $i<=500; $i++) {
+        for ($i=1; $i<=200; $i++) {
             $user = new user();
 
             $user->setNombre($this->getNombre());
