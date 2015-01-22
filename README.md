@@ -178,3 +178,5 @@ Backend
 - PHP >= 5.3.3
 - Composer
 - SQLite or MySQL
+
+> Requires PHP 5.3.3+ and Composer.
