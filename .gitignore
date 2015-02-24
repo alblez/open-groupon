@@ -11,3 +11,9 @@
 /vendor/
 /bin/
 /composer.phar
+
+# IDE
+.idea/
+*.swp
+*.swo
+.DS_Store
