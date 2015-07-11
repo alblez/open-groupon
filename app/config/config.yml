@@ -31,6 +31,7 @@ twig:
 # Configuración de Doctrine
 doctrine:
     dbal:
+        # strict_mode: ~
         driver:   %database_driver%
         charset:  UTF8
         # Si NO usas SQLite, comenta esta línea
