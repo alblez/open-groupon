@@ -6,5 +6,5 @@ parameters:
     mailer_host: localhost
     mailer_user: null
     mailer_password: null
-    locale: es
+    locale: en
     secret: ThisTokenIsNotSoSecretChangeIt
