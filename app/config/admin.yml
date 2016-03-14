@@ -1,7 +1,16 @@
 easy_admin:
     entities:
+<<<<<<< HEAD
         - AppBundle\Entity\Ciudad
         - AppBundle\Entity\Oferta
         - AppBundle\Entity\Venta
         - AppBundle\Entity\Tienda
         - AppBundle\Entity\Usuario
+||||||| parent of d67b65e (Eliminado el backend anterior y reemplazado por EasyAdmin)
+=======
+        - Cupon\CiudadBundle\Entity\Ciudad
+        - Cupon\OfertaBundle\Entity\Oferta
+        #- Cupon\OfertaBundle\Entity\Venta
+        - Cupon\TiendaBundle\Entity\Tienda
+        - Cupon\UsuarioBundle\Entity\Usuario
+>>>>>>> d67b65e (Eliminado el backend anterior y reemplazado por EasyAdmin)
