@@ -3,8 +3,8 @@
 /*
  * (c) Javier Eguiluz <javier.eguiluz@gmail.com>
  *
- * Este file pertenece a la application de prueba Cupon.
- * El code fuente de la application incluye un file llamado LICENSE
+ * Este archivo pertenece a la aplicación de prueba Cupon.
+ * El código fuente de la aplicación incluye un archivo llamado LICENSE
  * con toda la información sobre el copyright y la licencia.
  */
 
@@ -17,7 +17,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 /**
  * @ORM\Entity(repositoryClass="AppBundle\Repository\TiendaRepository")
  */
-class store implements UserInterface
+class Tienda implements UserInterface
 {
     /**
      * @ORM\Id
@@ -29,7 +29,7 @@ class store implements UserInterface
     /**
      * @ORM\Column(type="string", length=100)
      */
-    protected $name;
+    protected $nombre;
 
     /**
      * @ORM\Column(type="string", length=100)
@@ -37,7 +37,7 @@ class store implements UserInterface
     protected $slug;
 
     /**
-     * @ORM\Column(type="string", length=10)
+     * @ORM\Column(type="string", length=15)
      */
     protected $login;
 
@@ -57,9 +57,9 @@ class store implements UserInterface
     protected $direccion;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\city")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Ciudad")
      */
-    protected $city;
+    protected $ciudad;
 
     public function __toString()
     {
@@ -67,8 +67,6 @@ class store implements UserInterface
     }
 
     /**
-     * Get id.
-     *
      * @return int
      */
     public function getId()
@@ -77,29 +75,23 @@ class store implements UserInterface
     }
 
     /**
-     * Set name.
-     *
-     * @param string $name
+     * @param string $nombre
      */
-    public function setNombre($name)
+    public function setNombre($nombre)
     {
-        $this->name = $name;
-        $this->slug = Util::getSlug($name);
+        $this->nombre = $nombre;
+        $this->slug = Util::getSlug($nombre);
     }
 
     /**
-     * Get name.
-     *
      * @return string
      */
     public function getNombre()
     {
-        return $this->name;
+        return $this->nombre;
     }
 
     /**
-     * Set slug.
-     *
      * @param string $slug
      */
     public function setSlug($slug)
@@ -108,8 +100,6 @@ class store implements UserInterface
     }
 
     /**
-     * Get slug.
-     *
      * @return string
      */
     public function getSlug()
@@ -118,8 +108,6 @@ class store implements UserInterface
     }
 
     /**
-     * Set login.
-     *
      * @param string $login
      */
     public function setLogin($login)
@@ -128,8 +116,6 @@ class store implements UserInterface
     }
 
     /**
-     * Get login.
-     *
      * @return string
      */
     public function getLogin()
@@ -138,8 +124,6 @@ class store implements UserInterface
     }
 
     /**
-     * Set password.
-     *
      * @param string $password
      */
     public function setPassword($password)
@@ -148,8 +132,6 @@ class store implements UserInterface
     }
 
     /**
-     * Get password.
-     *
      * @return string
      */
     public function getPassword()
@@ -158,9 +140,7 @@ class store implements UserInterface
     }
 
     /**
-     * Set descripcion.
-     *
-     * @param text $descripcion
+     * @param string $descripcion
      */
     public function setDescripcion($descripcion)
     {
@@ -168,9 +148,7 @@ class store implements UserInterface
     }
 
     /**
-     * Get descripcion.
-     *
-     * @return text
+     * @return string
      */
     public function getDescripcion()
     {
@@ -178,9 +156,7 @@ class store implements UserInterface
     }
 
     /**
-     * Set direccion.
-     *
-     * @param text $direccion
+     * @param string $direccion
      */
     public function setDireccion($direccion)
     {
@@ -188,9 +164,7 @@ class store implements UserInterface
     }
 
     /**
-     * Get direccion.
-     *
-     * @return text
+     * @return string
      */
     public function getDireccion()
     {
@@ -198,27 +172,25 @@ class store implements UserInterface
     }
 
     /**
-     * Set city.
-     *
-     * @param AppBundle\Entity\city $city
+     * @param Ciudad $ciudad
      */
-    public function setCiudad(\AppBundle\Entity\city $city)
+    public function setCiudad(Ciudad $ciudad)
     {
-        $this->city = $city;
+        $this->ciudad = $ciudad;
     }
 
     /**
-     * Get city.
-     *
-     * @return AppBundle\Entity\city
+     * @return Ciudad
      */
     public function getCiudad()
     {
-        return $this->city;
+        return $this->ciudad;
     }
 
     /**
-     * method requerido por la interfaz UserInterface.
+     * Método requerido por la interfaz UserInterface.
+     *
+     * @return array
      */
     public function getRoles()
     {
@@ -226,7 +198,9 @@ class store implements UserInterface
     }
 
     /**
-     * method requerido por la interfaz UserInterface.
+     * Método requerido por la interfaz UserInterface.
+     *
+     * @return string
      */
     public function getUsername()
     {
@@ -234,9 +208,22 @@ class store implements UserInterface
     }
 
     /**
-     * Métodos requeridos por la interfaz UserInterface, pero no implementados
-     * por esta clase.
+     * Este método es requerido por la interfaz UserInterface, pero esta clase
+     * no necesita implementarlo porque se usa 'bcrypt' para codificar las contraseñas.
      */
-    public function getSalt() { }
-    public function eraseCredentials() { }
+    public function getSalt() {
+        return;
+    }
+
+    /**
+     * Este método es requerido por la interfaz UserInterface, pero esta clase
+     * no necesita implementarlo.
+     */
+    public function eraseCredentials() {
+        // si esta clase guardara tanto la contraseña codificada como la contraseña
+        // en claro, en este método se pondría esta última a 'null'
+        // $this->passwordEnClaro = null;
+
+        return;
+    }
 }
