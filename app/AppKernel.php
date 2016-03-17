@@ -13,7 +13,6 @@ class AppKernel extends Kernel
             new Symfony\Bundle\TwigBundle\TwigBundle(),
             new Symfony\Bundle\MonologBundle\MonologBundle(),
             new Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle(),
-            new Symfony\Bundle\AsseticBundle\AsseticBundle(),
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new JavierEguiluz\Bundle\EasyAdminBundle\EasyAdminBundle(),
@@ -37,7 +36,7 @@ class AppKernel extends Kernel
 
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
-        // Si tu archivo YAML contiene código PHP, utiliza el siguiente código:
+        // Si tu file YAML contiene code PHP, utiliza el siguiente code:
         //
         // use Symfony\Component\Yaml\Yaml;
         //
