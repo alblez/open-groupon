@@ -18,17 +18,11 @@ use Symfony\Component\HttpFoundation\Request;
 class SitioController extends Controller
 {
     /**
-<<<<<<< HEAD:src/Cupon/OfertaBundle/Controller/SitioController.php
-     * Muestra el form de contacto y también procesa el envío de emails
-||||||| parent of ab1dc88 (Eliminados todos los bundles para usar solo AppBundle):src/Cupon/OfertaBundle/Controller/SitioController.php
-     * Muestra el formulario de contacto y también procesa el envío de emails
-=======
      * @Route("/contacto", defaults={ "_locale"="es" }, name="contacto")
-     * Muestra el formulario de contacto y también procesa el envío de emails
->>>>>>> ab1dc88 (Eliminados todos los bundles para usar solo AppBundle):src/AppBundle/Controller/SitioController.php
+     * Muestra el form de contacto y también procesa el envío de emails
      *
      */
-    public function contactoAction(Request $peticion)
+    public function contactoAction(Request $request)
     {
         // Se creates un form "in situ", sin clase asociada
         $form = $this->createFormBuilder()
@@ -37,7 +31,7 @@ class SitioController extends Controller
             ->getForm()
         ;
 
-        $form->handleRequest($peticion);
+        $form->handleRequest($request);
 
         if ($form->isValid()) {
             $datos = $form->getData();
@@ -45,8 +39,8 @@ class SitioController extends Controller
             $contenido = sprintf(" Remitente: %s \n\n message: %s \n\n Navegador: %s \n address IP: %s \n",
                 $datos['remitente'],
                 htmlspecialchars($datos['message']),
-                $peticion->server->get('HTTP_USER_AGENT'),
-                $peticion->server->get('REMOTE_ADDR')
+                $request->server->get('HTTP_USER_AGENT'),
+                $request->server->get('REMOTE_ADDR')
             );
 
             $message = \Swift_Message::newInstance()
@@ -65,16 +59,8 @@ class SitioController extends Controller
             return $this->redirect($this->generateUrl('portada'));
         }
 
-<<<<<<< HEAD:src/Cupon/OfertaBundle/Controller/SitioController.php
-        return $this->render('OfertaBundle:Sitio:contacto.html.twig', array(
-            'form' => $form->createView(),
-||||||| parent of ab1dc88 (Eliminados todos los bundles para usar solo AppBundle):src/Cupon/OfertaBundle/Controller/SitioController.php
-        return $this->render('OfertaBundle:Sitio:contacto.html.twig', array(
-            'formulario' => $formulario->createView(),
-=======
         return $this->render('sitio/contacto.html.twig', array(
-            'formulario' => $formulario->createView(),
->>>>>>> ab1dc88 (Eliminados todos los bundles para usar solo AppBundle):src/AppBundle/Controller/SitioController.php
+            'form' => $form->createView(),
         ));
     }
 }
