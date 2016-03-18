@@ -1,37 +1,4 @@
-<<<<<<< HEAD
 {% extends 'frontend.html.twig' %}
-
-{% block id 'compras' %}
-{% block title 'Últimas ofertas que has comprado' %}
-
-{% block article %}
-    <h1>{{ block('title') }}</h1>
-
-    {% for compra in compras %}
-        {{ include('oferta/_oferta_simple.html.twig', {
-            oferta: compra.oferta,
-            comprada: true,
-            fechaCompra: compra.fecha
-        }) }}
-    {% endfor %}
-{% endblock %}
-
-{% block aside %}
-    {{ parent() }}
-
-    <section id="cercanas">
-        <h2>Ofertas en otras ciudades</h2>
-        <ul>
-            {% for ciudad in cercanas %}
-                <li><a href="{{ path('ciudad_cambiar', { ciudad: ciudad.slug }) }}">{{ ciudad.nombre }}</a></li>
-            {% endfor %}
-        </ul>
-    </section>
-
-    {{ include('comun/_sobre_nosotros.html.twig') }}
-||||||| parent of ab1dc88 (Eliminados todos los bundles para usar solo AppBundle)
-=======
-{% extends '::frontend.html.twig' %}
 
 {% block title %}Últimas ofertas que has comprado{% endblock %}
 {% block id 'compras' %}
@@ -55,7 +22,7 @@
         <h2>Ofertas en otras ciudades</h2>
         <ul>
             {% for ciudad in cercanas %}
-            <li><a href="{{ path('ciudad_cambiar', { 'ciudad': ciudad.slug }) }}">{{ ciudad.nombre }}</a></li>
+            <li><a href="{{ path('ciudad_cambiar', { ciudad: ciudad.slug }) }}">{{ ciudad.nombre }}</a></li>
             {% endfor %}
         </ul>
     </section>
@@ -65,5 +32,4 @@
         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
         <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
     </section>
->>>>>>> ab1dc88 (Eliminados todos los bundles para usar solo AppBundle)
 {% endblock %}

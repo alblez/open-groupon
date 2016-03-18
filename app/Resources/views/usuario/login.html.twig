@@ -1,39 +1,4 @@
-<<<<<<< HEAD
 {% extends 'frontend.html.twig' %}
-
-{% block id 'login' %}
-{% block title 'Entra en tu cuenta o date de alta' %}
-
-{% block article %}
-    <section id="entrar">
-        <h1>{{ 'Accede a tu cuenta'|trans }}</h1>
-
-        <form action="{{ path('usuario_login_check') }}" method="post">
-            {% if error %}
-                <div class="errores-globales">
-                    <span class="label">ERROR</span> {{ error.message|trans }}
-                </div>
-            {% endif %}
-
-            <label for="username">{{ 'Email'|trans }}</label>
-            <input type="text" id="username" name="_username" value="{{ last_username }}" />
-
-            <label for="password">{{ 'Contraseña'|trans }}</label>
-            <input type="password" id="password" name="_password" />
-
-            <input type="checkbox" id="remember_me" name="_remember_me" checked />
-            <label for="remember_me">{{ 'No cerrar sesión'|trans }}</label>
-
-            <input class="boton" type="submit" name="login" value="{{ 'Entrar'|trans }}" />
-        </form>
-    </section>
-
-    <section id="registrar">
-        <a class="boton" href="{{ path('usuario_registro') }}">{{ 'Regístrate gratis como usuario'|trans }}</a>
-    </section>
-||||||| parent of ab1dc88 (Eliminados todos los bundles para usar solo AppBundle)
-=======
-{% extends '::frontend.html.twig' %}
 
 {% block title %}Entra en tu cuenta o date de alta{% endblock %}
 {% block id 'login' %}
@@ -63,7 +28,6 @@
 <section id="registrar">
     <a class="boton" href="{{ path('usuario_registro') }}">{{ "Regístrate gratis como usuario" | trans }}</a>
 </section>
->>>>>>> ab1dc88 (Eliminados todos los bundles para usar solo AppBundle)
 {% endblock %}
 
 {% block aside %}
