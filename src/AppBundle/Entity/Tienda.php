@@ -3,8 +3,8 @@
 /*
  * (c) Javier Eguiluz <javier.eguiluz@gmail.com>
  *
- * Este file pertenece a la application de prueba Cupon.
- * El code fuente de la application incluye un file llamado LICENSE
+ * Este archivo pertenece a la aplicación de prueba Cupon.
+ * El código fuente de la aplicación incluye un archivo llamado LICENSE
  * con toda la información sobre el copyright y la licencia.
  */
 
@@ -17,17 +17,17 @@ use AppBundle\Util\Util;
 /**
  * @ORM\Entity(repositoryClass="AppBundle\Repository\TiendaRepository")
  */
-class store implements UserInterface
+class Tienda implements UserInterface
 {
     /**
-     * method requerido por la interfaz UserInterface
+     * Método requerido por la interfaz UserInterface.
      */
     public function eraseCredentials()
     {
     }
 
     /**
-     * method requerido por la interfaz UserInterface
+     * Método requerido por la interfaz UserInterface.
      */
     public function getRoles()
     {
@@ -35,7 +35,7 @@ class store implements UserInterface
     }
 
     /**
-     * method requerido por la interfaz UserInterface
+     * Método requerido por la interfaz UserInterface.
      */
     public function getUsername()
     {
@@ -52,7 +52,7 @@ class store implements UserInterface
     /**
      * @ORM\Column(type="string", length=100)
      */
-    protected $name;
+    protected $nombre;
 
     /**
      * @ORM\Column(type="string", length=100)
@@ -85,15 +85,9 @@ class store implements UserInterface
     protected $direccion;
 
     /**
-<<<<<<< HEAD:src/Cupon/TiendaBundle/Entity/Tienda.php
-     * @ORM\ManyToOne(targetEntity="Cupon\CiudadBundle\Entity\city")
-||||||| parent of ab1dc88 (Eliminados todos los bundles para usar solo AppBundle):src/Cupon/TiendaBundle/Entity/Tienda.php
-     * @ORM\ManyToOne(targetEntity="Cupon\CiudadBundle\Entity\Ciudad")
-=======
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Ciudad")
->>>>>>> ab1dc88 (Eliminados todos los bundles para usar solo AppBundle):src/AppBundle/Entity/Tienda.php
      */
-    protected $city;
+    protected $ciudad;
 
     public function __toString()
     {
@@ -101,9 +95,9 @@ class store implements UserInterface
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -111,28 +105,28 @@ class store implements UserInterface
     }
 
     /**
-     * Set name
+     * Set nombre.
      *
-     * @param string $name
+     * @param string $nombre
      */
-    public function setNombre($name)
+    public function setNombre($nombre)
     {
-        $this->name = $name;
-        $this->slug = Util::getSlug($name);
+        $this->nombre = $nombre;
+        $this->slug = Util::getSlug($nombre);
     }
 
     /**
-     * Get name
+     * Get nombre.
      *
      * @return string
      */
     public function getNombre()
     {
-        return $this->name;
+        return $this->nombre;
     }
 
     /**
-     * Set slug
+     * Set slug.
      *
      * @param string $slug
      */
@@ -142,7 +136,7 @@ class store implements UserInterface
     }
 
     /**
-     * Get slug
+     * Get slug.
      *
      * @return string
      */
@@ -152,7 +146,7 @@ class store implements UserInterface
     }
 
     /**
-     * Set login
+     * Set login.
      *
      * @param string $login
      */
@@ -162,7 +156,7 @@ class store implements UserInterface
     }
 
     /**
-     * Get login
+     * Get login.
      *
      * @return string
      */
@@ -172,7 +166,7 @@ class store implements UserInterface
     }
 
     /**
-     * Set password
+     * Set password.
      *
      * @param string $password
      */
@@ -182,7 +176,7 @@ class store implements UserInterface
     }
 
     /**
-     * Get salt
+     * Get salt.
      *
      * @return string
      */
@@ -192,7 +186,7 @@ class store implements UserInterface
     }
 
     /**
-     * Set salt
+     * Set salt.
      *
      * @param string $salt
      */
@@ -202,7 +196,7 @@ class store implements UserInterface
     }
 
     /**
-     * Get password
+     * Get password.
      *
      * @return string
      */
@@ -212,7 +206,7 @@ class store implements UserInterface
     }
 
     /**
-     * Set descripcion
+     * Set descripcion.
      *
      * @param text $descripcion
      */
@@ -222,7 +216,7 @@ class store implements UserInterface
     }
 
     /**
-     * Get descripcion
+     * Get descripcion.
      *
      * @return text
      */
@@ -232,7 +226,7 @@ class store implements UserInterface
     }
 
     /**
-     * Set direccion
+     * Set direccion.
      *
      * @param text $direccion
      */
@@ -242,7 +236,7 @@ class store implements UserInterface
     }
 
     /**
-     * Get direccion
+     * Get direccion.
      *
      * @return text
      */
@@ -252,40 +246,22 @@ class store implements UserInterface
     }
 
     /**
-     * Set city
+     * Set ciudad.
      *
-<<<<<<< HEAD:src/Cupon/TiendaBundle/Entity/Tienda.php
-     * @param Cupon\CiudadBundle\Entity\city $city
-||||||| parent of ab1dc88 (Eliminados todos los bundles para usar solo AppBundle):src/Cupon/TiendaBundle/Entity/Tienda.php
-     * @param Cupon\CiudadBundle\Entity\Ciudad $ciudad
-=======
      * @param AppBundle\Entity\Ciudad $ciudad
->>>>>>> ab1dc88 (Eliminados todos los bundles para usar solo AppBundle):src/AppBundle/Entity/Tienda.php
      */
-<<<<<<< HEAD:src/Cupon/TiendaBundle/Entity/Tienda.php
-    public function setCiudad(\Cupon\CiudadBundle\Entity\city $city)
-||||||| parent of ab1dc88 (Eliminados todos los bundles para usar solo AppBundle):src/Cupon/TiendaBundle/Entity/Tienda.php
-    public function setCiudad(\Cupon\CiudadBundle\Entity\Ciudad $ciudad)
-=======
     public function setCiudad(\AppBundle\Entity\Ciudad $ciudad)
->>>>>>> ab1dc88 (Eliminados todos los bundles para usar solo AppBundle):src/AppBundle/Entity/Tienda.php
     {
-        $this->city = $city;
+        $this->ciudad = $ciudad;
     }
 
     /**
-     * Get city
+     * Get ciudad.
      *
-<<<<<<< HEAD:src/Cupon/TiendaBundle/Entity/Tienda.php
-     * @return Cupon\CiudadBundle\Entity\city
-||||||| parent of ab1dc88 (Eliminados todos los bundles para usar solo AppBundle):src/Cupon/TiendaBundle/Entity/Tienda.php
-     * @return Cupon\CiudadBundle\Entity\Ciudad
-=======
      * @return AppBundle\Entity\Ciudad
->>>>>>> ab1dc88 (Eliminados todos los bundles para usar solo AppBundle):src/AppBundle/Entity/Tienda.php
      */
     public function getCiudad()
     {
-        return $this->city;
+        return $this->ciudad;
     }
 }

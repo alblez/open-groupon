@@ -3,8 +3,8 @@
 /*
  * (c) Javier Eguiluz <javier.eguiluz@gmail.com>
  *
- * Este file pertenece a la application de prueba Cupon.
- * El code fuente de la application incluye un file llamado LICENSE
+ * Este archivo pertenece a la aplicación de prueba Cupon.
+ * El código fuente de la aplicación incluye un archivo llamado LICENSE
  * con toda la información sobre el copyright y la licencia.
  */
 
@@ -15,20 +15,12 @@ use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-<<<<<<< HEAD:src/Cupon/TiendaBundle/DataFixtures/ORM/Tiendas.php
-use Cupon\CiudadBundle\Entity\city;
-use Cupon\TiendaBundle\Entity\store;
-||||||| parent of ab1dc88 (Eliminados todos los bundles para usar solo AppBundle):src/Cupon/TiendaBundle/DataFixtures/ORM/Tiendas.php
-use Cupon\CiudadBundle\Entity\Ciudad;
-use Cupon\TiendaBundle\Entity\Tienda;
-=======
 use AppBundle\Entity\Ciudad;
 use AppBundle\Entity\Tienda;
->>>>>>> ab1dc88 (Eliminados todos los bundles para usar solo AppBundle):src/AppBundle/DataFixtures/ORM/Tiendas.php
 
 /**
- * Fixtures de la entity store.
- * creates para cada city entre 2 y 5 tiendas con información muy realista.
+ * Fixtures de la entidad Tienda.
+ * Crea para cada ciudad entre 2 y 5 tiendas con información muy realista.
  */
 class Tiendas extends AbstractFixture implements OrderedFixtureInterface, ContainerAwareInterface
 {
@@ -47,37 +39,31 @@ class Tiendas extends AbstractFixture implements OrderedFixtureInterface, Contai
     public function load(ObjectManager $manager)
     {
         // Obtener todas las ciudades de la base de datos
-<<<<<<< HEAD:src/Cupon/TiendaBundle/DataFixtures/ORM/Tiendas.php
-        $ciudades = $manager->getRepository('CiudadBundle:city')->findAll();
-||||||| parent of ab1dc88 (Eliminados todos los bundles para usar solo AppBundle):src/Cupon/TiendaBundle/DataFixtures/ORM/Tiendas.php
-        $ciudades = $manager->getRepository('CiudadBundle:Ciudad')->findAll();
-=======
         $ciudades = $manager->getRepository('AppBundle:Ciudad')->findAll();
->>>>>>> ab1dc88 (Eliminados todos los bundles para usar solo AppBundle):src/AppBundle/DataFixtures/ORM/Tiendas.php
 
         $i = 1;
-        foreach ($ciudades as $city) {
+        foreach ($ciudades as $ciudad) {
             $numeroTiendas = rand(2, 5);
-            for ($j=1; $j<=$numeroTiendas; $j++) {
-                $store = new store();
+            for ($j = 1; $j <= $numeroTiendas; ++$j) {
+                $tienda = new Tienda();
 
-                $store->setNombre($this->getNombre());
+                $tienda->setNombre($this->getNombre());
 
-                $store->setLogin('store'.$i);
-                $store->setSalt(base_convert(sha1(uniqid(mt_rand(), true)), 16, 36));
+                $tienda->setLogin('tienda'.$i);
+                $tienda->setSalt(base_convert(sha1(uniqid(mt_rand(), true)), 16, 36));
 
-                $passwordEnClaro = 'store'.$i;
-                $encoder = $this->container->get('security.encoder_factory')->getEncoder($store);
-                $passwordCodificado = $encoder->encodePassword($passwordEnClaro, $store->getSalt());
-                $store->setPassword($passwordCodificado);
+                $passwordEnClaro = 'tienda'.$i;
+                $encoder = $this->container->get('security.encoder_factory')->getEncoder($tienda);
+                $passwordCodificado = $encoder->encodePassword($passwordEnClaro, $tienda->getSalt());
+                $tienda->setPassword($passwordCodificado);
 
-                $store->setDescripcion($this->getDescripcion());
-                $store->setDireccion($this->getDireccion($city));
-                $store->setCiudad($city);
+                $tienda->setDescripcion($this->getDescripcion());
+                $tienda->setDireccion($this->getDireccion($ciudad));
+                $tienda->setCiudad($ciudad);
 
-                $manager->persist($store);
+                $manager->persist($tienda);
 
-                $i++;
+                ++$i;
             }
         }
 
@@ -85,9 +71,9 @@ class Tiendas extends AbstractFixture implements OrderedFixtureInterface, Contai
     }
 
     /**
-     * Generador aleatorio de nombres de tiendas
+     * Generador aleatorio de nombres de tiendas.
      *
-     * @return string name aleatorio generado para la store.
+     * @return string Nombre aleatorio generado para la tienda.
      */
     private function getNombre()
     {
@@ -95,16 +81,16 @@ class Tiendas extends AbstractFixture implements OrderedFixtureInterface, Contai
         $nombres = array(
             'Lorem ipsum', 'Sit amet', 'Consectetur', 'Adipiscing elit',
             'Nec sapien', 'Tincidunt', 'Facilisis', 'Nulla scelerisque',
-            'Blandit ligula', 'Eget', 'Hendrerit', 'Malesuada', 'Enim sit'
+            'Blandit ligula', 'Eget', 'Hendrerit', 'Malesuada', 'Enim sit',
         );
 
         return $prefijos[array_rand($prefijos)].' '.$nombres[array_rand($nombres)];
     }
 
     /**
-     * Generador aleatorio de descripciones de tiendas
+     * Generador aleatorio de descripciones de tiendas.
      *
-     * @return  string description aleatoria generada para la store.
+     * @return string Descripción aleatoria generada para la tienda.
      */
     private function getDescripcion()
     {
@@ -136,26 +122,27 @@ class Tiendas extends AbstractFixture implements OrderedFixtureInterface, Contai
     /**
      * Generador aleatorio de direcciones postales.
      *
-     * @param  city $city Objeto de la city para la que se genera una address postal.
-     * @return string         address postal aleatoria generada para la store.
+     * @param Ciudad $ciudad Objeto de la ciudad para la que se genera una dirección postal.
+     *
+     * @return string Dirección postal aleatoria generada para la tienda.
      */
-    private function getDireccion(city $city)
+    private function getDireccion(Ciudad $ciudad)
     {
         $prefijos = array('Calle', 'Avenida', 'Plaza');
         $nombres = array(
             'Lorem', 'Ipsum', 'Sitamet', 'Consectetur', 'Adipiscing',
             'Necsapien', 'Tincidunt', 'Facilisis', 'Nulla', 'Scelerisque',
-            'Blandit', 'Ligula', 'Eget', 'Hendrerit', 'Malesuada', 'Enimsit'
+            'Blandit', 'Ligula', 'Eget', 'Hendrerit', 'Malesuada', 'Enimsit',
         );
 
         return $prefijos[array_rand($prefijos)].' '.$nombres[array_rand($nombres)].', '.rand(1, 100)."\n"
-               .$this->getCodigoPostal().' '.$city->getNombre();
+               .$this->getCodigoPostal().' '.$ciudad->getNombre();
     }
 
     /**
-     * Generador aleatorio de códigos postales
+     * Generador aleatorio de códigos postales.
      *
-     * @return string code postal aleatorio generado para la store.
+     * @return string Código postal aleatorio generado para la tienda.
      */
     private function getCodigoPostal()
     {

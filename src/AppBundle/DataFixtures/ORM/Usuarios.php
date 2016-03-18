@@ -3,8 +3,8 @@
 /*
  * (c) Javier Eguiluz <javier.eguiluz@gmail.com>
  *
- * Este file pertenece a la application de prueba Cupon.
- * El code fuente de la application incluye un file llamado LICENSE
+ * Este archivo pertenece a la aplicación de prueba Cupon.
+ * El código fuente de la aplicación incluye un archivo llamado LICENSE
  * con toda la información sobre el copyright y la licencia.
  */
 
@@ -15,20 +15,12 @@ use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-<<<<<<< HEAD:src/Cupon/UsuarioBundle/DataFixtures/ORM/Usuarios.php
-use Cupon\CiudadBundle\Entity\city;
-use Cupon\UsuarioBundle\Entity\user;
-||||||| parent of ab1dc88 (Eliminados todos los bundles para usar solo AppBundle):src/Cupon/UsuarioBundle/DataFixtures/ORM/Usuarios.php
-use Cupon\CiudadBundle\Entity\Ciudad;
-use Cupon\UsuarioBundle\Entity\Usuario;
-=======
 use AppBundle\Entity\Ciudad;
 use AppBundle\Entity\Usuario;
->>>>>>> ab1dc88 (Eliminados todos los bundles para usar solo AppBundle):src/AppBundle/DataFixtures/ORM/Usuarios.php
 
 /**
- * Fixtures de la entity user.
- * creates 200 usuarios de prueba con información muy realista.
+ * Fixtures de la entidad Usuario.
+ * Crea 200 usuarios de prueba con información muy realista.
  */
 class Usuarios extends AbstractFixture implements OrderedFixtureInterface, ContainerAwareInterface
 {
@@ -47,44 +39,38 @@ class Usuarios extends AbstractFixture implements OrderedFixtureInterface, Conta
     public function load(ObjectManager $manager)
     {
         // Obtener todas las ciudades de la base de datos
-<<<<<<< HEAD:src/Cupon/UsuarioBundle/DataFixtures/ORM/Usuarios.php
-        $ciudades = $manager->getRepository('CiudadBundle:city')->findAll();
-||||||| parent of ab1dc88 (Eliminados todos los bundles para usar solo AppBundle):src/Cupon/UsuarioBundle/DataFixtures/ORM/Usuarios.php
-        $ciudades = $manager->getRepository('CiudadBundle:Ciudad')->findAll();
-=======
         $ciudades = $manager->getRepository('AppBundle:Ciudad')->findAll();
->>>>>>> ab1dc88 (Eliminados todos los bundles para usar solo AppBundle):src/AppBundle/DataFixtures/ORM/Usuarios.php
 
-        for ($i=1; $i<=200; $i++) {
-            $user = new user();
+        for ($i = 1; $i <= 200; ++$i) {
+            $usuario = new Usuario();
 
-            $user->setNombre($this->getNombre());
-            $user->setApellidos($this->getApellidos());
-            $user->setEmail('user'.$i.'@localhost');
+            $usuario->setNombre($this->getNombre());
+            $usuario->setApellidos($this->getApellidos());
+            $usuario->setEmail('usuario'.$i.'@localhost');
 
-            $user->setSalt(base_convert(sha1(uniqid(mt_rand(), true)), 16, 36));
+            $usuario->setSalt(base_convert(sha1(uniqid(mt_rand(), true)), 16, 36));
 
-            $passwordEnClaro = 'user'.$i;
-            $encoder = $this->container->get('security.encoder_factory')->getEncoder($user);
-            $passwordCodificado = $encoder->encodePassword($passwordEnClaro, $user->getSalt());
-            $user->setPassword($passwordCodificado);
+            $passwordEnClaro = 'usuario'.$i;
+            $encoder = $this->container->get('security.encoder_factory')->getEncoder($usuario);
+            $passwordCodificado = $encoder->encodePassword($passwordEnClaro, $usuario->getSalt());
+            $usuario->setPassword($passwordCodificado);
 
-            $city = $ciudades[array_rand($ciudades)];
-            $user->setDireccion($this->getDireccion($city));
-            $user->setCiudad($city);
+            $ciudad = $ciudades[array_rand($ciudades)];
+            $usuario->setDireccion($this->getDireccion($ciudad));
+            $usuario->setCiudad($ciudad);
 
             // El 60% de los usuarios permite email
-            $user->setPermiteEmail((rand(1, 1000) % 10) < 6);
+            $usuario->setPermiteEmail((rand(1, 1000) % 10) < 6);
 
-            $user->setFechaAlta(new \DateTime('now - '.rand(1, 150).' days'));
-            $user->setFechaNacimiento(new \DateTime('now - '.rand(7000, 20000).' days'));
+            $usuario->setFechaAlta(new \DateTime('now - '.rand(1, 150).' days'));
+            $usuario->setFechaNacimiento(new \DateTime('now - '.rand(7000, 20000).' days'));
 
             $dni = substr(rand(), 0, 8);
-            $user->setDni($dni.substr("TRWAGMYFPDXBNJZSQVHLCKE", strtr($dni, "XYZ", "012")%23, 1));
+            $usuario->setDni($dni.substr('TRWAGMYFPDXBNJZSQVHLCKE', strtr($dni, 'XYZ', '012') % 23, 1));
 
-            $user->setNumeroTarjeta('1234567890123456');
+            $usuario->setNumeroTarjeta('1234567890123456');
 
-            $manager->persist($user);
+            $manager->persist($usuario);
         }
 
         $manager->flush();
@@ -94,7 +80,7 @@ class Usuarios extends AbstractFixture implements OrderedFixtureInterface, Conta
      * Generador aleatorio de nombres de personas.
      * Aproximadamente genera un 50% de hombres y un 50% de mujeres.
      *
-     * @return string name aleatorio generado para el user.
+     * @return string Nombre aleatorio generado para el usuario.
      */
     private function getNombre()
     {
@@ -106,14 +92,14 @@ class Usuarios extends AbstractFixture implements OrderedFixtureInterface, Conta
             'José Antonio', 'José Luis', 'Jesús', 'Javier', 'Francisco Javier',
             'Carlos', 'Daniel', 'Miguel', 'Rafael', 'Pedro', 'José Manuel',
             'Ángel', 'Alejandro', 'Miguel Ángel', 'José María', 'Fernando',
-            'Luis', 'Sergio', 'Pablo', 'Jorge', 'Alberto'
+            'Luis', 'Sergio', 'Pablo', 'Jorge', 'Alberto',
         );
         $mujeres = array(
             'María Carmen', 'María', 'Carmen', 'Josefa', 'Isabel', 'Ana María',
             'María Dolores', 'María Pilar', 'María Teresa', 'Ana', 'Francisca',
             'Laura', 'Antonia', 'Dolores', 'María Angeles', 'Cristina', 'Marta',
             'María José', 'María Isabel', 'Pilar', 'María Luisa', 'Concepción',
-            'Lucía', 'Mercedes', 'Manuela', 'Elena', 'Rosa María'
+            'Lucía', 'Mercedes', 'Manuela', 'Elena', 'Rosa María',
         );
 
         if (rand() % 2) {
@@ -126,7 +112,7 @@ class Usuarios extends AbstractFixture implements OrderedFixtureInterface, Conta
     /**
      * Generador aleatorio de apellidos de personas.
      *
-     * @return string Apellido aleatorio generado para el user.
+     * @return string Apellido aleatorio generado para el usuario.
      */
     private function getApellidos()
     {
@@ -140,7 +126,7 @@ class Usuarios extends AbstractFixture implements OrderedFixtureInterface, Conta
             'Alonso', 'Gutiérrez', 'Navarro', 'Torres', 'Domínguez', 'Vázquez',
             'Ramos', 'Gil', 'Ramírez', 'Serrano', 'Blanco', 'Suárez', 'Molina',
             'Morales', 'Ortega', 'Delgado', 'Castro', 'Ortíz', 'Rubio', 'Marín',
-            'Sanz', 'Iglesias', 'Nuñez', 'Medina', 'Garrido'
+            'Sanz', 'Iglesias', 'Nuñez', 'Medina', 'Garrido',
         );
 
         return $apellidos[array_rand($apellidos)].' '.$apellidos[array_rand($apellidos)];
@@ -149,26 +135,27 @@ class Usuarios extends AbstractFixture implements OrderedFixtureInterface, Conta
     /**
      * Generador aleatorio de direcciones postales.
      *
-     * @param  city $city Objeto de la city para la que se genera una address postal.
-     * @return string         address postal aleatoria generada para la store.
+     * @param Ciudad $ciudad Objeto de la ciudad para la que se genera una dirección postal.
+     *
+     * @return string Dirección postal aleatoria generada para la tienda.
      */
-    private function getDireccion(city $city)
+    private function getDireccion(Ciudad $ciudad)
     {
         $prefijos = array('Calle', 'Avenida', 'Plaza');
         $nombres = array(
             'Lorem', 'Ipsum', 'Sitamet', 'Consectetur', 'Adipiscing',
             'Necsapien', 'Tincidunt', 'Facilisis', 'Nulla', 'Scelerisque',
-            'Blandit', 'Ligula', 'Eget', 'Hendrerit', 'Malesuada', 'Enimsit'
+            'Blandit', 'Ligula', 'Eget', 'Hendrerit', 'Malesuada', 'Enimsit',
         );
 
         return $prefijos[array_rand($prefijos)].' '.$nombres[array_rand($nombres)].', '.rand(1, 100)."\n"
-               .$this->getCodigoPostal().' '.$city->getNombre();
+               .$this->getCodigoPostal().' '.$ciudad->getNombre();
     }
 
     /**
-     * Generador aleatorio de códigos postales
+     * Generador aleatorio de códigos postales.
      *
-     * @return string code postal aleatorio generado para la store.
+     * @return string Código postal aleatorio generado para la tienda.
      */
     private function getCodigoPostal()
     {

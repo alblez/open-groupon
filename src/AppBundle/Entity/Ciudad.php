@@ -3,8 +3,8 @@
 /*
  * (c) Javier Eguiluz <javier.eguiluz@gmail.com>
  *
- * Este file pertenece a la application de prueba Cupon.
- * El code fuente de la application incluye un file llamado LICENSE
+ * Este archivo pertenece a la aplicación de prueba Cupon.
+ * El código fuente de la aplicación incluye un archivo llamado LICENSE
  * con toda la información sobre el copyright y la licencia.
  */
 
@@ -16,7 +16,7 @@ use AppBundle\Util\Util;
 /**
  * @ORM\Entity(repositoryClass="AppBundle\Repository\CiudadRepository")
  */
-class city
+class Ciudad
 {
     /**
      * @ORM\Id
@@ -28,7 +28,7 @@ class city
     /**
      * @ORM\Column(type="string", length=100)
      */
-    protected $name;
+    protected $nombre;
 
     /**
      * @ORM\Column(type="string", length=100)
@@ -41,9 +41,9 @@ class city
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -51,28 +51,28 @@ class city
     }
 
     /**
-     * Set name
+     * Set nombre.
      *
-     * @param string $name
+     * @param string $nombre
      */
-    public function setNombre($name)
+    public function setNombre($nombre)
     {
-        $this->name = $name;
-        $this->slug = Util::getSlug($name);
+        $this->nombre = $nombre;
+        $this->slug = Util::getSlug($nombre);
     }
 
     /**
-     * Get name
+     * Get nombre.
      *
      * @return string
      */
     public function getNombre()
     {
-        return $this->name;
+        return $this->nombre;
     }
 
     /**
-     * Set slug
+     * Set slug.
      *
      * @param string $slug
      */
@@ -82,7 +82,7 @@ class city
     }
 
     /**
-     * Get slug
+     * Get slug.
      *
      * @return string
      */

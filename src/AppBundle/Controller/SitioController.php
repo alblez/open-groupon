@@ -3,14 +3,13 @@
 /*
  * (c) Javier Eguiluz <javier.eguiluz@gmail.com>
  *
- * Este file pertenece a la application de prueba Cupon.
- * El code fuente de la application incluye un file llamado LICENSE
+ * Este archivo pertenece a la aplicación de prueba Cupon.
+ * El código fuente de la aplicación incluye un archivo llamado LICENSE
  * con toda la información sobre el copyright y la licencia.
  */
 
 namespace AppBundle\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,48 +18,47 @@ class SitioController extends Controller
 {
     /**
      * @Route("/contacto", defaults={ "_locale"="es" }, name="contacto")
-     * Muestra el form de contacto y también procesa el envío de emails
-     *
+     * Muestra el formulario de contacto y también procesa el envío de emails
      */
     public function contactoAction(Request $request)
     {
-        // Se creates un form "in situ", sin clase asociada
-        $form = $this->createFormBuilder()
+        // Se crea un formulario "in situ", sin clase asociada
+        $formulario = $this->createFormBuilder()
             ->add('remitente', 'email')
-            ->add('message', 'textarea')
+            ->add('mensaje', 'textarea')
             ->getForm()
         ;
 
-        $form->handleRequest($request);
+        $formulario->handleRequest($request);
 
-        if ($form->isValid()) {
-            $datos = $form->getData();
+        if ($formulario->isValid()) {
+            $datos = $formulario->getData();
 
-            $contenido = sprintf(" Remitente: %s \n\n message: %s \n\n Navegador: %s \n address IP: %s \n",
+            $contenido = sprintf(" Remitente: %s \n\n Mensaje: %s \n\n Navegador: %s \n Dirección IP: %s \n",
                 $datos['remitente'],
-                htmlspecialchars($datos['message']),
+                htmlspecialchars($datos['mensaje']),
                 $request->server->get('HTTP_USER_AGENT'),
                 $request->server->get('REMOTE_ADDR')
             );
 
-            $message = \Swift_Message::newInstance()
+            $mensaje = \Swift_Message::newInstance()
                 ->setSubject('Contacto')
                 ->setFrom($datos['remitente'])
                 ->setTo('contacto@cupon')
                 ->setBody($contenido)
             ;
 
-            $this->container->get('mailer')->send($message);
+            $this->container->get('mailer')->send($mensaje);
 
             $this->get('session')->setFlash('info',
-                'Tu message se ha enviado correctamente.'
+                'Tu mensaje se ha enviado correctamente.'
             );
 
             return $this->redirect($this->generateUrl('portada'));
         }
 
         return $this->render('sitio/contacto.html.twig', array(
-            'form' => $form->createView(),
+            'formulario' => $formulario->createView(),
         ));
     }
 }

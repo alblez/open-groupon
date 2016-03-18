@@ -3,8 +3,8 @@
 /*
  * (c) Javier Eguiluz <javier.eguiluz@gmail.com>
  *
- * Este file pertenece a la application de prueba Cupon.
- * El code fuente de la application incluye un file llamado LICENSE
+ * Este archivo pertenece a la aplicación de prueba Cupon.
+ * El código fuente de la aplicación incluye un archivo llamado LICENSE
  * con toda la información sobre el copyright y la licencia.
  */
 
@@ -15,20 +15,20 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\SecurityContext;
-use AppBundle\Entity\user;
-use AppBundle\Entity\sale;
+use AppBundle\Entity\Usuario;
+use AppBundle\Entity\Venta;
 use AppBundle\Form\Frontend\UsuarioPerfilType;
 use AppBundle\Form\Frontend\UsuarioRegistroType;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 /**
- * @Route("/user")
+ * @Route("/usuario")
  */
 class UsuarioController extends Controller
 {
     /**
      * @Route("/login", name="usuario_login")
-     * Muestra el form de login
+     * Muestra el formulario de login
      */
     public function loginAction(Request $request)
     {
@@ -39,9 +39,9 @@ class UsuarioController extends Controller
             $sesion->get(SecurityContext::AUTHENTICATION_ERROR)
         );
 
-        return $this->render('user/login.html.twig', array(
+        return $this->render('usuario/login.html.twig', array(
             'last_username' => $sesion->get(SecurityContext::LAST_USERNAME),
-            'error'         => $error
+            'error' => $error,
         ));
     }
 
@@ -64,118 +64,118 @@ class UsuarioController extends Controller
     /**
      * @Route("/login", name="usuario_login")
      * Muestra la caja de login que se incluye en el lateral de la mayoría de páginas del sitio web.
-     * Esta caja se transforma en información y enlaces cuando el user se loguea en la application.
-     * La response se marca como privada para que no se añada a la cache pública. El trozo de template
-     * que llama a esta function se sirve a través de ESI
+     * Esta caja se transforma en información y enlaces cuando el usuario se loguea en la aplicación.
+     * La respuesta se marca como privada para que no se añada a la cache pública. El trozo de plantilla
+     * que llama a esta función se sirve a través de ESI
      *
-     * @param string $id El value del bloque `id` de la template,
-     *                   que coincide con el value del atributo `id` del elemento <body>
+     * @param string $id El valor del bloque `id` de la plantilla,
+     *                   que coincide con el valor del atributo `id` del elemento <body>
      */
     public function cajaLoginAction($id = '')
     {
-        $user = $this->get('security.context')->getToken()->getUser();
+        $usuario = $this->get('security.context')->getToken()->getUser();
 
-        $response = $this->render('user/cajaLogin.html.twig', array(
-            'id'      => $id,
-            'user' => $user
+        $respuesta = $this->render('usuario/cajaLogin.html.twig', array(
+            'id' => $id,
+            'usuario' => $usuario,
         ));
 
-        $response->setMaxAge(30);
+        $respuesta->setMaxAge(30);
 
-        return $response;
+        return $respuesta;
     }
 
     /**
-     * @Route("/record", name="usuario_registro")
-     * Muestra el form para que se registren los nuevos usuarios. Además
+     * @Route("/registro", name="usuario_registro")
+     * Muestra el formulario para que se registren los nuevos usuarios. Además
      * se encarga de procesar la información y de guardar la información en la base de datos
      */
     public function registroAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $user = new user();
-        $user->setPermiteEmail(true);
+        $usuario = new Usuario();
+        $usuario->setPermiteEmail(true);
 
-        $form = $this->createForm(new UsuarioRegistroType(), $user);
+        $formulario = $this->createForm(new UsuarioRegistroType(), $usuario);
 
-        $form->handleRequest($request);
+        $formulario->handleRequest($request);
 
-        if ($form->isValid()) {
-            // Completar las propiedades que el user no rellena en el form
-            $user->setSalt(md5(time()));
+        if ($formulario->isValid()) {
+            // Completar las propiedades que el usuario no rellena en el formulario
+            $usuario->setSalt(md5(time()));
 
-            $encoder = $this->get('security.encoder_factory')->getEncoder($user);
+            $encoder = $this->get('security.encoder_factory')->getEncoder($usuario);
             $passwordCodificado = $encoder->encodePassword(
-                $user->getPassword(),
-                $user->getSalt()
+                $usuario->getPassword(),
+                $usuario->getSalt()
             );
-            $user->setPassword($passwordCodificado);
+            $usuario->setPassword($passwordCodificado);
 
-            // Guardar el nuevo user en la base de datos
-            $em->persist($user);
+            // Guardar el nuevo usuario en la base de datos
+            $em->persist($usuario);
             $em->flush();
 
-            // Crear un message flash para notificar al user que se ha registrado correctamente
+            // Crear un mensaje flash para notificar al usuario que se ha registrado correctamente
             $this->get('session')->getFlashBag()->add('info',
                 '¡Enhorabuena! Te has registrado correctamente en Cupon'
             );
 
-            // Loguear al user automáticamente
-            $token = new UsernamePasswordToken($user, null, 'frontend', $user->getRoles());
+            // Loguear al usuario automáticamente
+            $token = new UsernamePasswordToken($usuario, null, 'frontend', $usuario->getRoles());
             $this->container->get('security.context')->setToken($token);
 
             return $this->redirect($this->generateUrl('portada', array(
-                'city' => $user->getCiudad()->getSlug()
+                'ciudad' => $usuario->getCiudad()->getSlug(),
             )));
         }
 
-        return $this->render('user/record.html.twig', array(
-            'form' => $form->createView()
+        return $this->render('usuario/registro.html.twig', array(
+            'formulario' => $formulario->createView(),
         ));
     }
 
     /**
      * @Route("/perfil", name="usuario_perfil")
-     * Muestra el form con toda la información del perfil del user logueado.
-     * También permite modificar la información y saves los cambios en la base de datos
+     * Muestra el formulario con toda la información del perfil del usuario logueado.
+     * También permite modificar la información y guarda los cambios en la base de datos
      */
     public function perfilAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $user = $this->get('security.context')->getToken()->getUser();
-        $form = $this->createForm(new UsuarioPerfilType(), $user);
-        $form
+        $usuario = $this->get('security.context')->getToken()->getUser();
+        $formulario = $this->createForm(new UsuarioPerfilType(), $usuario);
+        $formulario
             ->remove('registrarme')
             ->add('guardar', 'submit', array(
                 'label' => 'Guardar cambios',
-                'attr'  => array('class' => 'boton')
+                'attr' => array('class' => 'boton'),
             ))
         ;
 
-        $passwordOriginal = $form->getData()->getPassword();
+        $passwordOriginal = $formulario->getData()->getPassword();
 
-        $form->handleRequest($request);
+        $formulario->handleRequest($request);
 
-        if ($form->isValid()) {
-            // Si el user no ha cambiado el password, su value es null después
-            // de hacer el ->bindRequest(), por lo que hay que recuperar el value original
+        if ($formulario->isValid()) {
+            // Si el usuario no ha cambiado el password, su valor es null después
+            // de hacer el ->bindRequest(), por lo que hay que recuperar el valor original
 
-            if (null == $user->getPassword()) {
-                $user->setPassword($passwordOriginal);
+            if (null == $usuario->getPassword()) {
+                $usuario->setPassword($passwordOriginal);
             }
-            // Si el user ha cambiado su password, hay que codificarlo antes de guardarlo
+            // Si el usuario ha cambiado su password, hay que codificarlo antes de guardarlo
             else {
-                $encoder = $this->get('security.encoder_factory')->getEncoder($user);
+                $encoder = $this->get('security.encoder_factory')->getEncoder($usuario);
                 $passwordCodificado = $encoder->encodePassword(
-                    $user->getPassword(),
-                    $user->getSalt()
+                    $usuario->getPassword(),
+                    $usuario->getSalt()
                 );
-                $user->setPassword($passwordCodificado);
+                $usuario->setPassword($passwordCodificado);
             }
 
-            $em->persist($user);
+            $em->persist($usuario);
             $em->flush();
 
             $this->get('session')->getFlashBag()->add('info',
@@ -185,74 +185,74 @@ class UsuarioController extends Controller
             return $this->redirect($this->generateUrl('usuario_perfil'));
         }
 
-        return $this->render('user/perfil.html.twig', array(
-            'user'    => $user,
-            'form' => $form->createView()
+        return $this->render('usuario/perfil.html.twig', array(
+            'usuario' => $usuario,
+            'formulario' => $formulario->createView(),
         ));
     }
 
     /**
      * @Route("/compras", name="usuario_compras")
-     * Muestra todas las compras del user logueado
+     * Muestra todas las compras del usuario logueado
      */
     public function comprasAction()
     {
         $em = $this->getDoctrine()->getManager();
-        $user = $this->get('security.context')->getToken()->getUser();
+        $usuario = $this->get('security.context')->getToken()->getUser();
 
-        $cercanas = $em->getRepository('AppBundle:city')->findCercanas(
-            $user->getCiudad()->getId()
+        $cercanas = $em->getRepository('AppBundle:Ciudad')->findCercanas(
+            $usuario->getCiudad()->getId()
         );
 
-        $compras = $em->getRepository('UsuarioBundle:user')->findTodasLasCompras($user->getId());
+        $compras = $em->getRepository('UsuarioBundle:Usuario')->findTodasLasCompras($usuario->getId());
 
-        return $this->render('user/compras.html.twig', array(
-            'compras'  => $compras,
-            'cercanas' => $cercanas
+        return $this->render('usuario/compras.html.twig', array(
+            'compras' => $compras,
+            'cercanas' => $cercanas,
         ));
     }
 
     /**
-     * @Route("/{city}/ofertas/{slug}/comprar", name="comprar")
-     * Registra una nueva purchase de la offer indicada por parte del user logueado
+     * @Route("/{ciudad}/ofertas/{slug}/comprar", name="comprar")
+     * Registra una nueva compra de la oferta indicada por parte del usuario logueado
      *
-     * @param string $city El slug de la city a la que pertenece la offer
-     * @param string $slug   El slug de la offer
+     * @param string $ciudad El slug de la ciudad a la que pertenece la oferta
+     * @param string $slug   El slug de la oferta
      */
-    public function comprarAction(Request $request, $city, $slug)
+    public function comprarAction(Request $request, $ciudad, $slug)
     {
         $em = $this->getDoctrine()->getManager();
-        $user = $this->get('security.context')->getToken()->getUser();
+        $usuario = $this->get('security.context')->getToken()->getUser();
 
         // Solo pueden comprar los usuarios registrados y logueados
-        if (null == $user || !$this->get('security.context')->isGranted('ROLE_USUARIO')) {
+        if (null == $usuario || !$this->get('security.context')->isGranted('ROLE_USUARIO')) {
             $this->get('session')->getFlashBag()->add('info',
-                'Antes de comprar debes registrarte o conectarte con tu user y password.'
+                'Antes de comprar debes registrarte o conectarte con tu usuario y contraseña.'
             );
 
             return $this->redirect($this->generateUrl('usuario_login'));
         }
 
-        // Comprobar que existe la city indicada
-        $city = $em->getRepository('AppBundle:city')->findOneBySlug($city);
-        if (!$city) {
-            throw $this->createNotFoundException('La city indicada no está disponible');
+        // Comprobar que existe la ciudad indicada
+        $ciudad = $em->getRepository('AppBundle:Ciudad')->findOneBySlug($ciudad);
+        if (!$ciudad) {
+            throw $this->createNotFoundException('La ciudad indicada no está disponible');
         }
 
-        // Comprobar que existe la offer indicada
-        $offer = $em->getRepository('AppBundle:offer')->findOneBy(array('city' => $city->getId(), 'slug' => $slug));
-        if (!$offer) {
-            throw $this->createNotFoundException('La offer indicada no está disponible');
+        // Comprobar que existe la oferta indicada
+        $oferta = $em->getRepository('AppBundle:Oferta')->findOneBy(array('ciudad' => $ciudad->getId(), 'slug' => $slug));
+        if (!$oferta) {
+            throw $this->createNotFoundException('La oferta indicada no está disponible');
         }
 
-        // Un mismo user no puede comprar dos veces la misma offer
-        $sale = $em->getRepository('AppBundle:sale')->findOneBy(array(
-            'offer'  => $offer->getId(),
-            'user' => $user->getId()
+        // Un mismo usuario no puede comprar dos veces la misma oferta
+        $venta = $em->getRepository('AppBundle:Venta')->findOneBy(array(
+            'oferta' => $oferta->getId(),
+            'usuario' => $usuario->getId(),
         ));
 
-        if (null != $sale) {
-            $fechaVenta = $sale->getFecha();
+        if (null != $venta) {
+            $fechaVenta = $venta->getFecha();
 
             $formateador = \IntlDateFormatter::create(
                 $this->get('translator')->getLocale(),
@@ -261,7 +261,7 @@ class UsuarioController extends Controller
             );
 
             $this->get('session')->getFlashBag()->add('error',
-                'No puedes volver a comprar la misma offer (la compraste el '.$formateador->format($fechaVenta).').'
+                'No puedes volver a comprar la misma oferta (la compraste el '.$formateador->format($fechaVenta).').'
             );
 
             return $this->redirect(
@@ -269,22 +269,22 @@ class UsuarioController extends Controller
             );
         }
 
-        // Guardar la nueva sale e incrementar el contador de compras de la offer
-        $sale = new sale();
+        // Guardar la nueva venta e incrementar el contador de compras de la oferta
+        $venta = new Venta();
 
-        $sale->setOferta($offer);
-        $sale->setUsuario($user);
-        $sale->setFecha(new \DateTime());
+        $venta->setOferta($oferta);
+        $venta->setUsuario($usuario);
+        $venta->setFecha(new \DateTime());
 
-        $em->persist($sale);
+        $em->persist($venta);
 
-        $offer->setCompras($offer->getCompras()+1);
+        $oferta->setCompras($oferta->getCompras() + 1);
 
         $em->flush();
 
-        return $this->render('user/comprar.html.twig', array(
-            'offer'  => $offer,
-            'user' => $user
+        return $this->render('usuario/comprar.html.twig', array(
+            'oferta' => $oferta,
+            'usuario' => $usuario,
         ));
     }
 }
