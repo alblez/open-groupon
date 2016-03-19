@@ -10,19 +10,14 @@
 
 namespace AppBundle\DataFixtures\ORM;
 
+use AppBundle\Entity\city;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-<<<<<<< HEAD
-use Cupon\CiudadBundle\Entity\city;
-||||||| parent of ab1dc88 (Eliminados todos los bundles para usar solo AppBundle)
-use Cupon\CiudadBundle\Entity\Ciudad;
-=======
-use AppBundle\Entity\Ciudad;
->>>>>>> ab1dc88 (Eliminados todos los bundles para usar solo AppBundle)
 
 /**
- * creates los datos de prueba para la entity city.
+ * Fixtures de la entity city.
+ * creates 25 ciudades para poder probar la application.
  */
 class Ciudades extends AbstractFixture implements OrderedFixtureInterface
 {

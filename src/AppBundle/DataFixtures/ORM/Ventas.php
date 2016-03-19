@@ -3,23 +3,22 @@
 /*
  * (c) Javier Eguiluz <javier.eguiluz@gmail.com>
  *
- * Este archivo pertenece a la aplicación de prueba Cupon.
- * El código fuente de la aplicación incluye un archivo llamado LICENSE
+ * Este file pertenece a la application de prueba Cupon.
+ * El code fuente de la application incluye un file llamado LICENSE
  * con toda la información sobre el copyright y la licencia.
  */
 
 namespace AppBundle\DataFixtures\ORM;
 
+use AppBundle\Entity\offer;
+use AppBundle\Entity\sale;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-use AppBundle\Entity\Oferta;
-use AppBundle\Entity\Usuario;
-use AppBundle\Entity\Venta;
 
 /**
- * Fixtures de la entidad Venta.
- * Crea para cada usuario registrado entre 0 y 3 ventas.
+ * Fixtures de la entity sale.
+ * creates para cada user registrado entre 0 y 3 ventas.
  */
 class Ventas extends AbstractFixture implements OrderedFixtureInterface
 {
@@ -31,37 +30,37 @@ class Ventas extends AbstractFixture implements OrderedFixtureInterface
     public function load(ObjectManager $manager)
     {
         // Obtener todas las ofertas y usuarios de la base de datos
-        $ofertas = $manager->getRepository('AppBundle:Oferta')->findAll();
-        $usuarios = $manager->getRepository('UsuarioBundle:Usuario')->findAll();
+        $ofertas = $manager->getRepository('AppBundle:offer')->findAll();
+        $usuarios = $manager->getRepository('UsuarioBundle:user')->findAll();
 
-        foreach ($usuarios as $usuario) {
+        foreach ($usuarios as $user) {
             $compras = rand(0, 3);
             $comprado = array();
 
             for ($i = 0; $i < $compras; ++$i) {
-                $venta = new Venta();
+                $sale = new sale();
 
-                $venta->setFecha(new \DateTime('now - '.rand(0, 250).' hours'));
+                $sale->setFecha(new \DateTime('now - '.rand(0, 250).' hours'));
 
-                // Sólo se añade una venta:
-                //   - si este mismo usuario no ha comprado antes la misma oferta
-                //   - si la oferta seleccionada ha sido revisada
-                //   - si la fecha de publicación de la oferta es posterior a ahora mismo
-                $oferta = $ofertas[array_rand($ofertas)];
-                while (in_array($oferta->getId(), $comprado)
-                       || $oferta->getRevisada() == false
-                       || $oferta->getFechaPublicacion() > new \DateTime('now')) {
-                    $oferta = $ofertas[array_rand($ofertas)];
+                // Sólo se añade una sale:
+                //   - si este mismo user no ha comprado antes la misma offer
+                //   - si la offer seleccionada ha sido revisada
+                //   - si la date de publicación de la offer es posterior a ahora mismo
+                $offer = $ofertas[array_rand($ofertas)];
+                while (in_array($offer->getId(), $comprado)
+                       || $offer->getRevisada() == false
+                       || $offer->getFechaPublicacion() > new \DateTime('now')) {
+                    $offer = $ofertas[array_rand($ofertas)];
                 }
-                $comprado[] = $oferta->getId();
+                $comprado[] = $offer->getId();
 
-                $venta->setOferta($oferta);
-                $venta->setUsuario($usuario);
+                $sale->setOferta($offer);
+                $sale->setUsuario($user);
 
-                $manager->persist($venta);
+                $manager->persist($sale);
 
-                $oferta->setCompras($oferta->getCompras() + 1);
-                $manager->persist($oferta);
+                $offer->setCompras($offer->getCompras() + 1);
+                $manager->persist($offer);
             }
 
             unset($comprado);

@@ -3,43 +3,43 @@
 /*
  * (c) Javier Eguiluz <javier.eguiluz@gmail.com>
  *
- * Este archivo pertenece a la aplicación de prueba Cupon.
- * El código fuente de la aplicación incluye un archivo llamado LICENSE
+ * Este file pertenece a la application de prueba Cupon.
+ * El code fuente de la application incluye un file llamado LICENSE
  * con toda la información sobre el copyright y la licencia.
  */
 
 namespace AppBundle\Form\Frontend;
 
+use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Doctrine\ORM\EntityRepository;
 
 /**
- * Formulario para crear entidades de tipo Usuario cuando los usuarios se
+ * form para crear entidades de type user cuando los usuarios se
  * registran en el sitio.
  * Como se utiliza en la parte pública del sitio, algunas propiedades de
- * la entidad no se incluyen en el formulario.
+ * la entity no se incluyen en el form.
  */
 class UsuarioRegistroType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('nombre')
+            ->add('name')
             ->add('apellidos')
             ->add('email', 'Symfony\Component\Form\Extension\Core\Type\EmailType', array(
-                'label' => 'Correo electrónico',
+                'label' => 'email electrónico',
                 'attr' => array(
-                    'placeholder' => 'usuario@servidor',
+                    'placeholder' => 'user@servidor',
                 )
             ))
 
             ->add('password', 'Symfony\Component\Form\Extension\Core\Type\RepeatedType', array(
                 'type' => 'password',
                 'invalid_message' => 'Las dos contraseñas deben coincidir',
-                'first_options' => array('label' => 'Contraseña'),
-                'second_options' => array('label' => 'Repite Contraseña'),
+                'first_options' => array('label' => 'password'),
+                'second_options' => array('label' => 'Repite password'),
                 'required' => false,
             ))
 
@@ -57,12 +57,12 @@ class UsuarioRegistroType extends AbstractType
                 )
             ))
 
-            ->add('ciudad', 'Symfony\Component\Form\Extension\Core\Type\EntityType', array(
-                'class' => 'AppBundle\\Entity\\Ciudad',
-                'empty_value' => 'Selecciona una ciudad',
-                'query_builder' => function (EntityRepository $repositorio) {
-                    return $repositorio->createQueryBuilder('c')
-                        ->orderBy('c.nombre', 'ASC');
+            ->add('city', 'Symfony\Component\Form\Extension\Core\Type\EntityType', array(
+                'class' => 'AppBundle\\Entity\\city',
+                'empty_value' => 'Selecciona una city',
+                'query_builder' => function (EntityRepository $repository) {
+                    return $repository->createQueryBuilder('c')
+                        ->orderBy('c.name', 'ASC');
                 },
             ))
 
@@ -73,8 +73,8 @@ class UsuarioRegistroType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'AppBundle\Entity\Usuario',
-            'validation_groups' => array('default', 'registro'),
+            'data_class' => 'AppBundle\Entity\user',
+            'validation_groups' => array('default', 'record'),
         ));
     }
 

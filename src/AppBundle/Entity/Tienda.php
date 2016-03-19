@@ -3,31 +3,31 @@
 /*
  * (c) Javier Eguiluz <javier.eguiluz@gmail.com>
  *
- * Este archivo pertenece a la aplicación de prueba Cupon.
- * El código fuente de la aplicación incluye un archivo llamado LICENSE
+ * Este file pertenece a la application de prueba Cupon.
+ * El code fuente de la application incluye un file llamado LICENSE
  * con toda la información sobre el copyright y la licencia.
  */
 
 namespace AppBundle\Entity;
 
-use Symfony\Component\Security\Core\User\UserInterface;
-use Doctrine\ORM\Mapping as ORM;
 use AppBundle\Util\Util;
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass="AppBundle\Repository\TiendaRepository")
  */
-class Tienda implements UserInterface
+class store implements UserInterface
 {
     /**
-     * Método requerido por la interfaz UserInterface.
+     * method requerido por la interfaz UserInterface.
      */
     public function eraseCredentials()
     {
     }
 
     /**
-     * Método requerido por la interfaz UserInterface.
+     * method requerido por la interfaz UserInterface.
      */
     public function getRoles()
     {
@@ -35,7 +35,7 @@ class Tienda implements UserInterface
     }
 
     /**
-     * Método requerido por la interfaz UserInterface.
+     * method requerido por la interfaz UserInterface.
      */
     public function getUsername()
     {
@@ -52,7 +52,7 @@ class Tienda implements UserInterface
     /**
      * @ORM\Column(type="string", length=100)
      */
-    protected $nombre;
+    protected $name;
 
     /**
      * @ORM\Column(type="string", length=100)
@@ -85,9 +85,9 @@ class Tienda implements UserInterface
     protected $direccion;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Ciudad")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\city")
      */
-    protected $ciudad;
+    protected $city;
 
     public function __toString()
     {
@@ -105,24 +105,24 @@ class Tienda implements UserInterface
     }
 
     /**
-     * Set nombre.
+     * Set name.
      *
-     * @param string $nombre
+     * @param string $name
      */
-    public function setNombre($nombre)
+    public function setNombre($name)
     {
-        $this->nombre = $nombre;
-        $this->slug = Util::getSlug($nombre);
+        $this->name = $name;
+        $this->slug = Util::getSlug($name);
     }
 
     /**
-     * Get nombre.
+     * Get name.
      *
      * @return string
      */
     public function getNombre()
     {
-        return $this->nombre;
+        return $this->name;
     }
 
     /**
@@ -246,22 +246,22 @@ class Tienda implements UserInterface
     }
 
     /**
-     * Set ciudad.
+     * Set city.
      *
-     * @param AppBundle\Entity\Ciudad $ciudad
+     * @param AppBundle\Entity\city $city
      */
-    public function setCiudad(\AppBundle\Entity\Ciudad $ciudad)
+    public function setCiudad(\AppBundle\Entity\city $city)
     {
-        $this->ciudad = $ciudad;
+        $this->city = $city;
     }
 
     /**
-     * Get ciudad.
+     * Get city.
      *
-     * @return AppBundle\Entity\Ciudad
+     * @return AppBundle\Entity\city
      */
     public function getCiudad()
     {
-        return $this->ciudad;
+        return $this->city;
     }
 }
