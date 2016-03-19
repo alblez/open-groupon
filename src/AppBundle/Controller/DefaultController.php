@@ -109,7 +109,6 @@ class DefaultController extends Controller
 ||||||| parent of ab1dc88 (Eliminados todos los bundles para usar solo AppBundle)
 =======
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
 class DefaultController extends Controller
 {

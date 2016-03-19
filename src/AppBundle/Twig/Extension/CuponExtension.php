@@ -2,116 +2,11 @@
 
 namespace AppBundle\Twig\Extension;
 
-<<<<<<< HEAD
-/**
- * Extensión propia de Twig con filtros y funciones útiles para
- * la application.
- */
-class CuponExtension extends \Twig_Extension
-{
-    public function getFilters()
-    {
-        return array(
-            new \Twig_SimpleFilter('mostrar_como_lista', array($this, 'mostrarComoLista'), array('is_safe' => array('html'))),
-            new \Twig_SimpleFilter('cuenta_atras', array($this, 'cuentaAtras'), array('is_safe' => array('html'))),
-        );
-    }
-
-    public function getFunctions()
-    {
-        return array(
-            new \Twig_SimpleFunction('discount', array($this, 'discount')),
-        );
-    }
-
-    /**
-     * Muestra como una lista HTML el contenido de texto al que se
-     * aplica el filtro. Cada "\n" genera un nuevo elemento de
-     * la lista.
-     *
-     * @param string $value El texto que se transforma
-     * @param string $type  type de lista a generar ('ul', 'ol')
-     *
-     * @return string
-     */
-    public function mostrarComoLista($value, $type = 'ul')
-    {
-        $html = '<'.$type.'>'.PHP_EOL;
-        $html .= '  <li>'.str_replace(PHP_EOL, '</li>'.PHP_EOL.'  <li>', $value).'</li>'.PHP_EOL;
-        $html .= '</'.$type.'>'.PHP_EOL;
-
-        return $html;
-    }
-
-    /**
-     * Transforma una date en una cuenta atrás actualizada en tiempo
-     * real mediante JavaScript.
-     *
-     * La cuenta atrás se muestra en un elemento HTML con un atributo
-     * `id` generado automáticamente, para que se puedan añadir varias
-     * cuentas atrás en la misma page.
-     *
-     * @param \DateTime $date Objeto que representa la date original
-     *
-     * @return string
-     */
-    public function cuentaAtras(\DateTime $date)
-    {
-        // En JavaScript los meses empiezan a contar en 0 y acaban en 12
-        // En PHP los meses van de 1 a 12, por lo que hay que convertir la date
-        $fechaJson = json_encode(array(
-            'ano' => $date->format('Y'),
-            'mes' => $date->format('m') - 1,
-            'dia' => $date->format('d'),
-            'hora' => $date->format('H'),
-            'minuto' => $date->format('i'),
-            'segundo' => $date->format('s'),
-        ));
-
-        $idAleatorio = 'cuenta-atras-'.mt_rand(1, 100000);
-        $html = <<<EOJ
-        <span id="$idAleatorio"></span>
-
-        <script type="text/javascript">
-        funcion_expira = function(){
-            var expira = $fechaJson;
-            muestraCuentaAtras('$idAleatorio', expira);
-        }
-        if (!window.addEventListener) {
-            window.attachEvent("onload", funcion_expira);
-        } else {
-            window.addEventListener('load', funcion_expira);
-        }
-        </script>
-EOJ;
-
-        return $html;
-    }
-
-    /**
-     * Calcula el porcentaje que supone el discount indicado en euros.
-     * El price no es el price original sino el price de sale (también en euros).
-     *
-     * @param string     $price    price de sale del producto (en euros)
-     * @param string     $discount discount sobre el price original (en euros)
-     * @param int|string $decimales number de decimales que muestra el discount
-     *
-     * @return string
-     */
-    public function discount($price, $discount, $decimales = 0)
-    {
-        if (!is_numeric($price) || !is_numeric($discount)) {
-            return '-';
-        }
-
-        if ($discount === 0 || $discount === null) {
-||||||| parent of ab1dc88 (Eliminados todos los bundles para usar solo AppBundle)
-=======
 use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * Extensión propia de Twig con filtros y funciones útiles para
- * la application
+ * la aplicación.
  */
 class CuponExtension extends \Twig_Extension
 {
@@ -132,14 +27,14 @@ class CuponExtension extends \Twig_Extension
         return array(
             'mostrar_como_lista' => new \Twig_Filter_Method($this, 'mostrarComoLista', array('is_safe' => array('html'))),
             'cuenta_atras' => new \Twig_Filter_Method($this, 'cuentaAtras', array('is_safe' => array('html'))),
-            'date' => new \Twig_Filter_Method($this, 'date'),
+            'fecha' => new \Twig_Filter_Method($this, 'fecha'),
         );
     }
 
     public function getFunctions()
     {
         return array(
-            'discount' => new \Twig_Function_Method($this, 'discount')
+            'descuento' => new \Twig_Function_Method($this, 'descuento'),
         );
     }
 
@@ -149,38 +44,38 @@ class CuponExtension extends \Twig_Extension
      * la lista.
      *
      * @param string $value El texto que se transforma
-     * @param string $type  type de lista a generar ('ul', 'ol')
+     * @param string $tipo  Tipo de lista a generar ('ul', 'ol')
      */
-    public function mostrarComoLista($value, $type='ul')
+    public function mostrarComoLista($value, $tipo = 'ul')
     {
-        $html = "<".$type.">".PHP_EOL;
-        $html .= "  <li>".str_replace(PHP_EOL, "</li>".PHP_EOL."  <li>", $value)."</li>".PHP_EOL;
-        $html .= "</".$type.">".PHP_EOL;
+        $html = '<'.$tipo.'>'.PHP_EOL;
+        $html .= '  <li>'.str_replace(PHP_EOL, '</li>'.PHP_EOL.'  <li>', $value).'</li>'.PHP_EOL;
+        $html .= '</'.$tipo.'>'.PHP_EOL;
 
         return $html;
     }
 
     /**
-     * Transforma una date en una cuenta atrás actualizada en tiempo
+     * Transforma una fecha en una cuenta atrás actualizada en tiempo
      * real mediante JavaScript.
      *
      * La cuenta atrás se muestra en un elemento HTML con un atributo
      * `id` generado automáticamente, para que se puedan añadir varias
-     * cuentas atrás en la misma page.
+     * cuentas atrás en la misma página.
      *
-     * @param string $date Objeto que representa la date original
+     * @param string $fecha Objeto que representa la fecha original
      */
-    public function cuentaAtras($date)
+    public function cuentaAtras($fecha)
     {
         // En JavaScript los meses empiezan a contar en 0 y acaban en 12
-        // En PHP los meses van de 1 a 12, por lo que hay que convertir la date
-        $date = json_encode(array(
-            'ano' => $date->format('Y'),
-            'mes' => $date->format('m')-1,
-            'dia' => $date->format('d'),
-            'hora'    => $date->format('H'),
-            'minuto'  => $date->format('i'),
-            'segundo' => $date->format('s')
+        // En PHP los meses van de 1 a 12, por lo que hay que convertir la fecha
+        $fecha = json_encode(array(
+            'ano' => $fecha->format('Y'),
+            'mes' => $fecha->format('m') - 1,
+            'dia' => $fecha->format('d'),
+            'hora' => $fecha->format('H'),
+            'minuto' => $fecha->format('i'),
+            'segundo' => $fecha->format('s'),
         ));
 
         $idAleatorio = 'cuenta-atras-'.rand(1, 100000);
@@ -189,7 +84,7 @@ class CuponExtension extends \Twig_Extension
 
         <script type="text/javascript">
         funcion_expira = function(){
-            var expira = $date;
+            var expira = $fecha;
             muestraCuentaAtras('$idAleatorio', expira);
         }
         if (!window.addEventListener) {
@@ -204,33 +99,33 @@ EOJ;
     }
 
     /**
-     * Formatea la date indicada según las características del locale seleccionado.
-     * Se utiliza para mostrar correctamente las fechas en el idioma de cada user.
+     * Formatea la fecha indicada según las características del locale seleccionado.
+     * Se utiliza para mostrar correctamente las fechas en el idioma de cada usuario.
      *
-     * @param string $date        Objeto que representa la date original
-     * @param string $formatoFecha Formato con el que se muestra la date
+     * @param string $fecha        Objeto que representa la fecha original
+     * @param string $formatoFecha Formato con el que se muestra la fecha
      * @param string $formatoHora  Formato con el que se muestra la hora
-     * @param string $locale       El locale al que se traduce la date
+     * @param string $locale       El locale al que se traduce la fecha
      */
-    public function date($date, $formatoFecha = 'medium', $formatoHora = 'none', $locale = null)
+    public function fecha($fecha, $formatoFecha = 'medium', $formatoHora = 'none', $locale = null)
     {
-        // code copiado de
+        // Código copiado de
         //   https://github.com/thaberkern/symfony/blob
         //   /b679a23c331471961d9b00eb4d44f196351067c8
         //   /src/Symfony/Bridge/Twig/Extension/TranslationExtension.php
 
         // Formatos: http://www.php.net/manual/en/class.intldateformatter.php#intl.intldateformatter-constants
         $formatos = array(
-            // date/Hora: (no se muestra nada)
-            'none'   => \IntlDateFormatter::NONE,
-            // date: 12/13/52  Hora: 3:30pm
-            'short'  => \IntlDateFormatter::SHORT,
-            // date: Jan 12, 1952  Hora:
+            // Fecha/Hora: (no se muestra nada)
+            'none' => \IntlDateFormatter::NONE,
+            // Fecha: 12/13/52  Hora: 3:30pm
+            'short' => \IntlDateFormatter::SHORT,
+            // Fecha: Jan 12, 1952  Hora:
             'medium' => \IntlDateFormatter::MEDIUM,
-            // date: January 12, 1952  Hora: 3:30:32pm
-            'long'   => \IntlDateFormatter::LONG,
-            // date: Tuesday, April 12, 1952 AD  Hora: 3:30:42pm PST
-            'full'   => \IntlDateFormatter::FULL,
+            // Fecha: January 12, 1952  Hora: 3:30:32pm
+            'long' => \IntlDateFormatter::LONG,
+            // Fecha: Tuesday, April 12, 1952 AD  Hora: 3:30:42pm PST
+            'full' => \IntlDateFormatter::FULL,
         );
 
         $formateador = \IntlDateFormatter::create(
@@ -239,34 +134,33 @@ EOJ;
             $formatos[$formatoHora]
         );
 
-        if ($date instanceof \DateTime) {
-            return $formateador->format($date);
+        if ($fecha instanceof \DateTime) {
+            return $formateador->format($fecha);
         } else {
-            return $formateador->format(new \DateTime($date));
+            return $formateador->format(new \DateTime($fecha));
         }
     }
 
     /**
-     * Calcula el porcentaje que supone el discount indicado en euros.
-     * El price no es el price original sino el price de sale (también en euros)
+     * Calcula el porcentaje que supone el descuento indicado en euros.
+     * El precio no es el precio original sino el precio de venta (también en euros).
      *
-     * @param string $price    price de sale del producto (en euros)
-     * @param string $discount discount sobre el price original (en euros)
-     * @param string $decimales number de decimales que muestra el discount
+     * @param string $precio    Precio de venta del producto (en euros)
+     * @param string $descuento Descuento sobre el precio original (en euros)
+     * @param string $decimales Número de decimales que muestra el descuento
      */
-    public function discount($price, $discount, $decimales = 0)
+    public function descuento($precio, $descuento, $decimales = 0)
     {
-        if (!is_numeric($price) || !is_numeric($discount)) {
+        if (!is_numeric($precio) || !is_numeric($descuento)) {
             return '-';
         }
 
-        if ($discount == 0 || $discount == null) {
->>>>>>> ab1dc88 (Eliminados todos los bundles para usar solo AppBundle)
+        if ($descuento == 0 || $descuento == null) {
             return '0%';
         }
 
-        $precio_original = $price + $discount;
-        $porcentaje = ($discount / $precio_original) * 100;
+        $precio_original = $precio + $descuento;
+        $porcentaje = ($descuento / $precio_original) * 100;
 
         return '-'.number_format($porcentaje, $decimales).'%';
     }

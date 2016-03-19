@@ -3,8 +3,8 @@
 /*
  * (c) Javier Eguiluz <javier.eguiluz@gmail.com>
  *
- * Este file pertenece a la application de prueba Cupon.
- * El code fuente de la application incluye un file llamado LICENSE
+ * Este archivo pertenece a la aplicación de prueba Cupon.
+ * El código fuente de la aplicación incluye un archivo llamado LICENSE
  * con toda la información sobre el copyright y la licencia.
  */
 
@@ -15,205 +15,82 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity
  */
-class sale
+class Venta
 {
     /**
-<<<<<<< HEAD
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    private $id;
-
-    /**
      * @ORM\Column(type="datetime")
      */
-    protected $date;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\offer")
-     */
-    protected $offer;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\user")
-     */
-    protected $user;
-
-    /**
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param \DateTime $date
-     */
-    public function setFecha($date)
-    {
-        $this->date = $date;
-    }
-
-    /**
-     * @return \DateTime
-     */
-    public function getFecha()
-    {
-        return $this->date;
-    }
-
-    /**
-     * @param offer $offer
-     */
-    public function setOferta(offer $offer)
-    {
-        $this->offer = $offer;
-    }
-
-    /**
-     * @return offer
-     */
-    public function getOferta()
-    {
-        return $this->offer;
-    }
-
-    /**
-     * @param user $user
-     */
-    public function setUsuario(user $user)
-    {
-        $this->user = $user;
-    }
-
-    /**
-     * @return user
-||||||| parent of ab1dc88 (Eliminados todos los bundles para usar solo AppBundle)
-=======
-     * @ORM\Column(type="datetime")
-     */
-    protected $date;
+    protected $fecha;
 
     /**
      * @ORM\Id
-<<<<<<<< HEAD:src/Cupon/OfertaBundle/Entity/Venta.php
-     * @ORM\ManyToOne(targetEntity="Cupon\OfertaBundle\Entity\offer")
-|||||||| parent of ab1dc88 (Eliminados todos los bundles para usar solo AppBundle):src/Cupon/OfertaBundle/Entity/Venta.php
-     * @ORM\ManyToOne(targetEntity="Cupon\OfertaBundle\Entity\Oferta")
-========
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Oferta")
->>>>>>>> ab1dc88 (Eliminados todos los bundles para usar solo AppBundle):src/AppBundle/Entity/Venta.php
      */
-    protected $offer;
+    protected $oferta;
 
     /**
      * @ORM\Id
-<<<<<<<< HEAD:src/Cupon/OfertaBundle/Entity/Venta.php
-     * @ORM\ManyToOne(targetEntity="Cupon\UsuarioBundle\Entity\user")
-|||||||| parent of ab1dc88 (Eliminados todos los bundles para usar solo AppBundle):src/Cupon/OfertaBundle/Entity/Venta.php
-     * @ORM\ManyToOne(targetEntity="Cupon\UsuarioBundle\Entity\Usuario")
-========
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Usuario")
->>>>>>>> ab1dc88 (Eliminados todos los bundles para usar solo AppBundle):src/AppBundle/Entity/Venta.php
      */
-    protected $user;
+    protected $usuario;
 
     /**
-     * Set date
+     * Set fecha.
      *
-     * @param datetime $date
+     * @param datetime $fecha
      */
-    public function setFecha($date)
+    public function setFecha($fecha)
     {
-        $this->date = $date;
+        $this->fecha = $fecha;
     }
 
     /**
-     * Get date
+     * Get fecha.
      *
      * @return datetime
      */
     public function getFecha()
     {
-        return $this->date;
+        return $this->fecha;
     }
 
     /**
-     * Set offer
+     * Set oferta.
      *
-<<<<<<<< HEAD:src/Cupon/OfertaBundle/Entity/Venta.php
-     * @param Cupon\OfertaBundle\Entity\offer $offer
-|||||||| parent of ab1dc88 (Eliminados todos los bundles para usar solo AppBundle):src/Cupon/OfertaBundle/Entity/Venta.php
-     * @param Cupon\OfertaBundle\Entity\Oferta $oferta
-========
      * @param AppBundle\Entity\Oferta $oferta
->>>>>>>> ab1dc88 (Eliminados todos los bundles para usar solo AppBundle):src/AppBundle/Entity/Venta.php
      */
-<<<<<<<< HEAD:src/Cupon/OfertaBundle/Entity/Venta.php
-    public function setOferta(\Cupon\OfertaBundle\Entity\offer $offer)
-|||||||| parent of ab1dc88 (Eliminados todos los bundles para usar solo AppBundle):src/Cupon/OfertaBundle/Entity/Venta.php
-    public function setOferta(\Cupon\OfertaBundle\Entity\Oferta $oferta)
-========
     public function setOferta(\AppBundle\Entity\Oferta $oferta)
->>>>>>>> ab1dc88 (Eliminados todos los bundles para usar solo AppBundle):src/AppBundle/Entity/Venta.php
     {
-        $this->offer = $offer;
+        $this->oferta = $oferta;
     }
 
     /**
-     * Get offer
+     * Get oferta.
      *
-<<<<<<<< HEAD:src/Cupon/OfertaBundle/Entity/Venta.php
-     * @return Cupon\OfertaBundle\Entity\offer
-|||||||| parent of ab1dc88 (Eliminados todos los bundles para usar solo AppBundle):src/Cupon/OfertaBundle/Entity/Venta.php
-     * @return Cupon\OfertaBundle\Entity\Oferta
-========
      * @return AppBundle\Entity\Oferta
->>>>>>>> ab1dc88 (Eliminados todos los bundles para usar solo AppBundle):src/AppBundle/Entity/Venta.php
      */
     public function getOferta()
     {
-        return $this->offer;
+        return $this->oferta;
     }
 
     /**
-     * Set user
+     * Set usuario.
      *
-<<<<<<<< HEAD:src/Cupon/OfertaBundle/Entity/Venta.php
-     * @param Cupon\UsuarioBundle\Entity\user $user
-|||||||| parent of ab1dc88 (Eliminados todos los bundles para usar solo AppBundle):src/Cupon/OfertaBundle/Entity/Venta.php
-     * @param Cupon\UsuarioBundle\Entity\Usuario $usuario
-========
      * @param AppBundle\Entity\Usuario $usuario
->>>>>>>> ab1dc88 (Eliminados todos los bundles para usar solo AppBundle):src/AppBundle/Entity/Venta.php
      */
-<<<<<<<< HEAD:src/Cupon/OfertaBundle/Entity/Venta.php
-    public function setUsuario(\Cupon\UsuarioBundle\Entity\user $user)
-|||||||| parent of ab1dc88 (Eliminados todos los bundles para usar solo AppBundle):src/Cupon/OfertaBundle/Entity/Venta.php
-    public function setUsuario(\Cupon\UsuarioBundle\Entity\Usuario $usuario)
-========
     public function setUsuario(\AppBundle\Entity\Usuario $usuario)
->>>>>>>> ab1dc88 (Eliminados todos los bundles para usar solo AppBundle):src/AppBundle/Entity/Venta.php
     {
-        $this->user = $user;
+        $this->usuario = $usuario;
     }
 
     /**
-     * Get user
+     * Get usuario.
      *
-<<<<<<<< HEAD:src/Cupon/OfertaBundle/Entity/Venta.php
-     * @return Cupon\UsuarioBundle\Entity\user
-|||||||| parent of ab1dc88 (Eliminados todos los bundles para usar solo AppBundle):src/Cupon/OfertaBundle/Entity/Venta.php
-     * @return Cupon\UsuarioBundle\Entity\Usuario
-========
      * @return AppBundle\Entity\Usuario
->>>>>>>> ab1dc88 (Eliminados todos los bundles para usar solo AppBundle):src/AppBundle/Entity/Venta.php
->>>>>>> ab1dc88 (Eliminados todos los bundles para usar solo AppBundle)
      */
     public function getUsuario()
     {
-        return $this->user;
+        return $this->usuario;
     }
 }

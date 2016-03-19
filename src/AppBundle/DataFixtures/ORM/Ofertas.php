@@ -3,177 +3,23 @@
 /*
  * (c) Javier Eguiluz <javier.eguiluz@gmail.com>
  *
- * Este file pertenece a la application de prueba Cupon.
- * El code fuente de la application incluye un file llamado LICENSE
+ * Este archivo pertenece a la aplicación de prueba Cupon.
+ * El código fuente de la aplicación incluye un archivo llamado LICENSE
  * con toda la información sobre el copyright y la licencia.
  */
 
 namespace AppBundle\DataFixtures\ORM;
 
-<<<<<<< HEAD
-use AppBundle\Entity\offer;
-use Doctrine\Common\DataFixtures\AbstractFixture;
-use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
-use Doctrine\Common\Persistence\ObjectManager;
-
-/**
- * creates los datos de prueba para la entity offer.
- */
-class Ofertas extends AbstractFixture implements OrderedFixtureInterface
-{
-    const NUM_OFERTAS = 15;
-
-    public function getOrder()
-    {
-        return 30;
-    }
-
-    public function load(ObjectManager $manager)
-    {
-        // Obtener todas las tiendas y ciudades de la base de datos
-        $ciudades = $manager->getRepository('AppBundle:city')->findAll();
-
-        foreach ($ciudades as $city) {
-            $tiendas = $manager->getRepository('AppBundle:store')->findByCiudad(
-                $city->getId()
-            );
-
-            for ($j = 1; $j <= self::NUM_OFERTAS; ++$j) {
-                $offer = new offer();
-
-                $offer->setNombre($this->getNombre());
-                $offer->setDescripcion($this->getDescripcion());
-                $offer->setCondiciones($this->getCondiciones());
-                $offer->setRutaFoto('photo'.mt_rand(1, 20).'.jpg');
-                $offer->setPrecio(number_format(mt_rand(100, 10000) / 100, 2));
-                $offer->setDescuento($offer->getPrecio() * (mt_rand(10, 70) / 100));
-
-                // Una offer se publica hoy, el resto se reparte entre el pasado y el futuro
-                if (1 === $j) {
-                    $date = 'today';
-                    $offer->setRevisada(true);
-                } elseif ($j < 10) {
-                    $date = 'now - '.($j - 1).' days';
-                    // el 80% de las ofertas pasadas se marcan como revisadas
-                    $offer->setRevisada((mt_rand(1, 1000) % 10) < 8);
-                } else {
-                    $date = 'now + '.($j - 10 + 1).' days';
-                    $offer->setRevisada(true);
-                }
-
-                $fechaPublicacion = new \DateTime($date);
-                $fechaPublicacion->setTime(23, 59, 59);
-
-                // Se debe clonar el value de la fechaPublicacion porque si se usa directamente
-                // el method ->add(), se modificaría el value original, que no se saves en la BD
-                // hasta que se hace el ->flush()
-                $fechaExpiracion = clone $fechaPublicacion;
-                $fechaExpiracion->add(\DateInterval::createFromDateString('24 hours'));
-
-                $offer->setFechaPublicacion($fechaPublicacion);
-                $offer->setFechaExpiracion($fechaExpiracion);
-
-                $offer->setUmbral(mt_rand(25, 100));
-
-                $offer->setCiudad($city);
-
-                // Seleccionar aleatoriamente una store que pertenezca a la city anterior
-                $store = $tiendas[array_rand($tiendas)];
-                $offer->setTienda($store);
-
-                $manager->persist($offer);
-                $manager->flush();
-            }
-        }
-    }
-
-    /**
-     * Generador aleatorio de nombres de ofertas.
-     *
-     * @return string name/título aletorio generado para la offer.
-     */
-    private function getNombre()
-    {
-        $palabras = array_flip(array(
-            'Lorem', 'Ipsum', 'Sitamet', 'Et', 'At', 'Sed', 'Aut', 'Vel', 'Ut',
-            'Dum', 'Tincidunt', 'Facilisis', 'Nulla', 'Scelerisque', 'Blandit',
-            'Ligula', 'Eget', 'Drerit', 'Malesuada', 'Enimsit', 'Libero',
-            'Penatibus', 'Imperdiet', 'Pendisse', 'Vulputae', 'Natoque',
-            'Aliquam', 'Dapibus', 'Lacinia',
-        ));
-
-        $numeroPalabras = mt_rand(4, 8);
-
-        return implode(' ', array_rand($palabras, $numeroPalabras));
-    }
-
-    /**
-     * Generador aleatorio de descripciones de ofertas.
-     *
-     * @return string description aletoria generada para la offer.
-     */
-    private function getDescripcion()
-    {
-        $frases = array_flip(array(
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-            'Mauris ultricies nunc nec sapien tincidunt facilisis.',
-            'Nulla scelerisque blandit ligula eget hendrerit.',
-            'Sed malesuada, enim sit amet ultricies semper, elit leo lacinia massa, in tempus nisl ipsum quis libero.',
-            'Aliquam molestie neque non augue molestie bibendum.',
-            'Pellentesque ultricies erat ac lorem pharetra vulputate.',
-            'Donec dapibus blandit odio, in auctor turpis commodo ut.',
-            'Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.',
-            'Nam rhoncus lorem sed libero hendrerit accumsan.',
-            'Maecenas non erat eu justo rutrum condimentum.',
-            'Suspendisse leo tortor, tempus in lacinia sit amet, varius eu urna.',
-            'Phasellus eu leo tellus, et accumsan libero.',
-            'Pellentesque fringilla ipsum nec justo tempus elementum.',
-            'Aliquam dapibus metus aliquam ante lacinia blandit.',
-            'Donec ornare lacus vitae dolor imperdiet vitae ultricies nibh congue.',
-        ));
-
-        $numeroFrases = mt_rand(4, 7);
-
-        return implode("\n", array_rand($frases, $numeroFrases));
-    }
-
-    /**
-     * Generador aleatorio de condiciones de ofertas.
-     *
-     * @return string Condiciones aletorias generadas para la offer.
-     */
-    private function getCondiciones()
-    {
-        $frases = array_flip(array(
-            'Máximo 1 consumición por persona.',
-            'No acumulable a otras ofertas.',
-            'No disponible para llevar. Debe consumirse en el propio local.',
-            'Válido para cualquier día entre semana.',
-            'No válido en festivos ni fines de semana.',
-            'Reservado el derecho de admisión.',
-            'offer válida si se realizan consumiciones adicionales por value de 50 euros.',
-            'Válido solamente para comidas, no para cenas.',
-        ));
-
-        $numeroFrases = mt_rand(2, 4);
-||||||| parent of ab1dc88 (Eliminados todos los bundles para usar solo AppBundle)
-=======
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-<<<<<<<< HEAD:src/Cupon/OfertaBundle/DataFixtures/ORM/Ofertas.php
-use Cupon\OfertaBundle\Entity\offer;
-|||||||| parent of ab1dc88 (Eliminados todos los bundles para usar solo AppBundle):src/Cupon/OfertaBundle/DataFixtures/ORM/Ofertas.php
-use Cupon\OfertaBundle\Entity\Oferta;
-========
 use AppBundle\Entity\Oferta;
->>>>>>>> ab1dc88 (Eliminados todos los bundles para usar solo AppBundle):src/AppBundle/DataFixtures/ORM/Ofertas.php
 
 /**
- * Fixtures de la entity offer.
- * creates para cada city 15 ofertas con información muy realista.
+ * Fixtures de la entidad Oferta.
+ * Crea para cada ciudad 15 ofertas con información muy realista.
  */
 class Ofertas extends AbstractFixture implements OrderedFixtureInterface, ContainerAwareInterface
 {
@@ -192,77 +38,59 @@ class Ofertas extends AbstractFixture implements OrderedFixtureInterface, Contai
     public function load(ObjectManager $manager)
     {
         // Obtener todas las tiendas y ciudades de la base de datos
-<<<<<<<< HEAD:src/Cupon/OfertaBundle/DataFixtures/ORM/Ofertas.php
-        $ciudades = $manager->getRepository('CiudadBundle:city')->findAll();
-        $tiendas = $manager->getRepository('TiendaBundle:store')->findAll();
-|||||||| parent of ab1dc88 (Eliminados todos los bundles para usar solo AppBundle):src/Cupon/OfertaBundle/DataFixtures/ORM/Ofertas.php
-        $ciudades = $manager->getRepository('CiudadBundle:Ciudad')->findAll();
-        $tiendas = $manager->getRepository('TiendaBundle:Tienda')->findAll();
-========
         $ciudades = $manager->getRepository('AppBundle:Ciudad')->findAll();
         $tiendas = $manager->getRepository('AppBundle:Tienda')->findAll();
->>>>>>>> ab1dc88 (Eliminados todos los bundles para usar solo AppBundle):src/AppBundle/DataFixtures/ORM/Ofertas.php
 
-<<<<<<<< HEAD:src/Cupon/OfertaBundle/DataFixtures/ORM/Ofertas.php
-        foreach ($ciudades as $city) {
-            $tiendas = $manager->getRepository('TiendaBundle:store')->findByCiudad(
-                $city->getId()
-|||||||| parent of ab1dc88 (Eliminados todos los bundles para usar solo AppBundle):src/Cupon/OfertaBundle/DataFixtures/ORM/Ofertas.php
-        foreach ($ciudades as $ciudad) {
-            $tiendas = $manager->getRepository('TiendaBundle:Tienda')->findByCiudad(
-                $ciudad->getId()
-========
         foreach ($ciudades as $ciudad) {
             $tiendas = $manager->getRepository('AppBundle:Tienda')->findByCiudad(
                 $ciudad->getId()
->>>>>>>> ab1dc88 (Eliminados todos los bundles para usar solo AppBundle):src/AppBundle/DataFixtures/ORM/Ofertas.php
             );
 
-            for ($j=1; $j<=15; $j++) {
-                $offer = new offer();
+            for ($j = 1; $j <= 15; ++$j) {
+                $oferta = new Oferta();
 
-                $offer->setNombre($this->getNombre());
-                $offer->setDescripcion($this->getDescripcion());
-                $offer->setCondiciones($this->getCondiciones());
-                $offer->setRutaFoto('photo'.rand(1,20).'.jpg');
-                $offer->setPrecio(number_format(rand(100, 10000)/100, 2));
-                $offer->setDescuento($offer->getPrecio() * (rand(10, 70)/100));
+                $oferta->setNombre($this->getNombre());
+                $oferta->setDescripcion($this->getDescripcion());
+                $oferta->setCondiciones($this->getCondiciones());
+                $oferta->setRutaFoto('foto'.rand(1, 20).'.jpg');
+                $oferta->setPrecio(number_format(rand(100, 10000) / 100, 2));
+                $oferta->setDescuento($oferta->getPrecio() * (rand(10, 70) / 100));
 
-                // Una offer se publica hoy, el resto se reparte entre el pasado y el futuro
+                // Una oferta se publica hoy, el resto se reparte entre el pasado y el futuro
                 if (1 == $j) {
-                    $date = 'today';
-                    $offer->setRevisada(true);
+                    $fecha = 'today';
+                    $oferta->setRevisada(true);
                 } elseif ($j < 10) {
-                    $date = 'now - '.($j-1).' days';
+                    $fecha = 'now - '.($j - 1).' days';
                     // el 80% de las ofertas pasadas se marcan como revisadas
-                    $offer->setRevisada((rand(1, 1000) % 10) < 8);
+                    $oferta->setRevisada((rand(1, 1000) % 10) < 8);
                 } else {
-                    $date = 'now + '.($j - 10 + 1).' days';
-                    $offer->setRevisada(true);
+                    $fecha = 'now + '.($j - 10 + 1).' days';
+                    $oferta->setRevisada(true);
                 }
 
-                $fechaPublicacion = new \DateTime($date);
+                $fechaPublicacion = new \DateTime($fecha);
                 $fechaPublicacion->setTime(23, 59, 59);
 
-                // Se debe clonar el value de la fechaPublicacion porque si se usa directamente
-                // el method ->add(), se modificaría el value original, que no se saves en la BD
+                // Se debe clonar el valor de la fechaPublicacion porque si se usa directamente
+                // el método ->add(), se modificaría el valor original, que no se guarda en la BD
                 // hasta que se hace el ->flush()
                 $fechaExpiracion = clone $fechaPublicacion;
                 $fechaExpiracion->add(\DateInterval::createFromDateString('24 hours'));
 
-                $offer->setFechaPublicacion($fechaPublicacion);
-                $offer->setFechaExpiracion($fechaExpiracion);
+                $oferta->setFechaPublicacion($fechaPublicacion);
+                $oferta->setFechaExpiracion($fechaExpiracion);
 
-                $offer->setCompras(0);
-                $offer->setUmbral(rand(25, 100));
+                $oferta->setCompras(0);
+                $oferta->setUmbral(rand(25, 100));
 
-                $offer->setCiudad($city);
+                $oferta->setCiudad($ciudad);
 
-                // Seleccionar aleatoriamente una store que pertenezca a la city anterior
-                $store = $tiendas[array_rand($tiendas)];
-                $offer->setTienda($store);
+                // Seleccionar aleatoriamente una tienda que pertenezca a la ciudad anterior
+                $tienda = $tiendas[array_rand($tiendas)];
+                $oferta->setTienda($tienda);
 
-                $manager->persist($offer);
+                $manager->persist($oferta);
                 $manager->flush();
             }
         }
@@ -271,7 +99,7 @@ class Ofertas extends AbstractFixture implements OrderedFixtureInterface, Contai
     /**
      * Generador aleatorio de nombres de ofertas.
      *
-     * @return string name/título aletorio generado para la offer.
+     * @return string Nombre/título aletorio generado para la oferta.
      */
     private function getNombre()
     {
@@ -280,7 +108,7 @@ class Ofertas extends AbstractFixture implements OrderedFixtureInterface, Contai
             'Dum', 'Tincidunt', 'Facilisis', 'Nulla', 'Scelerisque', 'Blandit',
             'Ligula', 'Eget', 'Drerit', 'Malesuada', 'Enimsit', 'Libero',
             'Penatibus', 'Imperdiet', 'Pendisse', 'Vulputae', 'Natoque',
-            'Aliquam', 'Dapibus', 'Lacinia'
+            'Aliquam', 'Dapibus', 'Lacinia',
         ));
 
         $numeroPalabras = rand(4, 8);
@@ -291,7 +119,7 @@ class Ofertas extends AbstractFixture implements OrderedFixtureInterface, Contai
     /**
      * Generador aleatorio de descripciones de ofertas.
      *
-     * @return string description aletoria generada para la offer.
+     * @return string Descripción aletoria generada para la oferta.
      */
     private function getDescripcion()
     {
@@ -321,7 +149,7 @@ class Ofertas extends AbstractFixture implements OrderedFixtureInterface, Contai
     /**
      * Generador aleatorio de condiciones de ofertas.
      *
-     * @return string Condiciones aletorias generadas para la offer.
+     * @return string Condiciones aletorias generadas para la oferta.
      */
     private function getCondiciones()
     {
@@ -334,12 +162,11 @@ class Ofertas extends AbstractFixture implements OrderedFixtureInterface, Contai
             'Válido para cualquier día entre semana.',
             'No válido en festivos ni fines de semana.',
             'Reservado el derecho de admisión.',
-            'offer válida si se realizan consumiciones adicionales por value de 50 euros.',
+            'Oferta válida si se realizan consumiciones adicionales por valor de 50 euros.',
             'Válido solamente para comidas, no para cenas.',
         ));
 
         $numeroFrases = rand(2, 4);
->>>>>>> ab1dc88 (Eliminados todos los bundles para usar solo AppBundle)
 
         return implode(' ', array_rand($frases, $numeroFrases));
     }
