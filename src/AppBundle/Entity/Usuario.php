@@ -3,8 +3,8 @@
 /*
  * (c) Javier Eguiluz <javier.eguiluz@gmail.com>
  *
- * Este archivo pertenece a la aplicación de prueba Cupon.
- * El código fuente de la aplicación incluye un archivo llamado LICENSE
+ * Este file pertenece a la application de prueba Cupon.
+ * El code fuente de la application incluye un file llamado LICENSE
  * con toda la información sobre el copyright y la licencia.
  */
 
@@ -17,24 +17,24 @@ use Symfony\Bridge\Doctrine\Validator\Constraints as DoctrineAssert;
 use Symfony\Component\Validator\ExecutionContextInterface;
 
 /**
- * AppBundle\Entity\Usuario.
+ * AppBundle\Entity\user.
  *
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="AppBundle\Repository\UsuarioRepository")
  * @DoctrineAssert\UniqueEntity("email")
  * @Assert\Callback(methods={"esDniValido"})
  */
-class Usuario implements UserInterface
+class user implements UserInterface
 {
     /**
-     * Método requerido por la interfaz UserInterface.
+     * method requerido por la interfaz UserInterface.
      */
     public function eraseCredentials()
     {
     }
 
     /**
-     * Método requerido por la interfaz UserInterface.
+     * method requerido por la interfaz UserInterface.
      */
     public function getRoles()
     {
@@ -42,7 +42,7 @@ class Usuario implements UserInterface
     }
 
     /**
-     * Método requerido por la interfaz UserInterface.
+     * method requerido por la interfaz UserInterface.
      */
     public function getUsername()
     {
@@ -61,10 +61,10 @@ class Usuario implements UserInterface
     /**
      * @var string
      *
-     * @ORM\Column(name="nombre", type="string", length=100)
+     * @ORM\Column(name="name", type="string", length=100)
      * @Assert\NotBlank()
      */
-    private $nombre;
+    private $name;
 
     /**
      * @var string
@@ -86,7 +86,7 @@ class Usuario implements UserInterface
      * @var string
      *
      * @ORM\Column(name="password", type="string", length=255)
-     * @Assert\NotBlank(groups={"registro"})
+     * @Assert\NotBlank(groups={"record"})
      * @Assert\Length(min = 6)
      */
     private $password;
@@ -148,10 +148,10 @@ class Usuario implements UserInterface
     /**
      * @var int
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Ciudad", inversedBy="usuarios")
-     * @Assert\Type("AppBundle\Entity\Ciudad")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\city", inversedBy="usuarios")
+     * @Assert\Type("AppBundle\Entity\city")
      */
-    private $ciudad;
+    private $city;
 
     public function __construct()
     {
@@ -165,26 +165,26 @@ class Usuario implements UserInterface
 
     public function __sleep()
     {
-        return array('id', 'nombre', 'email');
+        return array('id', 'name', 'email');
     }
 
     /**
-     * Validador propio que comprueba si el DNI introducido es válido.
+     * validator propio que checks si el DNI introducido es válido.
      *
-     * El DNI es un identificador único obligatorio para todos los ciudadanos de
+     * El DNI es un identificador único required para todos los ciudadanos de
      * España y de varios países americanos.
      *
      *   Formato:   entre 1 y 8 números seguidos de 1 letra
      *   Ejemplos:  12345678Z - 11111111H - 01234567L
      *
      * Los números se pueden escoger aleatoriamente, pero la letra depende de los
-     * números y por tanto, actúa como carácter de control. ¿Cómo se obtiene la
+     * números y por tanto, actúa como carácter de control. ¿Cómo se gets la
      * letra a partir de los números?
      *
-     *   1. Obtener el 'mod 23' (resto de la división entera) del número
+     *   1. Obtener el 'mod 23' (resto de la división entera) del number
      *      (e.g.: 12345678 mod 23 = 14).
      *   2. Utilizar la siguiente tabla para elegir la letra que corresponde al
-     *      resultado de la operación anterior.
+     *      result de la operación anterior.
      *
      *   +--------+----+----+----+----+----+----+----+----+----+----+----+----+
      *   | mod 23 |  0 |  1 |  2 |  3 |  4 |  5 |  6 |  7 |  8 |  9 | 10 | 11 |
@@ -211,12 +211,12 @@ class Usuario implements UserInterface
         $numero = substr($dni, 0, -1);
         $letra = strtoupper(substr($dni, -1));
         if ($letra != substr('TRWAGMYFPDXBNJZSQVHLCKE', strtr($numero, 'XYZ', '012') % 23, 1)) {
-            $context->addViolationAt('dni', 'La letra no coincide con el número del DNI. Comprueba que has escrito bien tanto el número como la letra');
+            $context->addViolationAt('dni', 'La letra no coincide con el number del DNI. checks que has escrito bien tanto el number como la letra');
         }
     }
 
     /**
-     * @Assert\True(message = "Debes tener al menos 18 años para registrarte en el sitio")
+     * @Assert\IsTrue(message = "Debes tener al menos 18 años para registrarte en el sitio")
      */
     public function isMayorDeEdad()
     {
@@ -234,23 +234,23 @@ class Usuario implements UserInterface
     }
 
     /**
-     * Set nombre.
+     * Set name.
      *
-     * @param string $nombre
+     * @param string $name
      */
-    public function setNombre($nombre)
+    public function setNombre($name)
     {
-        $this->nombre = $nombre;
+        $this->name = $name;
     }
 
     /**
-     * Get nombre.
+     * Get name.
      *
      * @return string
      */
     public function getNombre()
     {
-        return $this->nombre;
+        return $this->name;
     }
 
     /**
@@ -454,22 +454,22 @@ class Usuario implements UserInterface
     }
 
     /**
-     * Set ciudad.
+     * Set city.
      *
-     * @param AppBundle\Entity\Ciudad $ciudad
+     * @param AppBundle\Entity\city $city
      */
-    public function setCiudad(\AppBundle\Entity\Ciudad $ciudad)
+    public function setCiudad(\AppBundle\Entity\city $city)
     {
-        $this->ciudad = $ciudad;
+        $this->city = $city;
     }
 
     /**
-     * Get ciudad.
+     * Get city.
      *
-     * @return AppBundle\Entity\Ciudad
+     * @return AppBundle\Entity\city
      */
     public function getCiudad()
     {
-        return $this->ciudad;
+        return $this->city;
     }
 }

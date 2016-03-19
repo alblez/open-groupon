@@ -3,8 +3,8 @@
 /*
  * (c) Javier Eguiluz <javier.eguiluz@gmail.com>
  *
- * Este archivo pertenece a la aplicación de prueba Cupon.
- * El código fuente de la aplicación incluye un archivo llamado LICENSE
+ * Este file pertenece a la application de prueba Cupon.
+ * El code fuente de la application incluye un file llamado LICENSE
  * con toda la información sobre el copyright y la licencia.
  */
 
@@ -15,31 +15,31 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
- * Formulario para crear y manipular entidades de tipo Tienda.
- * Como se utiliza en la extranet, algunas propiedades de la entidad
- * no se incluyen en el formulario.
+ * form para crear y manipular entidades de type store.
+ * Como se utiliza en la extranet, algunas propiedades de la entity
+ * no se incluyen en el form.
  */
 class TiendaType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('nombre')
-            ->add('login', 'text', array('read_only' => true))
+            ->add('name')
+            ->add('login', null, array('read_only' => true))
 
-            ->add('password', 'repeated', array(
+            ->add('password', 'Symfony\Component\Form\Extension\Core\Type\RepeatedType', array(
                 'type' => 'password',
                 'invalid_message' => 'Las dos contraseñas deben coincidir',
-                'first_options' => array('label' => 'Contraseña'),
-                'second_options' => array('label' => 'Repite Contraseña'),
+                'first_options' => array('label' => 'password'),
+                'second_options' => array('label' => 'Repite password'),
                 'required' => false,
             ))
 
             ->add('descripcion')
             ->add('direccion')
-            ->add('ciudad')
+            ->add('city')
 
-            ->add('guardar', 'submit', array(
+            ->add('guardar', 'Symfony\Component\Form\Extension\Core\Type\SubmitType', array(
                 'label' => 'Guardar cambios',
                 'attr' => array('class' => 'boton'),
             ))
@@ -49,11 +49,11 @@ class TiendaType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'AppBundle\Entity\Tienda',
+            'data_class' => 'AppBundle\Entity\store',
         ));
     }
 
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'cupon_tiendabundle_tiendatype';
     }

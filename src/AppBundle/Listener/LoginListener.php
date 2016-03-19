@@ -3,47 +3,47 @@
 /*
  * (c) Javier Eguiluz <javier.eguiluz@gmail.com>
  *
- * Este archivo pertenece a la aplicación de prueba Cupon.
- * El código fuente de la aplicación incluye un archivo llamado LICENSE
+ * Este file pertenece a la application de prueba Cupon.
+ * El code fuente de la application incluye un file llamado LICENSE
  * con toda la información sobre el copyright y la licencia.
  */
 
 namespace AppBundle\Listener;
 
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
+use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
-use Symfony\Component\Security\Core\SecurityContext;
 use Symfony\Component\Routing\Router;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * Listener del evento SecurityInteractive que se utiliza para redireccionar
- * al usuario recién logueado a la portada de su ciudad.
+ * al user recién logueado a la portada de su city.
  */
 class LoginListener
 {
-    private $contexto, $router, $ciudad = null;
+    private $checker, $router, $city = null;
 
-    public function __construct(SecurityContext $context, Router $router)
+    public function __construct(AuthorizationChecker $context, Router $router)
     {
-        $this->contexto = $context;
+        $this->checker = $context;
         $this->router = $router;
     }
 
     public function onSecurityInteractiveLogin(InteractiveLoginEvent $event)
     {
         $token = $event->getAuthenticationToken();
-        $this->ciudad = $token->getUser()->getCiudad()->getSlug();
+        $this->city = $token->getUser()->getCiudad()->getSlug();
     }
 
     public function onKernelResponse(FilterResponseEvent $event)
     {
-        if (null != $this->ciudad) {
-            if ($this->contexto->isGranted('ROLE_TIENDA')) {
+        if (null != $this->city) {
+            if ($this->checker->isGranted('ROLE_TIENDA')) {
                 $portada = $this->router->generate('extranet_portada');
             } else {
                 $portada = $this->router->generate('portada', array(
-                    'ciudad' => $this->ciudad,
+                    'city' => $this->city,
                 ));
             }
 
