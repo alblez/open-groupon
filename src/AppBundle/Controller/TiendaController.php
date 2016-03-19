@@ -3,8 +3,8 @@
 /*
  * (c) Javier Eguiluz <javier.eguiluz@gmail.com>
  *
- * Este archivo pertenece a la aplicación de prueba Cupon.
- * El código fuente de la aplicación incluye un archivo llamado LICENSE
+ * Este file pertenece a la application de prueba Cupon.
+ * El code fuente de la application incluye un file llamado LICENSE
  * con toda la información sobre el copyright y la licencia.
  */
 
@@ -13,43 +13,46 @@ namespace AppBundle\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class TiendaController extends Controller
 {
     /**
-     * @Route("/{ciudad}/tiendas/{tienda}", requirements={ "ciudad" = ".+" }, name="tienda_portada")
+     * @Route("/{city}/tiendas/{store}", requirements={ "city" = ".+" }, name="tienda_portada")
      * @Cache(smaxage="3600")
      *
-     * Muestra la portada de cada tienda, que muestra su información y las
+     * Muestra la portada de cada store, que muestra su información y las
      * ofertas que ha publicado recientemente
      *
-     * @param string $ciudad El slug de la ciudad donde se encuentra la tienda
-     * @param string $tienda El slug de la tienda
+     * @param string $city El slug de la city donde se encuentra la store
+     * @param string $store El slug de la store
+     * @return Response
      */
-    public function portadaAction($ciudad, $tienda)
+    public function portadaAction(Request $request, $city, $store)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $ciudad = $em->getRepository('AppBundle:Ciudad')->findOneBySlug($ciudad);
-        $tienda = $em->getRepository('AppBundle:Tienda')->findOneBy(array(
-            'slug' => $tienda,
-            'ciudad' => $ciudad->getId(),
+        $city = $em->getRepository('AppBundle:city')->findOneBySlug($city);
+        $store = $em->getRepository('AppBundle:store')->findOneBy(array(
+            'slug' => $store,
+            'city' => $city->getId(),
         ));
 
-        if (!$tienda) {
-            throw $this->createNotFoundException('La tienda indicada no está disponible');
+        if (!$store) {
+            throw $this->createNotFoundException('La store indicada no está disponible');
         }
 
-        $ofertas = $em->getRepository('AppBundle:Tienda')->findUltimasOfertasPublicadas($tienda->getId());
-        $cercanas = $em->getRepository('AppBundle:Tienda')->findCercanas(
-            $tienda->getSlug(),
-            $tienda->getCiudad()->getSlug()
+        $ofertas = $em->getRepository('AppBundle:store')->findUltimasOfertasPublicadas($store->getId());
+        $cercanas = $em->getRepository('AppBundle:store')->findCercanas(
+            $store->getSlug(),
+            $store->getCiudad()->getSlug()
         );
 
-        $formato = $this->get('request')->getRequestFormat();
+        $formato = $request->getRequestFormat();
 
-        return $this->render('tienda/portada.'.$formato.'.twig', array(
-            'tienda' => $tienda,
+        return $this->render('store/portada.'.$formato.'.twig', array(
+            'store' => $store,
             'ofertas' => $ofertas,
             'cercanas' => $cercanas,
         ));

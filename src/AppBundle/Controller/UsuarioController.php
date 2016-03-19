@@ -61,6 +61,8 @@ class UsuarioController extends Controller
 
     /**
      * @Route("/login", name="usuario_login")
+     * @Cache(maxage="30")
+     *
      * Muestra la caja de login que se incluye en el lateral de la mayoría de páginas del sitio web.
      * Esta caja se transforma en información y enlaces cuando el user se loguea en la application.
      * La response se marca como privada para que no se añada a la cache pública. El trozo de template
@@ -73,14 +75,10 @@ class UsuarioController extends Controller
     {
         $user = $this->get('security.token_storage')->getToken()->getUser();
 
-        $response = $this->render('user/cajaLogin.html.twig', array(
+        return $this->render('user/cajaLogin.html.twig', array(
             'id' => $id,
             'user' => $user,
         ));
-
-        $response->setMaxAge(30);
-
-        return $response;
     }
 
     /**
@@ -146,7 +144,7 @@ class UsuarioController extends Controller
         $form = $this->createForm('AppBundle\Form\Frontend\UsuarioPerfilType', $user);
         $form
             ->remove('registrarme')
-            ->add('guardar', 'submit', array(
+            ->add('guardar', 'Symfony\Component\Form\Extension\Core\Type\SubmitType', array(
                 'label' => 'Guardar cambios',
                 'attr' => array('class' => 'boton'),
             ))
@@ -223,7 +221,7 @@ class UsuarioController extends Controller
         $user = $this->get('security.token_storage')->getToken()->getUser();
 
         // Solo pueden comprar los usuarios registrados y logueados
-        if (null == $user || !$this->get('security.authorization_checker')->isGranted('ROLE_USUARIO')) {
+        if (null === $user || !$this->get('security.authorization_checker')->isGranted('ROLE_USUARIO')) {
             $this->get('session')->getFlashBag()->add('info',
                 'Antes de comprar debes registrarte o conectarte con tu user y password.'
             );
@@ -249,7 +247,7 @@ class UsuarioController extends Controller
             'user' => $user->getId(),
         ));
 
-        if (null != $sale) {
+        if (null !== $sale) {
             $fechaVenta = $sale->getFecha();
 
             $formateador = \IntlDateFormatter::create(
