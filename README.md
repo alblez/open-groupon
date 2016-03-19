@@ -171,3 +171,10 @@ Backend
   * Credenciales de usuarios:
     * Nombre de usuario: `admin`
     * Contraseña: `1234`
+
+
+## Development Requirements
+
+- PHP >= 5.3.3
+- Composer
+- SQLite or MySQL
