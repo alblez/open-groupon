@@ -3,24 +3,24 @@
 /*
  * (c) Javier Eguiluz <javier.eguiluz@gmail.com>
  *
- * Este archivo pertenece a la aplicación de prueba Cupon.
- * El código fuente de la aplicación incluye un archivo llamado LICENSE
+ * Este file pertenece a la application de prueba Cupon.
+ * El code fuente de la application incluye un file llamado LICENSE
  * con toda la información sobre el copyright y la licencia.
  */
 
 namespace AppBundle\DataFixtures\ORM;
 
+use AppBundle\Entity\city;
+use AppBundle\Entity\store;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use AppBundle\Entity\Ciudad;
-use AppBundle\Entity\Tienda;
 
 /**
- * Fixtures de la entidad Tienda.
- * Crea para cada ciudad entre 2 y 5 tiendas con información muy realista.
+ * Fixtures de la entity store.
+ * creates para cada city entre 2 y 5 tiendas con información muy realista.
  */
 class Tiendas extends AbstractFixture implements OrderedFixtureInterface, ContainerAwareInterface
 {
@@ -39,29 +39,29 @@ class Tiendas extends AbstractFixture implements OrderedFixtureInterface, Contai
     public function load(ObjectManager $manager)
     {
         // Obtener todas las ciudades de la base de datos
-        $ciudades = $manager->getRepository('AppBundle:Ciudad')->findAll();
+        $ciudades = $manager->getRepository('AppBundle:city')->findAll();
 
         $i = 1;
-        foreach ($ciudades as $ciudad) {
+        foreach ($ciudades as $city) {
             $numeroTiendas = rand(2, 5);
             for ($j = 1; $j <= $numeroTiendas; ++$j) {
-                $tienda = new Tienda();
+                $store = new store();
 
-                $tienda->setNombre($this->getNombre());
+                $store->setNombre($this->getNombre());
 
-                $tienda->setLogin('tienda'.$i);
-                $tienda->setSalt(base_convert(sha1(uniqid(mt_rand(), true)), 16, 36));
+                $store->setLogin('store'.$i);
+                $store->setSalt(base_convert(sha1(uniqid(mt_rand(), true)), 16, 36));
 
-                $passwordEnClaro = 'tienda'.$i;
-                $encoder = $this->container->get('security.encoder_factory')->getEncoder($tienda);
-                $passwordCodificado = $encoder->encodePassword($passwordEnClaro, $tienda->getSalt());
-                $tienda->setPassword($passwordCodificado);
+                $passwordEnClaro = 'store'.$i;
+                $encoder = $this->container->get('security.encoder_factory')->getEncoder($store);
+                $passwordCodificado = $encoder->encodePassword($passwordEnClaro, $store->getSalt());
+                $store->setPassword($passwordCodificado);
 
-                $tienda->setDescripcion($this->getDescripcion());
-                $tienda->setDireccion($this->getDireccion($ciudad));
-                $tienda->setCiudad($ciudad);
+                $store->setDescripcion($this->getDescripcion());
+                $store->setDireccion($this->getDireccion($city));
+                $store->setCiudad($city);
 
-                $manager->persist($tienda);
+                $manager->persist($store);
 
                 ++$i;
             }
@@ -73,7 +73,7 @@ class Tiendas extends AbstractFixture implements OrderedFixtureInterface, Contai
     /**
      * Generador aleatorio de nombres de tiendas.
      *
-     * @return string Nombre aleatorio generado para la tienda.
+     * @return string name aleatorio generado para la store.
      */
     private function getNombre()
     {
@@ -90,7 +90,7 @@ class Tiendas extends AbstractFixture implements OrderedFixtureInterface, Contai
     /**
      * Generador aleatorio de descripciones de tiendas.
      *
-     * @return string Descripción aleatoria generada para la tienda.
+     * @return string description aleatoria generada para la store.
      */
     private function getDescripcion()
     {
@@ -122,11 +122,11 @@ class Tiendas extends AbstractFixture implements OrderedFixtureInterface, Contai
     /**
      * Generador aleatorio de direcciones postales.
      *
-     * @param Ciudad $ciudad Objeto de la ciudad para la que se genera una dirección postal.
+     * @param city $city Objeto de la city para la que se genera una address postal.
      *
-     * @return string Dirección postal aleatoria generada para la tienda.
+     * @return string address postal aleatoria generada para la store.
      */
-    private function getDireccion(Ciudad $ciudad)
+    private function getDireccion(city $city)
     {
         $prefijos = array('Calle', 'Avenida', 'Plaza');
         $nombres = array(
@@ -136,13 +136,13 @@ class Tiendas extends AbstractFixture implements OrderedFixtureInterface, Contai
         );
 
         return $prefijos[array_rand($prefijos)].' '.$nombres[array_rand($nombres)].', '.rand(1, 100)."\n"
-               .$this->getCodigoPostal().' '.$ciudad->getNombre();
+               .$this->getCodigoPostal().' '.$city->getNombre();
     }
 
     /**
      * Generador aleatorio de códigos postales.
      *
-     * @return string Código postal aleatorio generado para la tienda.
+     * @return string code postal aleatorio generado para la store.
      */
     private function getCodigoPostal()
     {

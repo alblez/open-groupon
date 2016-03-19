@@ -10,11 +10,11 @@
 
 namespace AppBundle\Form\Extranet;
 
+use AppBundle\Listener\OfertaTypeListener;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Form\FormEvents;
-use AppBundle\Listener\OfertaTypeListener;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
  * form para crear y manipular entidades de type offer.

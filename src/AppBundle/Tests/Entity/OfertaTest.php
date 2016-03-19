@@ -3,20 +3,20 @@
 /*
  * (c) Javier Eguiluz <javier.eguiluz@gmail.com>
  *
- * Este archivo pertenece a la aplicación de prueba Cupon.
- * El código fuente de la aplicación incluye un archivo llamado LICENSE
+ * Este file pertenece a la application de prueba Cupon.
+ * El code fuente de la application incluye un file llamado LICENSE
  * con toda la información sobre el copyright y la licencia.
  */
 
 namespace AppBundle\Tests;
 
+use AppBundle\Entity\city;
+use AppBundle\Entity\offer;
+use AppBundle\Entity\store;
 use Symfony\Component\Validator\Validation;
-use AppBundle\Entity\Oferta;
-use AppBundle\Entity\Ciudad;
-use AppBundle\Entity\Tienda;
 
 /**
- * Test unitario para asegurar que la validación de la entidad Oferta
+ * Test unitario para asegurar que la validación de la entity offer
  * funciona correctamente.
  */
 class OfertaTest extends \PHPUnit_Framework_TestCase
@@ -32,30 +32,30 @@ class OfertaTest extends \PHPUnit_Framework_TestCase
 
     public function testValidarSlug()
     {
-        $oferta = new Oferta();
+        $offer = new offer();
 
-        $oferta->setNombre('Oferta de prueba');
-        $slug = $oferta->getSlug();
+        $offer->setNombre('offer de prueba');
+        $slug = $offer->getSlug();
 
-        $this->assertEquals('oferta-de-prueba', $slug, 'El slug se asigna automáticamente a partir del nombre');
+        $this->assertEquals('offer-de-prueba', $slug, 'El slug se asigna automáticamente a partir del name');
     }
 
     public function testValidarDescripcion()
     {
-        $oferta = new Oferta();
-        $oferta->setNombre('Oferta de prueba');
+        $offer = new offer();
+        $offer->setNombre('offer de prueba');
 
-        $listaErrores = $this->validator->validate($oferta);
-        $this->assertGreaterThan(0, $listaErrores->count(), 'La descripción no puede dejarse en blanco');
+        $listaErrores = $this->validator->validate($offer);
+        $this->assertGreaterThan(0, $listaErrores->count(), 'La description no puede dejarse en blanco');
 
         $error = $listaErrores[0];
         $this->assertEquals('This value should not be blank.', $error->getMessage());
         $this->assertEquals('descripcion', $error->getPropertyPath());
 
-        $oferta->setDescripcion('Descripción de prueba');
+        $offer->setDescripcion('description de prueba');
 
-        $listaErrores = $this->validator->validate($oferta);
-        $this->assertGreaterThan(0, $listaErrores->count(), 'La descripción debe tener al menos 30 caracteres');
+        $listaErrores = $this->validator->validate($offer);
+        $this->assertGreaterThan(0, $listaErrores->count(), 'La description debe tener al menos 30 caracteres');
 
         $error = $listaErrores[0];
         $this->assertRegExp('/This value is too short/', $error->getMessage());
@@ -64,33 +64,33 @@ class OfertaTest extends \PHPUnit_Framework_TestCase
 
     public function testValidarFechas()
     {
-        $oferta = new Oferta();
-        $oferta->setNombre('Oferta de prueba');
-        $oferta->setDescripcion('Descripción de prueba - Descripción de prueba - Descripción de prueba');
+        $offer = new offer();
+        $offer->setNombre('offer de prueba');
+        $offer->setDescripcion('description de prueba - description de prueba - description de prueba');
 
-        $oferta->setFechaPublicacion(new \DateTime('today'));
-        $oferta->setFechaExpiracion(new \DateTime('yesterday'));
+        $offer->setFechaPublicacion(new \DateTime('today'));
+        $offer->setFechaExpiracion(new \DateTime('yesterday'));
 
-        $listaErrores = $this->validator->validate($oferta);
-        $this->assertGreaterThan(0, $listaErrores->count(), 'La fecha de expiración debe ser posterior a la fecha de publicación');
+        $listaErrores = $this->validator->validate($offer);
+        $this->assertGreaterThan(0, $listaErrores->count(), 'La date de expiración debe ser posterior a la date de publicación');
 
         $error = $listaErrores[0];
-        $this->assertEquals('La fecha de expiración debe ser posterior a la fecha de publicación', $error->getMessage());
+        $this->assertEquals('La date de expiración debe ser posterior a la date de publicación', $error->getMessage());
         $this->assertEquals('fechaValida', $error->getPropertyPath());
     }
 
     public function testValidarUmbral()
     {
-        $oferta = new Oferta();
-        $oferta->setNombre('Oferta de prueba');
-        $oferta->setDescripcion('Descripción de prueba - Descripción de prueba - Descripción de prueba');
-        $oferta->setFechaPublicacion(new \DateTime('today'));
-        $oferta->setFechaExpiracion(new \DateTime('tomorrow'));
+        $offer = new offer();
+        $offer->setNombre('offer de prueba');
+        $offer->setDescripcion('description de prueba - description de prueba - description de prueba');
+        $offer->setFechaPublicacion(new \DateTime('today'));
+        $offer->setFechaExpiracion(new \DateTime('tomorrow'));
 
-        $oferta->setUmbral(3.5);
+        $offer->setUmbral(3.5);
 
-        $listaErrores = $this->validator->validate($oferta);
-        $this->assertGreaterThan(0, $listaErrores->count(), 'El umbral debe ser un número entero');
+        $listaErrores = $this->validator->validate($offer);
+        $this->assertGreaterThan(0, $listaErrores->count(), 'El umbral debe ser un number entero');
 
         $error = $listaErrores[0];
         $this->assertRegExp('/This value should be of type/', $error->getMessage());
@@ -99,72 +99,72 @@ class OfertaTest extends \PHPUnit_Framework_TestCase
 
     public function testValidarPrecio()
     {
-        $oferta = new Oferta();
-        $oferta->setNombre('Oferta de prueba');
-        $oferta->setDescripcion('Descripción de prueba - Descripción de prueba - Descripción de prueba');
-        $oferta->setFechaPublicacion(new \DateTime('today'));
-        $oferta->setFechaExpiracion(new \DateTime('tomorrow'));
-        $oferta->setUmbral(3);
+        $offer = new offer();
+        $offer->setNombre('offer de prueba');
+        $offer->setDescripcion('description de prueba - description de prueba - description de prueba');
+        $offer->setFechaPublicacion(new \DateTime('today'));
+        $offer->setFechaExpiracion(new \DateTime('tomorrow'));
+        $offer->setUmbral(3);
 
-        $oferta->setPrecio(-10);
+        $offer->setPrecio(-10);
 
-        $listaErrores = $this->validator->validate($oferta);
-        $this->assertGreaterThan(0, $listaErrores->count(), 'El precio no puede ser un número negativo');
+        $listaErrores = $this->validator->validate($offer);
+        $this->assertGreaterThan(0, $listaErrores->count(), 'El price no puede ser un number negativo');
 
         $error = $listaErrores[0];
         $this->assertRegExp('/This value should be .* or more/', $error->getMessageTemplate());
-        $this->assertEquals('precio', $error->getPropertyPath());
+        $this->assertEquals('price', $error->getPropertyPath());
     }
 
     public function testValidarCiudad()
     {
-        $oferta = new Oferta();
-        $oferta->setNombre('Oferta de prueba');
-        $oferta->setDescripcion('Descripción de prueba - Descripción de prueba - Descripción de prueba');
-        $oferta->setFechaPublicacion(new \DateTime('today'));
-        $oferta->setFechaExpiracion(new \DateTime('tomorrow'));
-        $oferta->setUmbral(3);
-        $oferta->setPrecio(10.5);
+        $offer = new offer();
+        $offer->setNombre('offer de prueba');
+        $offer->setDescripcion('description de prueba - description de prueba - description de prueba');
+        $offer->setFechaPublicacion(new \DateTime('today'));
+        $offer->setFechaExpiracion(new \DateTime('tomorrow'));
+        $offer->setUmbral(3);
+        $offer->setPrecio(10.5);
 
-        $oferta->setCiudad($this->getCiudad());
-        $slug_ciudad = $oferta->getCiudad()->getSlug();
+        $offer->setCiudad($this->getCiudad());
+        $slug_ciudad = $offer->getCiudad()->getSlug();
 
-        $this->assertEquals('ciudad-de-prueba', $slug_ciudad, 'La ciudad se guarda correctamente en la oferta');
+        $this->assertEquals('city-de-prueba', $slug_ciudad, 'La city se saves correctamente en la offer');
     }
 
     public function testValidarTienda()
     {
-        $oferta = new Oferta();
-        $oferta->setNombre('Oferta de prueba');
-        $oferta->setDescripcion('Descripción de prueba - Descripción de prueba - Descripción de prueba');
-        $oferta->setFechaPublicacion(new \DateTime('today'));
-        $oferta->setFechaExpiracion(new \DateTime('tomorrow'));
-        $oferta->setUmbral(3);
-        $oferta->setPrecio(10.5);
-        $ciudad = $this->getCiudad();
-        $oferta->setCiudad($ciudad);
+        $offer = new offer();
+        $offer->setNombre('offer de prueba');
+        $offer->setDescripcion('description de prueba - description de prueba - description de prueba');
+        $offer->setFechaPublicacion(new \DateTime('today'));
+        $offer->setFechaExpiracion(new \DateTime('tomorrow'));
+        $offer->setUmbral(3);
+        $offer->setPrecio(10.5);
+        $city = $this->getCiudad();
+        $offer->setCiudad($city);
 
-        $oferta->setTienda($this->getTienda($ciudad));
-        $oferta_ciudad = $oferta->getCiudad()->getNombre();
-        $oferta_tienda_ciudad = $oferta->getTienda()->getCiudad()->getNombre();
+        $offer->setTienda($this->getTienda($city));
+        $oferta_ciudad = $offer->getCiudad()->getNombre();
+        $oferta_tienda_ciudad = $offer->getTienda()->getCiudad()->getNombre();
 
-        $this->assertEquals($oferta_ciudad, $oferta_tienda_ciudad, 'La tienda asociada a la oferta es de la misma ciudad en la que se vende la oferta');
+        $this->assertEquals($oferta_ciudad, $oferta_tienda_ciudad, 'La store asociada a la offer es de la misma city en la que se vende la offer');
     }
 
     private function getCiudad()
     {
-        $ciudad = new Ciudad();
-        $ciudad->setNombre('Ciudad de Prueba');
+        $city = new city();
+        $city->setNombre('city de Prueba');
 
-        return $ciudad;
+        return $city;
     }
 
-    private function getTienda($ciudad)
+    private function getTienda($city)
     {
-        $tienda = new Tienda();
-        $tienda->setNombre('Tienda de Prueba');
-        $tienda->setCiudad($ciudad);
+        $store = new store();
+        $store->setNombre('store de Prueba');
+        $store->setCiudad($city);
 
-        return $tienda;
+        return $store;
     }
 }
