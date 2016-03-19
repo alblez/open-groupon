@@ -3,8 +3,8 @@
 /*
  * (c) Javier Eguiluz <javier.eguiluz@gmail.com>
  *
- * Este archivo pertenece a la aplicación de prueba Cupon.
- * El código fuente de la aplicación incluye un archivo llamado LICENSE
+ * Este file pertenece a la application de prueba Cupon.
+ * El code fuente de la application incluye un file llamado LICENSE
  * con toda la información sobre el copyright y la licencia.
  */
 
@@ -18,7 +18,7 @@ use AppBundle\Util\Util;
 /**
  * @ORM\Entity(repositoryClass="AppBundle\Repository\OfertaRepository")
  */
-class Oferta
+class offer
 {
     /**
      * @ORM\Id
@@ -32,7 +32,7 @@ class Oferta
      *
      * @Assert\NotBlank()
      */
-    protected $nombre;
+    protected $name;
 
     /**
      * @ORM\Column(type="string")
@@ -62,19 +62,19 @@ class Oferta
     /**
      * @Assert\Image(maxSize = "500k")
      */
-    protected $foto;
+    protected $photo;
 
     /**
      * @ORM\Column(type="decimal", scale=2)
      *
      * @Assert\Range(min = 0)
      */
-    protected $precio;
+    protected $price;
 
     /**
      * @ORM\Column(type="decimal", scale=2)
      */
-    protected $descuento;
+    protected $discount;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
@@ -111,14 +111,14 @@ class Oferta
     protected $revisada;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Ciudad")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\city")
      */
-    protected $ciudad;
+    protected $city;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Tienda")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\store")
      */
-    protected $tienda;
+    protected $store;
 
     public function __toString()
     {
@@ -126,7 +126,7 @@ class Oferta
     }
 
     /**
-     * @Assert\True(message = "La fecha de expiración debe ser posterior a la fecha de publicación")
+     * @Assert\IsTrue(message = "La date de expiración debe ser posterior a la date de publicación")
      */
     public function isFechaValida()
     {
@@ -138,10 +138,10 @@ class Oferta
     }
 
     /**
-     * Sube la foto de la oferta copiándola en el directorio que se indica y
-     * guardando en la entidad la ruta hasta la foto.
+     * Sube la photo de la offer copiándola en el directorio que se indica y
+     * guardando en la entity la ruta hasta la photo.
      *
-     * @param string $directorioDestino Ruta completa del directorio al que se sube la foto
+     * @param string $directorioDestino Ruta completa del directorio al que se sube la photo
      */
     public function subirFoto($directorioDestino)
     {
@@ -167,24 +167,24 @@ class Oferta
     }
 
     /**
-     * Set nombre.
+     * Set name.
      *
-     * @param string $nombre
+     * @param string $name
      */
-    public function setNombre($nombre)
+    public function setNombre($name)
     {
-        $this->nombre = $nombre;
-        $this->slug = Util::getSlug($nombre);
+        $this->name = $name;
+        $this->slug = Util::getSlug($name);
     }
 
     /**
-     * Get nombre.
+     * Get name.
      *
      * @return string
      */
     public function getNombre()
     {
-        return $this->nombre;
+        return $this->name;
     }
 
     /**
@@ -250,7 +250,7 @@ class Oferta
     /**
      * Set rutaFoto.
      *
-     * @param string $foto
+     * @param string $photo
      */
     public function setRutaFoto($rutaFoto)
     {
@@ -268,63 +268,63 @@ class Oferta
     }
 
     /**
-     * Set foto.
+     * Set photo.
      *
-     * @param UploadedFile $foto
+     * @param UploadedFile $photo
      */
-    public function setFoto(UploadedFile $foto = null)
+    public function setFoto(UploadedFile $photo = null)
     {
-        $this->foto = $foto;
+        $this->photo = $photo;
     }
 
     /**
-     * Get foto.
+     * Get photo.
      *
      * @return UploadedFile
      */
     public function getFoto()
     {
-        return $this->foto;
+        return $this->photo;
     }
 
     /**
-     * Set precio.
+     * Set price.
      *
-     * @param decimal $precio
+     * @param decimal $price
      */
-    public function setPrecio($precio)
+    public function setPrecio($price)
     {
-        $this->precio = $precio;
+        $this->price = $price;
     }
 
     /**
-     * Get precio.
+     * Get price.
      *
      * @return decimal
      */
     public function getPrecio()
     {
-        return $this->precio;
+        return $this->price;
     }
 
     /**
-     * Set descuento.
+     * Set discount.
      *
-     * @param decimal $descuento
+     * @param decimal $discount
      */
-    public function setDescuento($descuento)
+    public function setDescuento($discount)
     {
-        $this->descuento = $descuento;
+        $this->discount = $discount;
     }
 
     /**
-     * Get descuento.
+     * Get discount.
      *
      * @return decimal
      */
     public function getDescuento()
     {
-        return $this->descuento;
+        return $this->discount;
     }
 
     /**
@@ -428,42 +428,42 @@ class Oferta
     }
 
     /**
-     * Set ciudad.
+     * Set city.
      *
-     * @param AppBundle\Entity\Ciudad $ciudad
+     * @param AppBundle\Entity\city $city
      */
-    public function setCiudad(\AppBundle\Entity\Ciudad $ciudad)
+    public function setCiudad(\AppBundle\Entity\city $city)
     {
-        $this->ciudad = $ciudad;
+        $this->city = $city;
     }
 
     /**
-     * Get ciudad.
+     * Get city.
      *
-     * @return AppBundle\Entity\Ciudad
+     * @return AppBundle\Entity\city
      */
     public function getCiudad()
     {
-        return $this->ciudad;
+        return $this->city;
     }
 
     /**
-     * Set tienda.
+     * Set store.
      *
-     * @param AppBundle\Entity\Tienda $tienda
+     * @param AppBundle\Entity\store $store
      */
-    public function setTienda(\AppBundle\Entity\Tienda $tienda)
+    public function setTienda(\AppBundle\Entity\store $store)
     {
-        $this->tienda = $tienda;
+        $this->store = $store;
     }
 
     /**
-     * Get tienda.
+     * Get store.
      *
-     * @return AppBundle\Entity\Tienda
+     * @return AppBundle\Entity\store
      */
     public function getTienda()
     {
-        return $this->tienda;
+        return $this->store;
     }
 }

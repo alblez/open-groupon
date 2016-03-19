@@ -29,11 +29,11 @@ class OfertaType extends AbstractType
             ->add('name')
             ->add('descripcion')
             ->add('condiciones')
-            ->add('photo', 'file', array('required' => false))
-            ->add('price', 'money')
-            ->add('discount', 'money')
+            ->add('photo', 'Symfony\Component\Form\Extension\Core\Type\FileType', array('required' => false))
+            ->add('price', 'Symfony\Component\Form\Extension\Core\Type\MoneyType')
+            ->add('discount', 'Symfony\Component\Form\Extension\Core\Type\MoneyType')
             ->add('umbral')
-            ->add('guardar', 'submit', array(
+            ->add('guardar', 'Symfony\Component\Form\Extension\Core\Type\SubmitType', array(
                 'label' => 'Guardar cambios',
                 'attr' => array('class' => 'boton'),
             ))
@@ -58,17 +58,11 @@ class OfertaType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-<<<<<<< HEAD:src/Cupon/OfertaBundle/Form/Extranet/OfertaType.php
-            'data_class' => 'Cupon\OfertaBundle\Entity\offer',
-||||||| parent of ab1dc88 (Eliminados todos los bundles para usar solo AppBundle):src/Cupon/OfertaBundle/Form/Extranet/OfertaType.php
-            'data_class' => 'Cupon\OfertaBundle\Entity\Oferta',
-=======
-            'data_class' => 'AppBundle\Entity\Oferta',
->>>>>>> ab1dc88 (Eliminados todos los bundles para usar solo AppBundle):src/AppBundle/Form/Extranet/OfertaType.php
+            'data_class' => 'AppBundle\Entity\offer',
         ));
     }
 
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'oferta_tienda';
     }
