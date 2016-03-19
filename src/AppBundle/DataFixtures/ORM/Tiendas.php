@@ -8,15 +8,15 @@
  * con toda la información sobre el copyright y la licencia.
  */
 
-namespace Cupon\TiendaBundle\DataFixtures\ORM;
+namespace AppBundle\DataFixtures\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Cupon\CiudadBundle\Entity\Ciudad;
-use Cupon\TiendaBundle\Entity\Tienda;
+use AppBundle\Entity\Ciudad;
+use AppBundle\Entity\Tienda;
 
 /**
  * Fixtures de la entidad Tienda.
@@ -39,7 +39,7 @@ class Tiendas extends AbstractFixture implements OrderedFixtureInterface, Contai
     public function load(ObjectManager $manager)
     {
         // Obtener todas las ciudades de la base de datos
-        $ciudades = $manager->getRepository('CiudadBundle:Ciudad')->findAll();
+        $ciudades = $manager->getRepository('AppBundle:Ciudad')->findAll();
 
         $i = 1;
         foreach ($ciudades as $ciudad) {

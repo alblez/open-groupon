@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+<<<<<<< HEAD
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -105,4 +106,12 @@ class DefaultController extends Controller
             'offer' => $offer,
         ));
     }
+||||||| parent of ab1dc88 (Eliminados todos los bundles para usar solo AppBundle)
+=======
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+
+class DefaultController extends Controller
+{
+>>>>>>> ab1dc88 (Eliminados todos los bundles para usar solo AppBundle)
 }

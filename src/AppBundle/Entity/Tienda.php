@@ -8,14 +8,14 @@
  * con toda la información sobre el copyright y la licencia.
  */
 
-namespace Cupon\TiendaBundle\Entity;
+namespace AppBundle\Entity;
 
 use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\ORM\Mapping as ORM;
-use Cupon\OfertaBundle\Util\Util;
+use AppBundle\Util\Util;
 
 /**
- * @ORM\Entity(repositoryClass="Cupon\TiendaBundle\Entity\TiendaRepository")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\TiendaRepository")
  */
 class Tienda implements UserInterface
 {
@@ -85,7 +85,7 @@ class Tienda implements UserInterface
     protected $direccion;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Cupon\CiudadBundle\Entity\Ciudad")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Ciudad")
      */
     protected $ciudad;
 
@@ -248,9 +248,9 @@ class Tienda implements UserInterface
     /**
      * Set ciudad
      *
-     * @param Cupon\CiudadBundle\Entity\Ciudad $ciudad
+     * @param AppBundle\Entity\Ciudad $ciudad
      */
-    public function setCiudad(\Cupon\CiudadBundle\Entity\Ciudad $ciudad)
+    public function setCiudad(\AppBundle\Entity\Ciudad $ciudad)
     {
         $this->ciudad = $ciudad;
     }
@@ -258,7 +258,7 @@ class Tienda implements UserInterface
     /**
      * Get ciudad
      *
-     * @return Cupon\CiudadBundle\Entity\Ciudad
+     * @return AppBundle\Entity\Ciudad
      */
     public function getCiudad()
     {

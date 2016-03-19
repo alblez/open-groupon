@@ -8,12 +8,18 @@
  * con toda la información sobre el copyright y la licencia.
  */
 
-namespace Cupon\CiudadBundle\DataFixtures\ORM;
+namespace AppBundle\DataFixtures\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
+<<<<<<< HEAD
 use Cupon\CiudadBundle\Entity\city;
+||||||| parent of ab1dc88 (Eliminados todos los bundles para usar solo AppBundle)
+use Cupon\CiudadBundle\Entity\Ciudad;
+=======
+use AppBundle\Entity\Ciudad;
+>>>>>>> ab1dc88 (Eliminados todos los bundles para usar solo AppBundle)
 
 /**
  * creates los datos de prueba para la entity city.

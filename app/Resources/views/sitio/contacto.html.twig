@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {% extends 'frontend.html.twig' %}
 
 {% block id 'pagina' %}
@@ -14,4 +15,30 @@
     </p>
 
     {{ form(formulario) }}
+||||||| parent of ab1dc88 (Eliminados todos los bundles para usar solo AppBundle)
+=======
+{% extends '::frontend.html.twig' %}
+
+{% block title %}Contacto{% endblock %}
+{% block id 'pagina' %}
+
+{% block article %}
+    <h1>Contacto</h1>
+
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+
+    {{ form_start(formulario) }}
+        {{ form_errors(formulario) }}
+
+        <div>
+            {{ form_label(formulario.remitente, 'Tu dirección de email') }}
+            {{ form_errors(formulario.remitente) }}
+            {{ form_widget(formulario.remitente) }}
+        </div>
+
+        {{ form_row(formulario.mensaje) }}
+
+        <input type="submit" value="Enviar mensaje" />
+    {{ form_end(formulario) }}
+>>>>>>> ab1dc88 (Eliminados todos los bundles para usar solo AppBundle)
 {% endblock %}
