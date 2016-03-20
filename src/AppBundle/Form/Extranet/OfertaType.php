@@ -38,6 +38,7 @@ class OfertaType extends AbstractType
                 'attr' => array('class' => 'boton'),
             ))
         ;
+<<<<<<< HEAD
 
         // El form es diferente según se utilice en la acción 'new' o en la acción 'edit'
         // Para determinar en qué acción estamos, se checks si el atributo `id` del objeto
@@ -53,6 +54,24 @@ class OfertaType extends AbstractType
             $listener = new OfertaTypeListener();
             $builder->addEventListener(FormEvents::PRE_SUBMIT, array($listener, 'preSubmit'));
         }
+||||||| parent of f8cf698 (Mejorada la forma en la que se implementa el checkbox de "Acepto las Condiciones")
+
+        // El form es diferente según se utilice en la acción 'new' o en la acción 'edit'
+        // Para determinar en qué acción estamos, se checks si el atributo `id` del objeto
+        // es null, en cuyo caso estamos en la acción 'new'
+        //
+        // La acción `new` muestra un checkbox que no corresponde a ninguna propiedad de la entity
+        // del modelo. Se añade dinámicamente y se indica que no es parte del modelo (con la propiedad
+        // `property_path`).
+        if (null == $options['data']->getId()) {
+            $builder->add('acepto', 'checkbox', array('mapped' => false, 'required' => false));
+
+            // registrar el listener que validará el campo 'acepto' añadido anteriormente
+            $listener = new OfertaTypeListener();
+            $builder->addEventListener(FormEvents::PRE_SUBMIT, array($listener, 'preSubmit'));
+        }
+=======
+>>>>>>> f8cf698 (Mejorada la forma en la que se implementa el checkbox de "Acepto las Condiciones")
     }
 
     public function configureOptions(OptionsResolver $resolver)

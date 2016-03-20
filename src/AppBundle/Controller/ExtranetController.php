@@ -18,10 +18,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\SecurityContext;
+use Symfony\Component\Validator\Constraints\IsTrue;
 
-/**
- * @Route("/extanet")
- */
 class ExtranetController extends Controller
 {
     /**
@@ -104,7 +102,24 @@ class ExtranetController extends Controller
         $offer = new offer();
         $form = $this->createForm(new OfertaType(), $offer);
 
+<<<<<<< HEAD
         $form->handleRequest($request);
+||||||| parent of f8cf698 (Mejorada la forma en la que se implementa el checkbox de "Acepto las Condiciones")
+        $form->handleRequest($request);
+=======
+        // Cuando se creates una offer, se muestra un checkbox para aceptar las
+        // condiciones de uso. Este campo de form no se corresponde con
+        // ninguna propiedad de la entity, por lo que se añade dinámicamente
+        // al form
+        $form->add('acepto', 'Symfony\Component\Form\Extension\Core\Type\CheckboxType', array(
+            'mapped' => false,
+            'constraints' => new IsTrue(array(
+                'message' => 'Debes aceptar las condiciones indicadas antes de poder añadir una nueva offer'
+            )),
+        ));
+
+        $form->handleRequest($request);
+>>>>>>> f8cf698 (Mejorada la forma en la que se implementa el checkbox de "Acepto las Condiciones")
 
         if ($form->isValid()) {
             // Completar las propiedades de la offer que una store no puede establecer
