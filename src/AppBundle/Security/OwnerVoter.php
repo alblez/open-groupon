@@ -10,39 +10,34 @@
 
 namespace AppBundle\Security;
 
+use AppBundle\Entity\offer;
+use AppBundle\Entity\store;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
+use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
-class OwnerVoter implements VoterInterface
+/**
+ * Este voter decide si la offer puede ser editada por la store actualmente logueada.
+ */
+class OwnerVoter extends Voter
 {
-    public function supportsAttribute($attribute)
+    public function supports($attribute, $subject)
     {
-        return 'ROLE_EDITAR_OFERTA' == $attribute;
+        return $subject instanceof offer && 'ROLE_EDITAR_OFERTA' === $attribute;
     }
 
-    public function supportsClass($class)
-    {
-        return true;
-    }
+    /**
+     * returns 'true' si el user logueado es de type store y es el creador
+     * de la offer que se quiere modificar.
+     *
+     * @param string $attribute
+     * @param mixed $subject
+     * @param TokenInterface $token
+     *
+     * @return bool
+     */
+    protected function voteOnAttribute($attribute, $subject, TokenInterface $token) {
+        $store = $token->getUser();
 
-    public function vote(TokenInterface $token, $object, array $attributes)
-    {
-        $vote = VoterInterface::ACCESS_ABSTAIN;
-
-        foreach ($attributes as $attribute) {
-            if (false === $this->supportsAttribute($attribute)) {
-                continue;
-            }
-
-            $user = $token->getUser();
-            $vote = VoterInterface::ACCESS_DENIED;
-
-            // comprobar que la offer que se edita fue publicada por esta misma store
-            if ($object->getTienda()->getId() === $user->getId()) {
-                $vote = VoterInterface::ACCESS_GRANTED;
-            }
-        }
-
-        return $vote;
+        return $store instanceof store && $subject->getTienda()->getId() === $store->getId();
     }
 }
