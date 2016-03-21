@@ -17,6 +17,7 @@ use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Security\Core\Encoder\BCryptPasswordEncoder;
 
 /**
  * Fixtures de la entity user.
@@ -24,16 +25,21 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class Usuarios extends AbstractFixture implements OrderedFixtureInterface, ContainerAwareInterface
 {
-    public function getOrder()
-    {
-        return 40;
-    }
+    const NUM_USUARIOS = 100;
 
+    /** @var ContainerInterface */
     private $container;
+    /** @var BCryptPasswordEncoder */
+    private $encoder;
 
     public function setContainer(ContainerInterface $container = null)
     {
         $this->container = $container;
+    }
+
+    public function getOrder()
+    {
+        return 40;
     }
 
     public function load(ObjectManager $manager)
@@ -41,19 +47,20 @@ class Usuarios extends AbstractFixture implements OrderedFixtureInterface, Conta
         // Obtener todas las ciudades de la base de datos
         $ciudades = $manager->getRepository('AppBundle:city')->findAll();
 
-        for ($i = 1; $i <= 200; ++$i) {
+        // Obtener el "encoder" que codifica las contraseñas de los usuarios
+        $this->encoder = $this->container->get('security.encoder_factory')->getEncoder(new user());
+
+        for ($i = 1; $i <= self::NUM_USUARIOS; ++$i) {
             $user = new user();
 
             $user->setNombre($this->getNombre());
             $user->setApellidos($this->getApellidos());
             $user->setEmail('user'.$i.'@localhost');
-
-            $user->setSalt(base_convert(sha1(uniqid(mt_rand(), true)), 16, 36));
-
-            $passwordEnClaro = 'user'.$i;
-            $encoder = $this->container->get('security.encoder_factory')->getEncoder($user);
-            $passwordCodificado = $encoder->encodePassword($passwordEnClaro, $user->getSalt());
-            $user->setPassword($passwordCodificado);
+            $user->setPassword($this->encoder->encodePassword('user'.$i, null));
+            $user->setDni($this->getDni());
+            $user->setNumeroTarjeta('1234567890123456');
+            $user->setFechaAlta(new \DateTime('now - '.rand(1, 150).' days'));
+            $user->setFechaNacimiento(new \DateTime('now - '.rand(7000, 20000).' days'));
 
             $city = $ciudades[array_rand($ciudades)];
             $user->setDireccion($this->getDireccion($city));
@@ -61,14 +68,6 @@ class Usuarios extends AbstractFixture implements OrderedFixtureInterface, Conta
 
             // El 60% de los usuarios permite email
             $user->setPermiteEmail((rand(1, 1000) % 10) < 6);
-
-            $user->setFechaAlta(new \DateTime('now - '.rand(1, 150).' days'));
-            $user->setFechaNacimiento(new \DateTime('now - '.rand(7000, 20000).' days'));
-
-            $dni = substr(rand(), 0, 8);
-            $user->setDni($dni.substr('TRWAGMYFPDXBNJZSQVHLCKE', strtr($dni, 'XYZ', '012') % 23, 1));
-
-            $user->setNumeroTarjeta('1234567890123456');
 
             $manager->persist($user);
         }
@@ -80,7 +79,7 @@ class Usuarios extends AbstractFixture implements OrderedFixtureInterface, Conta
      * Generador aleatorio de nombres de personas.
      * Aproximadamente genera un 50% de hombres y un 50% de mujeres.
      *
-     * @return string name aleatorio generado para el user.
+     * @return string
      */
     private function getNombre()
     {
@@ -112,7 +111,7 @@ class Usuarios extends AbstractFixture implements OrderedFixtureInterface, Conta
     /**
      * Generador aleatorio de apellidos de personas.
      *
-     * @return string Apellido aleatorio generado para el user.
+     * @return string
      */
     private function getApellidos()
     {
@@ -137,7 +136,7 @@ class Usuarios extends AbstractFixture implements OrderedFixtureInterface, Conta
      *
      * @param city $city Objeto de la city para la que se genera una address postal.
      *
-     * @return string address postal aleatoria generada para la store.
+     * @return string
      */
     private function getDireccion(city $city)
     {
@@ -155,10 +154,23 @@ class Usuarios extends AbstractFixture implements OrderedFixtureInterface, Conta
     /**
      * Generador aleatorio de códigos postales.
      *
-     * @return string code postal aleatorio generado para la store.
+     * @return string
      */
     private function getCodigoPostal()
     {
         return sprintf('%02s%03s', rand(1, 52), rand(0, 999));
+    }
+
+    /**
+     * Generador aleatorio de DNI (incluye number y letra).
+     *
+     * @return string
+     */
+    private function getDni()
+    {
+        $numeroDni = substr(rand(), 0, 8);
+        $dni = $numeroDni.substr('TRWAGMYFPDXBNJZSQVHLCKE', strtr($numeroDni, 'XYZ', '012') % 23, 1);
+
+        return $dni;
     }
 }
