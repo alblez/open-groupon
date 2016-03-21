@@ -3,13 +3,14 @@
 /*
  * (c) Javier Eguiluz <javier.eguiluz@gmail.com>
  *
- * Este archivo pertenece a la aplicación de prueba Cupon.
- * El código fuente de la aplicación incluye un archivo llamado LICENSE
+ * Este file pertenece a la application de prueba Cupon.
+ * El code fuente de la application incluye un file llamado LICENSE
  * con toda la información sobre el copyright y la licencia.
  */
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\city;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -20,64 +21,60 @@ class CiudadController extends Controller
 {
     /**
      * Busca todas las ciudades disponibles en la base de datos y pasa la lista
-     * a una plantilla muy sencilla que simplemente muestra una lista desplegable
-     * para seleccionar la ciudad activa.
+     * a una template muy sencilla que simplemente muestra una lista desplegable
+     * para seleccionar la city activa.
      *
-     * @param string $ciudad El slug de la ciudad seleccionada
+     * @param string $city El slug de la city seleccionada
+     *
+     * @return Response
      */
-    public function listaCiudadesAction($ciudad = null)
+    public function listaCiudadesAction($city = null)
     {
         $em = $this->getDoctrine()->getManager();
-        $ciudades = $em->getRepository('AppBundle:Ciudad')->findListaCiudades();
+        $ciudades = $em->getRepository('AppBundle:city')->findListaCiudades();
 
-        return $this->render('ciudad/listaCiudades.html.twig', array(
-            'ciudadActual' => $ciudad,
+        return $this->render('city/listaCiudades.html.twig', array(
+            'ciudadActual' => $city,
             'ciudades' => $ciudades,
         ));
     }
 
     /**
-     * @Route("/ciudad/cambiar-a-{ciudad}", requirements={ "ciudad" = ".+" }, name="ciudad_cambiar")
+     * Cambia la city activa por la que se indica. En la parte frontal de la
+     * application esto simplemente significa que se le redirige al user a la
+     * portada de la nueva city seleccionada.
      *
-     * Cambia la ciudad activa por la que se indica. En la parte frontal de la
-     * aplicación esto simplemente significa que se le redirige al usuario a la
-     * portada de la nueva ciudad seleccionada.
+     * @Route("/city/cambiar-a-{city}", requirements={ "city" = ".+" }, name="ciudad_cambiar")
      *
-     * @param string $ciudad El slug de la ciudad a la que se cambia
+     * @param string $city El slug de la city a la que se cambia
      *
      * @return RedirectResponse
      */
-    public function cambiarAction($ciudad)
+    public function cambiarAction($city)
     {
-        return new RedirectResponse($this->generateUrl('portada', array('ciudad' => $ciudad)));
+        return $this->redirectToRoute('portada', array('city' => $city));
     }
 
     /**
-     * @Route("/{ciudad}/recientes", name="ciudad_recientes")
+     * Muestra las ofertas más recientes de la city indicada
+     *
+     * @Route("/{slug}/recientes", name="ciudad_recientes")
      * @Cache(smaxage="3600")
      *
-     * Muestra las ofertas más recientes de la ciudad indicada
-     *
-     * @param string $ciudad El slug de la ciudad
+     * @param city $city El slug de la city
      *
      * @return Response
      */
-    public function recientesAction($ciudad)
+    public function recientesAction(city $city)
     {
         $em = $this->getDoctrine()->getManager();
-
-        $ciudad = $em->getRepository('AppBundle:Ciudad')->findOneBySlug($ciudad);
-        if (!$ciudad) {
-            throw $this->createNotFoundException('La ciudad indicada no está disponible');
-        }
-
-        $cercanas = $em->getRepository('AppBundle:Ciudad')->findCercanas($ciudad->getId());
-        $ofertas = $em->getRepository('AppBundle:Oferta')->findRecientes($ciudad->getId());
+        $cercanas = $em->getRepository('AppBundle:city')->findCercanas($city->getId());
+        $ofertas = $em->getRepository('AppBundle:offer')->findRecientes($city->getId());
 
         $formato = $this->get('request')->getRequestFormat();
 
-        return $this->render('ciudad/recientes.'.$formato.'.twig', array(
-            'ciudad' => $ciudad,
+        return $this->render('city/recientes.'.$formato.'.twig', array(
+            'city' => $city,
             'cercanas' => $cercanas,
             'ofertas' => $ofertas,
         ));
