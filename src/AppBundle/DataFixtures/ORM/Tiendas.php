@@ -41,8 +41,7 @@ class Tiendas extends AbstractFixture implements OrderedFixtureInterface, Contai
         // Obtener todas las ciudades de la base de datos
         $ciudades = $manager->getRepository('AppBundle:city')->findAll();
 
-        $i = 1;
-        foreach ($ciudades as $city) {
+        foreach ($ciudades as $i => $city) {
             $numeroTiendas = rand(2, 5);
             for ($j = 1; $j <= $numeroTiendas; ++$j) {
                 $store = new store();
@@ -62,8 +61,7 @@ class Tiendas extends AbstractFixture implements OrderedFixtureInterface, Contai
                 $store->setCiudad($city);
 
                 $manager->persist($store);
-
-                ++$i;
+                $this->addReference('store'.$j, $store);
             }
         }
 
