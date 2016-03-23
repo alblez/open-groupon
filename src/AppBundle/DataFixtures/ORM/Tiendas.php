@@ -3,32 +3,27 @@
 /*
  * (c) Javier Eguiluz <javier.eguiluz@gmail.com>
  *
- * Este archivo pertenece a la aplicación de prueba Cupon.
- * El código fuente de la aplicación incluye un archivo llamado LICENSE
+ * Este file pertenece a la application de prueba Cupon.
+ * El code fuente de la application incluye un file llamado LICENSE
  * con toda la información sobre el copyright y la licencia.
  */
 
-namespace Cupon\TiendaBundle\DataFixtures\ORM;
+namespace AppBundle\DataFixtures\ORM;
 
+use AppBundle\Entity\city;
+use AppBundle\Entity\store;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Cupon\CiudadBundle\Entity\Ciudad;
-use Cupon\TiendaBundle\Entity\Tienda;
 
 /**
- * Fixtures de la entidad Tienda.
- * Crea para cada ciudad entre 2 y 5 tiendas con información muy realista.
+ * creates los datos de prueba para la entity store.
  */
 class Tiendas extends AbstractFixture implements OrderedFixtureInterface, ContainerAwareInterface
 {
-    public function getOrder()
-    {
-        return 20;
-    }
-
+    /** @var ContainerInterface */
     private $container;
 
     public function setContainer(ContainerInterface $container = null)
@@ -36,42 +31,37 @@ class Tiendas extends AbstractFixture implements OrderedFixtureInterface, Contai
         $this->container = $container;
     }
 
+    public function getOrder()
+    {
+        return 20;
+    }
+
     public function load(ObjectManager $manager)
     {
         // Obtener todas las ciudades de la base de datos
-        $ciudades = $manager->getRepository('CiudadBundle:Ciudad')->findAll();
+        $ciudades = $manager->getRepository('AppBundle:city')->findAll();
 
-        $i = 1;
-        foreach ($ciudades as $ciudad) {
-            $numeroTiendas = rand(2, 5);
-            for ($j=1; $j<=$numeroTiendas; $j++) {
-                $tienda = new Tienda();
+        foreach ($ciudades as $i => $city) {
+            $numeroTiendas = mt_rand(2, 5);
+            for ($j = 1; $j <= $numeroTiendas; ++$j) {
+                $store = new store();
 
-                $tienda->setNombre($this->getNombre());
+                $store->setNombre($this->getNombre());
+                $store->setLogin('store'.$i);
+                $store->setPasswordEnClaro('store'.$i);
+                $store->setDescripcion($this->getDescripcion());
+                $store->setDireccion($this->getDireccion($city));
+                $store->setCiudad($city);
 
-                $tienda->setLogin('tienda'.$i);
-                $tienda->setSalt(base_convert(sha1(uniqid(mt_rand(), true)), 16, 36));
-
-                $passwordEnClaro = 'tienda'.$i;
-                $encoder = $this->container->get('security.encoder_factory')->getEncoder($tienda);
-                $passwordCodificado = $encoder->encodePassword($passwordEnClaro, $tienda->getSalt());
-                $tienda->setPassword($passwordCodificado);
-
-                $tienda->setDescripcion($this->getDescripcion());
-                $tienda->setDireccion($this->getDireccion($ciudad));
-                $tienda->setCiudad($ciudad);
-
-                $manager->persist($tienda);
-
-                $i++;
+                $this->container->get('app.manager.tienda_manager')->guardar($store);
             }
         }
-
-        $manager->flush();
     }
 
     /**
-     * Generador aleatorio de nombres de tiendas
+     * Generador aleatorio de nombres de tiendas.
+     *
+     * @return string
      */
     private function getNombre()
     {
@@ -79,19 +69,19 @@ class Tiendas extends AbstractFixture implements OrderedFixtureInterface, Contai
         $nombres = array(
             'Lorem ipsum', 'Sit amet', 'Consectetur', 'Adipiscing elit',
             'Nec sapien', 'Tincidunt', 'Facilisis', 'Nulla scelerisque',
-            'Blandit ligula', 'Eget', 'Hendrerit', 'Malesuada', 'Enim sit'
+            'Blandit ligula', 'Eget', 'Hendrerit', 'Malesuada', 'Enim sit',
         );
 
         return $prefijos[array_rand($prefijos)].' '.$nombres[array_rand($nombres)];
     }
 
     /**
-     * Generador aleatorio de descripciones de tiendas
+     * Generador aleatorio de descripciones de tiendas.
+     *
+     * @return string
      */
     private function getDescripcion()
     {
-        $descripcion = '';
-
         $frases = array_flip(array(
             'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
             'Mauris ultricies nunc nec sapien tincidunt facilisis.',
@@ -110,32 +100,38 @@ class Tiendas extends AbstractFixture implements OrderedFixtureInterface, Contai
             'Donec ornare lacus vitae dolor imperdiet vitae ultricies nibh congue.',
         ));
 
-        $numeroFrases = rand(3, 6);
+        $numeroFrases = mt_rand(3, 6);
 
         return implode(' ', array_rand($frases, $numeroFrases));
     }
 
     /**
-     * Generador aleatorio de direcciones postales
+     * Generador aleatorio de direcciones postales.
+     *
+     * @param city $city
+     *
+     * @return string
      */
-    private function getDireccion($ciudad)
+    private function getDireccion(city $city)
     {
         $prefijos = array('Calle', 'Avenida', 'Plaza');
         $nombres = array(
             'Lorem', 'Ipsum', 'Sitamet', 'Consectetur', 'Adipiscing',
             'Necsapien', 'Tincidunt', 'Facilisis', 'Nulla', 'Scelerisque',
-            'Blandit', 'Ligula', 'Eget', 'Hendrerit', 'Malesuada', 'Enimsit'
+            'Blandit', 'Ligula', 'Eget', 'Hendrerit', 'Malesuada', 'Enimsit',
         );
 
-        return $prefijos[array_rand($prefijos)].' '.$nombres[array_rand($nombres)].', '.rand(1, 100)."\n"
-               .$this->getCodigoPostal().' '.$ciudad->getNombre();
+        return $prefijos[array_rand($prefijos)].' '.$nombres[array_rand($nombres)].', '.mt_rand(1, 100)."\n"
+               .$this->getCodigoPostal().' '.$city->getNombre();
     }
 
     /**
-     * Generador aleatorio de códigos postales
+     * Generador aleatorio de códigos postales.
+     *
+     * @return string
      */
     private function getCodigoPostal()
     {
-        return sprintf('%02s%03s', rand(1, 52), rand(0, 999));
+        return sprintf('%02s%03s', mt_rand(1, 52), mt_rand(0, 999));
     }
 }

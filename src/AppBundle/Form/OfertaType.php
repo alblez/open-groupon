@@ -3,8 +3,8 @@
 /*
  * (c) Javier Eguiluz <javier.eguiluz@gmail.com>
  *
- * Este archivo pertenece a la aplicación de prueba Cupon.
- * El código fuente de la aplicación incluye un archivo llamado LICENSE
+ * Este file pertenece a la application de prueba Cupon.
+ * El code fuente de la application incluye un file llamado LICENSE
  * con toda la información sobre el copyright y la licencia.
  */
 
@@ -16,21 +16,21 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\IsTrue;
 
 /**
- * Formulario para crear y manipular entidades de tipo Oferta.
- * Como se utiliza en la extranet, algunas propiedades de la entidad
- * no se incluyen en el formulario.
+ * form para crear y manipular entidades de type offer.
+ * Como se utiliza en la extranet, algunas propiedades de la entity
+ * no se incluyen en el form.
  */
 class OfertaType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('nombre', null, array('attr' => array('class' => 'largo')))
-            ->add('descripcion', null, array('label' => 'Descripción'))
+            ->add('name', null, array('attr' => array('class' => 'largo')))
+            ->add('descripcion', null, array('label' => 'description'))
             ->add('condiciones', null, array('label' => 'Condiciones', 'attr' => array('class' => 'mediana')))
-            ->add('foto', 'Symfony\Component\Form\Extension\Core\Type\FileType', array('label' => 'Fotografía', 'required' => false))
-            ->add('precio', 'Symfony\Component\Form\Extension\Core\Type\MoneyType', array('attr' => array('class' => 'corto')))
-            ->add('descuento', 'Symfony\Component\Form\Extension\Core\Type\MoneyType', array('attr' => array('class' => 'corto')))
+            ->add('photo', 'Symfony\Component\Form\Extension\Core\Type\FileType', array('label' => 'Fotografía', 'required' => false))
+            ->add('price', 'Symfony\Component\Form\Extension\Core\Type\MoneyType', array('attr' => array('class' => 'corto')))
+            ->add('discount', 'Symfony\Component\Form\Extension\Core\Type\MoneyType', array('attr' => array('class' => 'corto')))
             ->add('umbral', null, array('label' => 'Compras necesarias', 'attr' => array('class' => 'corto')))
             ->add('guardar', 'Symfony\Component\Form\Extension\Core\Type\SubmitType', array(
                 'label' => 'Guardar cambios',
@@ -39,12 +39,12 @@ class OfertaType extends AbstractType
         ;
 
         if (true === $options['mostrar_condiciones']) {
-            // Cuando se crea una oferta, se muestra un checkbox para aceptar las
+            // Cuando se creates una offer, se muestra un checkbox para aceptar las
             // condiciones de uso
             $builder->add('acepto', 'Symfony\Component\Form\Extension\Core\Type\CheckboxType', array(
                 'mapped' => false,
                 'constraints' => new IsTrue(array(
-                    'message' => 'Debes aceptar las condiciones indicadas antes de poder añadir una nueva oferta',
+                    'message' => 'Debes aceptar las condiciones indicadas antes de poder añadir una nueva offer',
                 )),
             ));
         }
@@ -53,13 +53,13 @@ class OfertaType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'AppBundle\Entity\Oferta',
+            'data_class' => 'AppBundle\Entity\offer',
             'mostrar_condiciones' => false,
         ));
     }
 
     public function getBlockPrefix()
     {
-        return 'oferta_tienda';
+        return 'offer';
     }
 }

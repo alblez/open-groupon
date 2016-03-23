@@ -10,6 +10,7 @@
 
 namespace AppBundle\Repository;
 
+use AppBundle\Entity\offer;
 use Doctrine\ORM\EntityRepository;
 
 class OfertaRepository extends EntityRepository
@@ -19,7 +20,7 @@ class OfertaRepository extends EntityRepository
      *
      * @param string $city El slug de la city
      * @param string $slug El slug de la offer
-     * @return mixed
+     * @return offer|null
      */
     public function findOferta($city, $slug)
     {
@@ -41,7 +42,7 @@ class OfertaRepository extends EntityRepository
      * Encuentra la offer del día en la city indicada.
      *
      * @param string $city El slug de la city
-     * @return mixed
+     * @return offer|null
      */
     public function findOfertaDelDia($city)
     {
@@ -64,7 +65,7 @@ class OfertaRepository extends EntityRepository
      * Encuentra la offer del día de mañana en la city indicada.
      *
      * @param string $city El slug de la city
-     * @return mixed
+     * @return offer|null
      */
     public function findOfertaDelDiaSiguiente($city)
     {
@@ -86,10 +87,10 @@ class OfertaRepository extends EntityRepository
     /**
      * Encuentra las cinco ofertas más recuentes de la city indicada.
      *
-     * @param string $ciudad_id El id de la city
+     * @param int $ciudad_id El id de la city
      * @return array
      */
-    public function findRecientes($ciudad_id)
+    public function findRecientes($ciudadId)
     {
         $em = $this->getEntityManager();
 
@@ -100,7 +101,7 @@ class OfertaRepository extends EntityRepository
             ORDER BY o.fechaPublicacion DESC
         ');
         $query->setMaxResults(5);
-        $query->setParameter('id', $ciudad_id);
+        $query->setParameter('id', $ciudadId);
         $query->setParameter('date', new \DateTime('today'));
         $query->useResultCache(true, 600);
 
@@ -134,7 +135,7 @@ class OfertaRepository extends EntityRepository
     /**
      * Encuentra todas las ventas de la offer indicada.
      *
-     * @param string $offer El id de la offer
+     * @param int $offer El id de la offer
      * @return array
      */
     public function findVentasByOferta($offer)
