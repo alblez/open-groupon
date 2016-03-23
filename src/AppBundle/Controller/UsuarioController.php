@@ -33,29 +33,9 @@ class UsuarioController extends Controller
     {
         $authUtils = $this->get('security.authentication_utils');
 
-<<<<<<< HEAD
-        $error = $request->attributes->get(
-            SecurityContext::AUTHENTICATION_ERROR,
-            $sesion->get(SecurityContext::AUTHENTICATION_ERROR)
-        );
-
         return $this->render('user/login.html.twig', array(
-            'last_username' => $sesion->get(SecurityContext::LAST_USERNAME),
-            'error' => $error,
-||||||| parent of c25d0b1 (Actualizados todos los controladores para usar atajos)
-        $error = $request->attributes->get(
-            SecurityContext::AUTHENTICATION_ERROR,
-            $sesion->get(SecurityContext::AUTHENTICATION_ERROR)
-        );
-
-        return $this->render('user/login.html.twig', array(
-            'last_username' => $sesion->get(SecurityContext::LAST_USERNAME),
-            'error' => $error,
-=======
-        return $this->render('user/login.html.twig.html.twig', array(
             'last_username' => $authUtils->getLastUsername(),
             'error' => $authUtils->getLastAuthenticationError(),
->>>>>>> c25d0b1 (Actualizados todos los controladores para usar atajos)
         ));
     }
 
@@ -82,46 +62,24 @@ class UsuarioController extends Controller
      * La response se marca como privada para que no se añada a la cache pública. El trozo de template
      * que llama a esta function se sirve a través de ESI
      *
-<<<<<<< HEAD
-     * @param string $id El value del bloque `id` de la template,
-     *                   que coincide con el value del atributo `id` del elemento <body>
-||||||| parent of c25d0b1 (Actualizados todos los controladores para usar atajos)
-     * @param string $id El value del bloque `id` de la template,
-     *                   que coincide con el value del atributo `id` del elemento <body>
-=======
      * @Cache(maxage="30")
      *
      * @param string $id El value del bloque `id` de la template,
      *                   que coincide con el value del atributo `id` del elemento <body>
      *
      * @return Response
->>>>>>> c25d0b1 (Actualizados todos los controladores para usar atajos)
      */
     public function cajaLoginAction($id = '')
     {
         $user = $this->get('security.token_storage')->getToken()->getUser();
 
-<<<<<<< HEAD
         return $this->render('user/cajaLogin.html.twig', array(
-||||||| parent of c25d0b1 (Actualizados todos los controladores para usar atajos)
-        return $this->render('user/cajaLogin.html.twig', array(
-=======
-        return $this->render('user/cajaLogin.html.twig.html.twig', array(
->>>>>>> c25d0b1 (Actualizados todos los controladores para usar atajos)
             'id' => $id,
             'user' => $user,
         ));
     }
     /**
-<<<<<<< HEAD
-     * @Route("/record", name="usuario_registro")
      * Muestra el form para que se registren los nuevos usuarios. Además
-||||||| parent of c25d0b1 (Actualizados todos los controladores para usar atajos)
-     * @Route("/record", name="usuario_registro")
-     * Muestra el form para que se registren los nuevos usuarios. Además
-=======
-     * Muestra el form para que se registren los nuevos usuarios. Además
->>>>>>> c25d0b1 (Actualizados todos los controladores para usar atajos)
      * se encarga de procesar la información y de guardar la información en la base de datos
      *
      * @Route("/record", name="usuario_registro")
@@ -130,89 +88,27 @@ class UsuarioController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-<<<<<<< HEAD
-        $user = new user();
-        $user->setPermiteEmail(true);
-
-        $form = $this->createForm('AppBundle\Form\Frontend\UsuarioRegistroType', $user);
-
-        $form->handleRequest($request);
-||||||| parent of c25d0b1 (Actualizados todos los controladores para usar atajos)
-        $user = new user();
-        $user->setPermiteEmail(true);
-
-        $form = $this->createForm('AppBundle\Form\Frontend\UsuarioRegistroType', $user);
-
-        $form->handleRequest($request);
-=======
         $user = new user();
         $form = $this->createForm('AppBundle\Form\Frontend\UsuarioRegistroType', $user);
         $form->handleRequest($request);
->>>>>>> c25d0b1 (Actualizados todos los controladores para usar atajos)
 
-<<<<<<< HEAD
-        if ($form->isValid()) {
-            // Completar las propiedades que el user no rellena en el form
-            $user->setSalt(md5(time()));
-
-            $encoder = $this->get('security.encoder_factory')->getEncoder($user);
-            $passwordCodificado = $encoder->encodePassword(
-                $user->getPassword(),
-                $user->getSalt()
-            );
-            $user->setPassword($passwordCodificado);
-||||||| parent of c25d0b1 (Actualizados todos los controladores para usar atajos)
-        if ($form->isValid()) {
-            // Completar las propiedades que el user no rellena en el form
-            $user->setSalt(md5(time()));
-
-            $encoder = $this->get('security.encoder_factory')->getEncoder($user);
-            $passwordCodificado = $encoder->encodePassword(
-                $user->getPassword(),
-                $user->getSalt()
-            );
-            $user->setPassword($passwordCodificado);
-=======
         if ($form->isValid()) {
             $encoder = $this->get('security.encoder_factory')->getEncoder($user);
             $passwordCodificado = $encoder->encodePassword($user->getPassword(), $user->getSalt());
             $user->setPassword($passwordCodificado);
->>>>>>> c25d0b1 (Actualizados todos los controladores para usar atajos)
 
             // Guardar el nuevo user en la base de datos
             $em->persist($user);
             $em->flush();
 
-<<<<<<< HEAD
-            // Crear un message flash para notificar al user que se ha registrado correctamente
-            $this->get('session')->getFlashBag()->add('info',
-                '¡Enhorabuena! Te has registrado correctamente en Cupon'
-            );
-||||||| parent of c25d0b1 (Actualizados todos los controladores para usar atajos)
-            // Crear un message flash para notificar al user que se ha registrado correctamente
-            $this->get('session')->getFlashBag()->add('info',
-                '¡Enhorabuena! Te has registrado correctamente en Cupon'
-            );
-=======
             // Crear un message flash para notificar al user que se ha registrado correctamente
             $this->addFlash('info', '¡Enhorabuena! Te has registrado correctamente en Cupon');
->>>>>>> c25d0b1 (Actualizados todos los controladores para usar atajos)
 
             // Loguear al user automáticamente
             $token = new UsernamePasswordToken($user, null, 'frontend', $user->getRoles());
             $this->container->get('security.token_storage')->setToken($token);
 
-<<<<<<< HEAD
-            return $this->redirect($this->generateUrl('portada', array(
-                'city' => $user->getCiudad()->getSlug(),
-            )));
-||||||| parent of c25d0b1 (Actualizados todos los controladores para usar atajos)
-            return $this->redirect($this->generateUrl('portada', array(
-                'city' => $user->getCiudad()->getSlug(),
-            )));
-=======
             return $this->redirectToRoute('portada', array('city' => $user->getCiudad()->getSlug()));
->>>>>>> c25d0b1 (Actualizados todos los controladores para usar atajos)
         }
 
         return $this->render('user/record.html.twig', array(
@@ -229,81 +125,23 @@ class UsuarioController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-<<<<<<< HEAD
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-        $form = $this->createForm('AppBundle\Form\Frontend\UsuarioPerfilType', $user);
-        $form
-            ->remove('registrarme')
-            ->add('guardar', 'Symfony\Component\Form\Extension\Core\Type\SubmitType', array(
-                'label' => 'Guardar cambios',
-                'attr' => array('class' => 'boton'),
-            ))
-        ;
-
-        $passwordOriginal = $form->getData()->getPassword();
-||||||| parent of c25d0b1 (Actualizados todos los controladores para usar atajos)
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-        $form = $this->createForm('AppBundle\Form\Frontend\UsuarioPerfilType', $user);
-        $form
-            ->remove('registrarme')
-            ->add('guardar', 'Symfony\Component\Form\Extension\Core\Type\SubmitType', array(
-                'label' => 'Guardar cambios',
-                'attr' => array('class' => 'boton'),
-            ))
-        ;
-
-        $passwordOriginal = $form->getData()->getPassword();
-=======
         $user = $this->get('security.token_storage')->getToken()->getUser();
         $form = $this->createForm('AppBundle\Form\Frontend\UsuarioPerfilType', $user);
         $passwordOriginal = $form->getData()->getPassword();
->>>>>>> c25d0b1 (Actualizados todos los controladores para usar atajos)
 
         $form->handleRequest($request);
 
-<<<<<<< HEAD
-        if ($form->isValid()) {
-            // Si el user no ha cambiado el password, su value es null después
-            // de hacer el ->bindRequest(), por lo que hay que recuperar el value original
-
-            if (null == $user->getPassword()) {
-                $user->setPassword($passwordOriginal);
-||||||| parent of c25d0b1 (Actualizados todos los controladores para usar atajos)
-        if ($form->isValid()) {
-            // Si el user no ha cambiado el password, su value es null después
-            // de hacer el ->bindRequest(), por lo que hay que recuperar el value original
-
-            if (null == $user->getPassword()) {
-                $user->setPassword($passwordOriginal);
-=======
         if ($form->isValid()) {
             // Si el user no ha cambiado el password, su value es null después
             // de hacer el ->bindRequest(), por lo que hay que recuperar el value original
             if (null === $user->getPassword()) {
                 $user->setPassword($passwordOriginal);
->>>>>>> c25d0b1 (Actualizados todos los controladores para usar atajos)
             }
             // Si el user ha cambiado su password, hay que codificarlo antes de guardarlo
             else {
-<<<<<<< HEAD
-                $encoder = $this->get('security.encoder_factory')->getEncoder($user);
-                $passwordCodificado = $encoder->encodePassword(
-                    $user->getPassword(),
-                    $user->getSalt()
-                );
-                $user->setPassword($passwordCodificado);
-||||||| parent of c25d0b1 (Actualizados todos los controladores para usar atajos)
-                $encoder = $this->get('security.encoder_factory')->getEncoder($user);
-                $passwordCodificado = $encoder->encodePassword(
-                    $user->getPassword(),
-                    $user->getSalt()
-                );
-                $user->setPassword($passwordCodificado);
-=======
                 $encoder = $this->get('security.encoder_factory')->getEncoder($user);
                 $passwordCodificado = $encoder->encodePassword($user->getPassword(), $user->getSalt());
                 $user->setPassword($passwordCodificado);
->>>>>>> c25d0b1 (Actualizados todos los controladores para usar atajos)
             }
 
             $em->persist($user);
@@ -342,30 +180,14 @@ class UsuarioController extends Controller
     }
 
     /**
-<<<<<<< HEAD
-     * @Route("/{city}/ofertas/{slug}/comprar", name="comprar")
      * Registra una nueva purchase de la offer indicada por parte del user logueado
-||||||| parent of c25d0b1 (Actualizados todos los controladores para usar atajos)
-     * @Route("/{city}/ofertas/{slug}/comprar", name="comprar")
-     * Registra una nueva purchase de la offer indicada por parte del user logueado
-=======
-     * Registra una nueva purchase de la offer indicada por parte del user logueado
->>>>>>> c25d0b1 (Actualizados todos los controladores para usar atajos)
      *
-<<<<<<< HEAD
-     * @param string $city El slug de la city a la que pertenece la offer
-     * @param string $slug   El slug de la offer
-||||||| parent of c25d0b1 (Actualizados todos los controladores para usar atajos)
-     * @param string $city El slug de la city a la que pertenece la offer
-     * @param string $slug   El slug de la offer
-=======
      * @Route("/{city}/ofertas/{slug}/comprar", name="comprar")
      *
      * @param string $city El slug de la city a la que pertenece la offer
      * @param string $slug   El slug de la offer
      *
      * @return Response
->>>>>>> c25d0b1 (Actualizados todos los controladores para usar atajos)
      */
     public function comprarAction(Request $request, $city, $slug)
     {
@@ -373,20 +195,8 @@ class UsuarioController extends Controller
         $user = $this->get('security.token_storage')->getToken()->getUser();
 
         // Solo pueden comprar los usuarios registrados y logueados
-<<<<<<< HEAD
-        if (null === $user || !$this->get('security.authorization_checker')->isGranted('ROLE_USUARIO')) {
-            $this->get('session')->getFlashBag()->add('info',
-                'Antes de comprar debes registrarte o conectarte con tu user y password.'
-            );
-||||||| parent of c25d0b1 (Actualizados todos los controladores para usar atajos)
-        if (null === $user || !$this->get('security.authorization_checker')->isGranted('ROLE_USUARIO')) {
-            $this->get('session')->getFlashBag()->add('info',
-                'Antes de comprar debes registrarte o conectarte con tu user y password.'
-            );
-=======
         if (null === $user || !$this->get('security.authorization_checker')->isGranted('ROLE_USUARIO')) {
             $this->addFlash('info', 'Antes de comprar debes registrarte o conectarte con tu user y password.');
->>>>>>> c25d0b1 (Actualizados todos los controladores para usar atajos)
 
             return $this->redirectToRoute('usuario_login');
         }
@@ -418,17 +228,7 @@ class UsuarioController extends Controller
                 \IntlDateFormatter::NONE
             );
 
-<<<<<<< HEAD
-            $this->get('session')->getFlashBag()->add('error',
-                'No puedes volver a comprar la misma offer (la compraste el '.$formateador->format($fechaVenta).').'
-            );
-||||||| parent of c25d0b1 (Actualizados todos los controladores para usar atajos)
-            $this->get('session')->getFlashBag()->add('error',
-                'No puedes volver a comprar la misma offer (la compraste el '.$formateador->format($fechaVenta).').'
-            );
-=======
             $this->addFlash('error', 'No puedes volver a comprar la misma offer (la compraste el '.$formateador->format($fechaVenta).').');
->>>>>>> c25d0b1 (Actualizados todos los controladores para usar atajos)
 
             return $this->redirect(
                 $request->headers->get('Referer', $this->generateUrl('portada'))
