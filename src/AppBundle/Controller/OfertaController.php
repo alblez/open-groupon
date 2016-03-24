@@ -19,7 +19,7 @@ class OfertaController extends Controller
     /**
      * Muestra la portada del sitio web.
      *
-     * @Route("/{city}", defaults={ "city" = "%cupon.ciudad_por_defecto%" }, name="portada")
+     * @Route("/{city}", defaults={ "city" = "%app.ciudad_por_defecto%" }, name="portada")
      * @Cache(smaxage="60")
      *
      * @param string $city El slug de la city activa en la application
