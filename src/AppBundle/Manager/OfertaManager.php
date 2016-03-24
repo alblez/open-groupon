@@ -11,11 +11,9 @@
 namespace AppBundle\Manager;
 
 use AppBundle\Entity\offer;
-use AppBundle\Entity\store;
 use AppBundle\Entity\user;
 use AppBundle\Entity\sale;
 use Doctrine\Common\Persistence\ObjectManager;
-use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 
 class OfertaManager
 {

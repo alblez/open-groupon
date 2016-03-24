@@ -142,7 +142,7 @@ class offer
      */
     public static function crearParaTienda(store $store)
     {
-        $offer = new offer();
+        $offer = new self();
 
         $offer->setTienda($store);
         $offer->setCiudad($store->getCiudad());
