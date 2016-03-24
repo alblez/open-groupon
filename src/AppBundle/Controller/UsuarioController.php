@@ -73,7 +73,8 @@ class UsuarioController extends Controller
     {
         $user = $this->get('security.token_storage')->getToken()->getUser();
 
-        return $this->render('user/cajaLogin.html.twig', array(
+        return $this->render(
+            'caja_login.html.twig', array(
             'id' => $id,
             'user' => $user,
         ));
