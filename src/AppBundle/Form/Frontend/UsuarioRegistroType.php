@@ -34,15 +34,13 @@ class UsuarioRegistroType extends AbstractType
                     'placeholder' => 'user@servidor',
                 )
             ))
-
             ->add('password', 'Symfony\Component\Form\Extension\Core\Type\RepeatedType', array(
-                'type' => 'password',
+                'type' => 'Symfony\Component\Form\Extension\Core\Type\PasswordType',
                 'invalid_message' => 'Las dos contraseñas deben coincidir',
                 'first_options' => array('label' => 'password'),
                 'second_options' => array('label' => 'Repite password'),
                 'required' => false,
             ))
-
             ->add('direccion')
             ->add('permiteEmail', 'Symfony\Component\Form\Extension\Core\Type\CheckboxType', array('required' => false))
             ->add(
@@ -58,16 +56,14 @@ class UsuarioRegistroType extends AbstractType
                     'placeholder' => 'Entre 13 y 16 numeros',
                 )
             ))
-
             ->add('city', 'Symfony\Bridge\Doctrine\Form\Type\EntityType', array(
                 'class' => 'AppBundle\\Entity\\city',
-                'empty_value' => 'Selecciona una city',
+                'placeholder' => 'Selecciona una city',
                 'query_builder' => function (EntityRepository $repository) {
                     return $repository->createQueryBuilder('c')
                         ->orderBy('c.name', 'ASC');
                 },
             ))
-
             ->add('registrarme', 'Symfony\Component\Form\Extension\Core\Type\SubmitType')
         ;
     }
