@@ -28,15 +28,11 @@ class ExtranetController extends Controller
      */
     public function loginAction(Request $request)
     {
-        $sesion = $request->getSession();
-
-        $error = $request->attributes->get(
-            SecurityContext::AUTHENTICATION_ERROR,
-            $sesion->get(SecurityContext::AUTHENTICATION_ERROR)
-        );
+        $authUtils = $this->get('security.authentication_utils');
 
         return $this->render('extranet/login.html.twig', array(
-            'error' => $error,
+            'last_username' => $authUtils->getLastUsername(),
+            'error' => $authUtils->getLastAuthenticationError(),
         ));
     }
 
@@ -45,7 +41,8 @@ class ExtranetController extends Controller
      */
     public function loginCheckAction()
     {
-        // el "login check" lo hace Symfony automáticamente
+        // el "login check" lo hace Symfony automáticamente, pero es necesario
+        // definir una ruta /login_check. Por eso existe este method vacío.
     }
 
     /**
@@ -53,13 +50,15 @@ class ExtranetController extends Controller
      */
     public function logoutAction()
     {
-        // el logout lo hace Symfony automáticamente
+        // el logout lo hace Symfony automáticamente, pero es necesario
+        // definir una ruta /logout. Por eso existe este method vacío.
     }
 
     /**
-     * @Route("/", name="extranet_portada")
      * Muestra la portada de la extranet de la store que está logueada en
      * la application
+     *
+     * @Route("/", name="extranet_portada")
      */
     public function portadaAction()
     {
@@ -74,28 +73,27 @@ class ExtranetController extends Controller
     }
 
     /**
-     * @Route("/offer/ventas/{id}", name="extranet_oferta_ventas")
      * Muestra las ventas registradas para la offer indicada
      *
-     * @param string $id El id de la offer para la que se buscan sus ventas
+     * @Route("/offer/ventas/{id}", name="extranet_oferta_ventas")
      */
-    public function ofertaVentasAction($id)
+    public function ofertaVentasAction(offer $offer)
     {
         $em = $this->getDoctrine()->getManager();
-
-        $ventas = $em->getRepository('AppBundle:offer')->findVentasByOferta($id);
+        $ventas = $em->getRepository('AppBundle:offer')->findVentasByOferta($offer->getId());
 
         return $this->render('extranet/ventas.html.twig', array(
-            'offer' => $ventas[0]->getOferta(),
+            'offer' => $offer,
             'ventas' => $ventas,
         ));
     }
 
     /**
-     * @Route("/offer/nueva", name="extranet_oferta_nueva")
      * Muestra el form para crear una nueva offer y se encarga del
      * procesamiento de la información recibida y la creación de las nuevas
-     * entidades de type offer
+     * entidades de type offer.
+     *
+     * @Route("/offer/nueva", name="extranet_oferta_nueva")
      */
     public function ofertaNuevaAction(Request $request)
     {
@@ -140,23 +138,14 @@ class ExtranetController extends Controller
     }
 
     /**
-     * @Route("/offer/editar/{id}", requirements={ "city" = ".+" }, name="extranet_oferta_editar")
      * Muestra el form para editar una offer y se encarga del
      * procesamiento de la información recibida y la modificación de los
      * datos de las entidades de type offer
      *
-     * @param string $id El id de la offer a modificar
+     * @Route("/offer/editar/{id}", requirements={ "city" = ".+" }, name="extranet_oferta_editar")
      */
-    public function ofertaEditarAction(Request $request, $id)
+    public function ofertaEditarAction(Request $request, offer $offer)
     {
-        $em = $this->getDoctrine()->getManager();
-
-        $offer = $em->getRepository('AppBundle:offer')->find($id);
-
-        if (!$offer) {
-            throw $this->createNotFoundException('La offer indicada no está disponible');
-        }
-
         $this->denyAccessUnlessGranted('ROLE_EDITAR_OFERTA', $offer);
 
         // Una offer sólo se puede modificar si todavía no ha sido revisada por los administradores
@@ -191,6 +180,7 @@ class ExtranetController extends Controller
                 }
             }
 
+            $em = $this->getDoctrine()->getManager();
             $em->persist($offer);
             $em->flush();
 
@@ -205,41 +195,21 @@ class ExtranetController extends Controller
     }
 
     /**
-     * @Route("/perfil", name="extranet_perfil")
      * Muestra el form para editar los datos del perfil de la store que está
      * logueada en la application. También se encarga de procesar la información y
-     * guardar las modificaciones en la base de datos
+     * guardar las modificaciones en la base de datos.
+     *
+     * @Route("/perfil", name="extranet_perfil")
      */
     public function perfilAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
-
         $store = $this->get('security.token_storage')->getToken()->getUser();
-        $form = $this->createForm(new TiendaType(), $store);
-
-        $passwordOriginal = $form->getData()->getPassword();
+        $form = $this->createForm('AppBundle\Form\Extranet\TiendaType', $store);
 
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            // Si el user no ha cambiado el password, su value es null después de
-            // hacer el ->bindRequest(), por lo que hay que recuperar el value original
-            if (null == $store->getPassword()) {
-                $store->setPassword($passwordOriginal);
-            }
-            // Si el user ha cambiado su password, hay que codificarlo antes de guardarlo
-            else {
-                $encoder = $this->get('security.encoder_factory')->getEncoder($store);
-                $passwordCodificado = $encoder->encodePassword(
-                    $store->getPassword(),
-                    $store->getSalt()
-                );
-                $store->setPassword($passwordCodificado);
-            }
-
-            $em->persist($store);
-            $em->flush();
-
+            $this->get('app.manager.tienda_manager')->guardar($store);
             $this->addFlash('info', 'Los datos de tu perfil se han actualizado correctamente');
 
             return $this->redirectToRoute('extranet_portada');

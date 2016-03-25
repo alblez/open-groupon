@@ -14,15 +14,9 @@ use AppBundle\Entity\store;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 
-/**
- * Esta clase encapsula algunas operaciones que se realizan habitualmente sobre
- * las entidades de type store.
- */
 class TiendaManager
 {
-    /** @var ObjectManager */
     private $em;
-    /** @var EncoderFactoryInterface */
     private $encoderFactory;
 
     public function __construct(ObjectManager $entityManager, EncoderFactoryInterface $encoderFactory)
@@ -31,9 +25,6 @@ class TiendaManager
         $this->encoderFactory = $encoderFactory;
     }
 
-    /**
-     * @param store $store
-     */
     public function guardar(store $store)
     {
         if (null !== $store->getPasswordEnClaro()) {
@@ -44,9 +35,6 @@ class TiendaManager
         $this->em->flush();
     }
 
-    /**
-     * @param store $store
-     */
     private function codificarPassword(store $store)
     {
         $encoder = $this->encoderFactory->getEncoder($store);
