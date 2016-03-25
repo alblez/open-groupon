@@ -11,17 +11,14 @@
 namespace AppBundle\Manager;
 
 use AppBundle\Entity\offer;
+use AppBundle\Entity\store;
 use AppBundle\Entity\user;
 use AppBundle\Entity\sale;
 use Doctrine\Common\Persistence\ObjectManager;
+use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 
-/**
- * Esta clase encapsula algunas operaciones que se realizan habitualmente sobre
- * las entidades de type offer.
- */
 class OfertaManager
 {
-    /** @var ObjectManager */
     private $em;
 
     public function __construct(ObjectManager $entityManager)
@@ -29,10 +26,6 @@ class OfertaManager
         $this->em = $entityManager;
     }
 
-    /**
-     * @param offer  $offer
-     * @param user $user
-     */
     public function comprar(offer $offer, user $user)
     {
         $sale = new sale();
@@ -44,17 +37,6 @@ class OfertaManager
         $this->em->persist($sale);
         $offer->setCompras($offer->getCompras() + 1);
 
-        $this->em->flush();
-    }
-
-    /**
-     * @param offer $offer
-     */
-    public function guardar(offer $offer)
-    {
-        $offer->setFechaActualizacion(new \DateTime('now'));
-
-        $this->em->persist($offer);
         $this->em->flush();
     }
 }
