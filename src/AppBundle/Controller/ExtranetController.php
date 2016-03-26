@@ -102,11 +102,6 @@ class ExtranetController extends Controller
         $offer = new offer();
         $form = $this->createForm(new OfertaType(), $offer);
 
-<<<<<<< HEAD
-        $form->handleRequest($request);
-||||||| parent of f8cf698 (Mejorada la forma en la que se implementa el checkbox de "Acepto las Condiciones")
-        $form->handleRequest($request);
-=======
         // Cuando se creates una offer, se muestra un checkbox para aceptar las
         // condiciones de uso. Este campo de form no se corresponde con
         // ninguna propiedad de la entity, por lo que se añade dinámicamente
@@ -119,7 +114,6 @@ class ExtranetController extends Controller
         ));
 
         $form->handleRequest($request);
->>>>>>> f8cf698 (Mejorada la forma en la que se implementa el checkbox de "Acepto las Condiciones")
 
         if ($form->isValid()) {
             // Completar las propiedades de la offer que una store no puede establecer
@@ -164,7 +158,7 @@ class ExtranetController extends Controller
         }
 
         // Comprobar que el user tiene permiso para editar esta offer concreta
-        if (false === $this->get('security.token_storage')->isGranted('ROLE_EDITAR_OFERTA', $offer)) {
+        if (false === $this->get('security.authorization_checker')->isGranted('ROLE_EDITAR_OFERTA', $offer)) {
             throw new AccessDeniedException();
         }
 
