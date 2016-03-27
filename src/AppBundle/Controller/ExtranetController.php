@@ -100,7 +100,7 @@ class ExtranetController extends Controller
     public function ofertaNuevaAction(Request $request)
     {
         $offer = new offer();
-        $form = $this->createForm(new OfertaType(), $offer);
+        $form = $this->createForm('AppBundle\Form\Extranet\OfertaType', $offer);
 
         // Cuando se creates una offer, se muestra un checkbox para aceptar las
         // condiciones de uso. Este campo de form no se corresponde con
@@ -159,28 +159,14 @@ class ExtranetController extends Controller
 
         $this->denyAccessUnlessGranted('ROLE_EDITAR_OFERTA', $offer);
 
-<<<<<<< HEAD
-        // Una offer sólo se puede modificar si todavía no ha sido revisada por los administradores
-        if ($offer->getRevisada()) {
-            $this->get('session')->getFlashBag()->add('error',
-                'La offer indicada no se puede modificar porque ya ha sido revisada por los administradores'
-            );
-||||||| parent of c25d0b1 (Actualizados todos los controladores para usar atajos)
-        // Una offer sólo se puede modificar si todavía no ha sido revisada por los administradores
-        if ($offer->getRevisada()) {
-            $this->get('session')->getFlashBag()->add('error',
-                'La offer indicada no se puede modificar porque ya ha sido revisada por los administradores'
-            );
-=======
         // Una offer sólo se puede modificar si todavía no ha sido revisada por los administradores
         if ($offer->getRevisada()) {
             $this->addFlash('error', 'La offer indicada no se puede modificar porque ya ha sido revisada por los administradores');
->>>>>>> c25d0b1 (Actualizados todos los controladores para usar atajos)
 
             return $this->redirectToRoute('extranet_portada');
         }
 
-        $form = $this->createForm(new OfertaType(), $offer);
+        $form = $this->createForm('AppBundle\Form\Extranet\OfertaType', $offer);
 
         // Guardar la ruta de la photo original de la offer
         $rutaFotoOriginal = $form->getData()->getRutaFoto();
