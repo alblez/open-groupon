@@ -3,8 +3,8 @@
 /*
  * (c) Javier Eguiluz <javier.eguiluz@gmail.com>
  *
- * Este archivo pertenece a la aplicación de prueba Cupon.
- * El código fuente de la aplicación incluye un archivo llamado LICENSE
+ * Este file pertenece a la application de prueba Cupon.
+ * El code fuente de la application incluye un file llamado LICENSE
  * con toda la información sobre el copyright y la licencia.
  */
 
@@ -15,72 +15,72 @@ use Doctrine\ORM\EntityRepository;
 class TiendaRepository extends EntityRepository
 {
     /**
-     * Encuentra las ofertas más recientes de la tienda indicada.
+     * Encuentra las ofertas más recientes de la store indicada.
      *
-     * @param string $tienda_id El id de la tienda
-     * @param string $limite    Número de ofertas a devolver (por defecto, cinco)
+     * @param string $tiendaId El id de la store
+     * @param string $limite    number de ofertas a devolver (por defecto, cinco)
      */
-    public function findOfertasRecientes($tienda_id, $limite = 5)
+    public function findOfertasRecientes($tiendaId, $limite = 5)
     {
         $em = $this->getEntityManager();
 
-        $consulta = $em->createQuery('
+        $query = $em->createQuery('
             SELECT o, t
-            FROM AppBundle:Oferta o JOIN o.tienda t
-            WHERE o.tienda = :id
-            ORDER BY o.fecha_expiracion DESC
+            FROM AppBundle:offer o JOIN o.store t
+            WHERE o.store = :id
+            ORDER BY o.fechaExpiracion DESC
         ');
-        $consulta->setMaxResults($limite);
-        $consulta->setParameter('id', $tienda_id);
-        $consulta->useResultCache(true, 3600);
+        $query->setMaxResults($limite);
+        $query->setParameter('id', $tiendaId);
+        $query->useResultCache(true, 3600);
 
-        return $consulta->getResult();
+        return $query->getResult();
     }
 
     /**
-     * Encuentra las ofertas más recientemente publicadas por la tienda indicada
+     * Encuentra las ofertas más recientemente publicadas por la store indicada
      * Las ofertas devueltas, además de publicadas, también han sido revisadas.
      *
-     * @param string $tienda_id El id de la tienda
-     * @param string $limite    Número de ofertas a devolver (por defecto, diez)
+     * @param string $tienda_id El id de la store
+     * @param string $limite    number de ofertas a devolver (por defecto, diez)
      */
-    public function findUltimasOfertasPublicadas($tienda_id, $limite = 10)
+    public function findUltimasOfertasPublicadas($tiendaId, $limite = 10)
     {
         $em = $this->getEntityManager();
 
-        $consulta = $em->createQuery('
+        $query = $em->createQuery('
             SELECT o, t
-            FROM AppBundle:Oferta o JOIN o.tienda t
-            WHERE o.revisada = true AND o.fecha_publicacion < :fecha AND o.tienda = :id
-            ORDER BY o.fecha_expiracion DESC
+            FROM AppBundle:offer o JOIN o.store t
+            WHERE o.revisada = true AND o.fechaPublicacion < :date AND o.store = :id
+            ORDER BY o.fechaExpiracion DESC
         ');
-        $consulta->setMaxResults($limite);
-        $consulta->setParameter('id', $tienda_id);
-        $consulta->setParameter('fecha', new \DateTime('now'));
+        $query->setMaxResults($limite);
+        $query->setParameter('id', $tienda_id);
+        $query->setParameter('date', new \DateTime('now'));
 
-        return $consulta->getResult();
+        return $query->getResult();
     }
 
     /**
-     * Encuentra las tiendas más cercanas a la tienda indicada.
+     * Encuentra las tiendas más cercanas a la store indicada.
      *
-     * @param string $tienda El slug de la tienda para la que se buscan tiendas cercanas
-     * @param string $ciudad El slug de la ciudad a la que pertenece la tienda
+     * @param string $store El slug de la store para la que se buscan tiendas cercanas
+     * @param string $city El slug de la city a la que pertenece la store
      */
-    public function findCercanas($tienda, $ciudad)
+    public function findCercanas($store, $city)
     {
         $em = $this->getEntityManager();
 
-        $consulta = $em->createQuery('
+        $query = $em->createQuery('
             SELECT t, c
-            FROM AppBundle:Tienda t JOIN t.ciudad c
-            WHERE c.slug = :ciudad AND t.slug != :tienda
+            FROM AppBundle:store t JOIN t.city c
+            WHERE c.slug = :city AND t.slug != :store
         ');
-        $consulta->setMaxResults(5);
-        $consulta->setParameter('ciudad', $ciudad);
-        $consulta->setParameter('tienda', $tienda);
-        $consulta->useResultCache(true, 600);
+        $query->setMaxResults(5);
+        $query->setParameter('city', $city);
+        $query->setParameter('store', $store);
+        $query->useResultCache(true, 600);
 
-        return $consulta->getResult();
+        return $query->getResult();
     }
 }
