@@ -19,35 +19,15 @@ use Symfony\Component\HttpFoundation\Response;
 class TiendaController extends Controller
 {
     /**
-<<<<<<< HEAD
-     * @Route("/{city}/tiendas/{store}", requirements={ "city" = ".+" }, name="tienda_portada")
-     * @Cache(smaxage="3600")
-     *
      * Muestra la portada de cada store, que muestra su información y las
-||||||| parent of c25d0b1 (Actualizados todos los controladores para usar atajos)
-     * @Route("/{city}/tiendas/{store}", requirements={ "city" = ".+" }, name="tienda_portada")
-     * @Cache(smaxage="3600")
+     * ofertas que ha publicado recientemente.
      *
-     * Muestra la portada de cada store, que muestra su información y las
-=======
-     * Muestra la portada de cada store, que muestra su información y las
->>>>>>> c25d0b1 (Actualizados todos los controladores para usar atajos)
-     * ofertas que ha publicado recientemente
-     *
-<<<<<<< HEAD
-     * @param string $city El slug de la city donde se encuentra la store
-     * @param string $store El slug de la store
-||||||| parent of c25d0b1 (Actualizados todos los controladores para usar atajos)
-     * @param string $city El slug de la city donde se encuentra la store
-     * @param string $store El slug de la store
-=======
      * @Route("/{city}/tiendas/{store}", requirements={ "city" = ".+" }, name="tienda_portada")
      * @Cache(smaxage="3600")
      *
      * @param string $city El slug de la city donde se encuentra la store
      * @param string $store El slug de la store
      *
->>>>>>> c25d0b1 (Actualizados todos los controladores para usar atajos)
      * @return Response
      */
     public function portadaAction(Request $request, $city, $store)

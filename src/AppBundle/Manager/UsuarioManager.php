@@ -38,7 +38,7 @@ class UsuarioManager
         $this->em->persist($user);
         $this->em->flush();
     }
-    
+
     public function loguear(user $user)
     {
         $token = new UsernamePasswordToken($user, null, 'frontend', $user->getRoles());

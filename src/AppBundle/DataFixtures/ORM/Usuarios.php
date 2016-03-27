@@ -12,7 +12,6 @@ namespace AppBundle\DataFixtures\ORM;
 
 use AppBundle\Entity\city;
 use AppBundle\Entity\user;
-use AppBundle\Manager\UsuarioManager;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;

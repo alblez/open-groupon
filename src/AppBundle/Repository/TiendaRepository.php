@@ -18,7 +18,7 @@ class TiendaRepository extends EntityRepository
      * Encuentra las ofertas más recientes de la store indicada.
      *
      * @param string $tiendaId El id de la store
-     * @param string $limite    number de ofertas a devolver (por defecto, cinco)
+     * @param string $limite   number de ofertas a devolver (por defecto, cinco)
      */
     public function findOfertasRecientes($tiendaId, $limite = 5)
     {
