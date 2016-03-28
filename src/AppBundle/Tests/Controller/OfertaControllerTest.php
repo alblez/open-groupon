@@ -3,8 +3,8 @@
 /*
  * (c) Javier Eguiluz <javier.eguiluz@gmail.com>
  *
- * Este archivo pertenece a la aplicación de prueba Cupon.
- * El código fuente de la aplicación incluye un archivo llamado LICENSE
+ * Este file pertenece a la application de prueba Cupon.
+ * El code fuente de la application incluye un file llamado LICENSE
  * con toda la información sobre el copyright y la licencia.
  */
 
@@ -14,10 +14,10 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Test funcional de la portada del sitio y de la acción de comprar una oferta
- * por parte de un usuario anónimo.
+ * Test funcional de la portada del sitio y de la acción de comprar una offer
+ * por parte de un user anónimo.
  *
- * También asegura el rendimiento de la aplicación obligando a que la portada
+ * También asegura el rendimiento de la application obligando a que la portada
  * requiera menos de cuatro consultas a la base de datos y se genere en menos
  * de medio segundo.
  */
@@ -38,10 +38,10 @@ class OfertaControllerTest extends WebTestCase
         $client = static::createClient();
         $crawler = $client->request('GET', '/');
 
-        $ofertasActivas = $crawler->filter('article.oferta section.descripcion a:contains("Comprar")');
+        $ofertasActivas = $crawler->filter('article.offer section.descripcion a:contains("Comprar")');
 
         $this->assertCount(1, $ofertasActivas,
-            'La portada muestra una única oferta activa que se puede comprar'
+            'La portada muestra una única offer activa que se puede comprar'
         );
     }
 
@@ -62,11 +62,11 @@ class OfertaControllerTest extends WebTestCase
         $client = static::createClient();
         $crawler = $client->request('GET', '/');
 
-        $ciudadPorDefecto = $client->getContainer()->getParameter('cupon.ciudad_por_defecto');
+        $ciudadPorDefecto = $client->getContainer()->getParameter('app.ciudad_por_defecto');
         $ciudadPortada = $crawler->filter('header nav select option[selected="selected"]')->attr('value');
 
         $this->assertEquals($ciudadPorDefecto, $ciudadPortada,
-            'La ciudad seleccionada en la portada de un usuario anónimo es la ciudad por defecto'
+            'La city seleccionada en la portada de un user anónimo es la city por defecto'
         );
     }
 
@@ -79,13 +79,13 @@ class OfertaControllerTest extends WebTestCase
         $client->click($comprar);
 
         $this->assertTrue($client->getResponse()->isRedirect(),
-            'Cuando un usuario anónimo intenta comprar, se le redirige al formulario de login'
+            'Cuando un user anónimo intenta comprar, se le redirige al form de login'
         );
     }
 
     public function testLosUsuariosAnonimosDebenLoguearseParaPoderComprar()
     {
-        $pathLogin = '/.*\/usuario\/login_check/';
+        $pathLogin = '/.*\/user\/login_check/';
         $client = static::createClient();
         $client->followRedirects(true);
 
@@ -95,7 +95,7 @@ class OfertaControllerTest extends WebTestCase
         $crawler = $client->click($comprar);
 
         $this->assertRegExp($pathLogin, $crawler->filter('article form')->attr('action'),
-            'Después de pulsar el botón de comprar, el usuario anónimo ve el formulario de login'
+            'Después de pulsar el botón de comprar, el user anónimo ve el form de login'
         );
     }
 
