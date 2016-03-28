@@ -92,22 +92,14 @@ class ExtranetController extends Controller
      */
     public function ofertaNuevaAction(Request $request)
     {
-        $offer = new offer();
+        $store = $this->get('security.token_storage')->getToken()->getUser();
+
+        $offer = offer::crearParaTienda($store);
         $form = $this->createForm('AppBundle\Form\Extranet\OfertaType', $offer, array('mostrar_condiciones' => true));
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            // Completar las propiedades de la offer que una store no puede establecer
-            $store = $this->get('security.token_storage')->getToken()->getUser();
-            $offer->setTienda($store);
-            $offer->setCiudad($store->getCiudad());
-
-            // Copiar la photo subida y guardar la ruta
-            $offer->subirFoto($this->container->getParameter('cupon.directorio.imagenes'));
-
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($offer);
-            $em->flush();
+            $this->get('app.manager.oferta_manager')->guardar($offer);
 
             return $this->redirectToRoute('extranet_portada');
         }
