@@ -70,15 +70,7 @@ class UsuarioController extends Controller
     {
         $user = $this->get('security.token_storage')->getToken()->getUser();
 
-<<<<<<< HEAD
-        return $this->render(
-            'user/caja_login.html.twig', array(
-||||||| parent of cd05d74 (Simplificado el form para registrar usuarios y editar perfiles de user)
-        return $this->render(
-            'user/caja_login.html.twig', array(
-=======
         return $this->render('user/caja_login.html.twig', array(
->>>>>>> cd05d74 (Simplificado el form para registrar usuarios y editar perfiles de user)
             'id' => $id,
             'user' => $user,
         ));
@@ -91,37 +83,17 @@ class UsuarioController extends Controller
      */
     public function registroAction(Request $request)
     {
-<<<<<<< HEAD
-        $em = $this->getDoctrine()->getManager();
-
-        $user = new user();
-        $form = $this->createForm('AppBundle\Form\Frontend\UsuarioRegistroType', $user);
-        $form->handleRequest($request);
-||||||| parent of cd05d74 (Simplificado el form para registrar usuarios y editar perfiles de user)
-        $em = $this->getDoctrine()->getManager();
-
-        $user = new user();
-        $form = $this->createForm('AppBundle\Form\Frontend\UsuarioRegistroType', $user);
-        $form->handleRequest($request);
-=======
         $user = new user();
         $form = $this->createForm('AppBundle\Form\UsuarioType', $user, array(
             'accion' => 'crear_usuario',
             'validation_groups' => array('default', 'record'),
         ));
         $form->handleRequest($request);
->>>>>>> cd05d74 (Simplificado el form para registrar usuarios y editar perfiles de user)
 
         if ($form->isValid()) {
             $this->get('app.manager.usuario_manager')->guardar($user);
             $this->get('app.manager.usuario_manager')->loguear($user);
 
-<<<<<<< HEAD
-            // Crear un message flash para notificar al user que se ha registrado correctamente
-||||||| parent of cd05d74 (Simplificado el form para registrar usuarios y editar perfiles de user)
-            // Crear un message flash para notificar al user que se ha registrado correctamente
-=======
->>>>>>> cd05d74 (Simplificado el form para registrar usuarios y editar perfiles de user)
             $this->addFlash('info', '¡Enhorabuena! Te has registrado correctamente en Cupon');
 
             return $this->redirectToRoute('portada', array('city' => $user->getCiudad()->getSlug()));
@@ -133,33 +105,15 @@ class UsuarioController extends Controller
     }
 
     /**
-<<<<<<< HEAD
-     * @Route("/perfil", name="usuario_perfil")
-     * Muestra el form con toda la información del perfil del user logueado.
-     * También permite modificar la información y saves los cambios en la base de datos
-||||||| parent of cd05d74 (Simplificado el form para registrar usuarios y editar perfiles de user)
-     * @Route("/perfil", name="usuario_perfil")
-     * Muestra el form con toda la información del perfil del user logueado.
-     * También permite modificar la información y saves los cambios en la base de datos
-=======
      * Muestra el form con toda la información del perfil del user logueado.
      * También permite modificar la información y saves los cambios en la base de datos
      *
      * @Route("/perfil", name="usuario_perfil")
->>>>>>> cd05d74 (Simplificado el form para registrar usuarios y editar perfiles de user)
      */
     public function perfilAction(Request $request)
     {
-<<<<<<< HEAD
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-        $form = $this->createForm('AppBundle\Form\Frontend\UsuarioPerfilType', $user);
-||||||| parent of cd05d74 (Simplificado el form para registrar usuarios y editar perfiles de user)
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-        $form = $this->createForm('AppBundle\Form\Frontend\UsuarioPerfilType', $user);
-=======
         $user = $this->get('security.token_storage')->getToken()->getUser();
         $form = $this->createForm('AppBundle\Form\UsuarioType', $user);
->>>>>>> cd05d74 (Simplificado el form para registrar usuarios y editar perfiles de user)
 
         $form->handleRequest($request);
 
@@ -180,12 +134,6 @@ class UsuarioController extends Controller
      * Muestra todas las compras del user logueado.
      *
      * @Route("/compras", name="usuario_compras")
-<<<<<<< HEAD
-     * Muestra todas las compras del user logueado
-||||||| parent of cd05d74 (Simplificado el form para registrar usuarios y editar perfiles de user)
-     * Muestra todas las compras del user logueado
-=======
->>>>>>> cd05d74 (Simplificado el form para registrar usuarios y editar perfiles de user)
      */
     public function comprasAction()
     {
@@ -196,7 +144,7 @@ class UsuarioController extends Controller
             $user->getCiudad()->getId()
         );
 
-        $compras = $em->getRepository('UsuarioBundle:user')->findTodasLasCompras($user->getId());
+        $compras = $em->getRepository('AppBundle:user')->findTodasLasCompras($user->getId());
 
         return $this->render('user/compras.html.twig', array(
             'compras' => $compras,

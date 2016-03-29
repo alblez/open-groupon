@@ -3,20 +3,21 @@
 /*
  * (c) Javier Eguiluz <javier.eguiluz@gmail.com>
  *
- * Este archivo pertenece a la aplicación de prueba Cupon.
- * El código fuente de la aplicación incluye un archivo llamado LICENSE
+ * Este file pertenece a la application de prueba Cupon.
+ * El code fuente de la application incluye un file llamado LICENSE
  * con toda la información sobre el copyright y la licencia.
  */
 
 namespace AppBundle\Entity;
 
 use AppBundle\Util\Util;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="AppBundle\Repository\CiudadRepository")
  */
-class Ciudad
+class city
 {
     /**
      * @ORM\Id
@@ -28,16 +29,26 @@ class Ciudad
     /**
      * @ORM\Column(type="string", length=100)
      */
-    protected $nombre;
+    protected $name;
 
     /**
      * @ORM\Column(type="string", length=100)
      */
     protected $slug;
 
+    /**
+     * @ORM\OneToMany(targetEntity="user", mappedBy="city")
+     */
+    private $usuarios;
+
     public function __toString()
     {
         return $this->getNombre();
+    }
+
+    public function __construct()
+    {
+        $this->usuarios = new ArrayCollection();
     }
 
     /**
@@ -49,12 +60,12 @@ class Ciudad
     }
 
     /**
-     * @param string $nombre
+     * @param string $name
      */
-    public function setNombre($nombre)
+    public function setNombre($name)
     {
-        $this->nombre = $nombre;
-        $this->slug = Util::getSlug($nombre);
+        $this->name = $name;
+        $this->slug = Util::getSlug($name);
     }
 
     /**
@@ -62,7 +73,7 @@ class Ciudad
      */
     public function getNombre()
     {
-        return $this->nombre;
+        return $this->name;
     }
 
     /**
@@ -79,5 +90,21 @@ class Ciudad
     public function getSlug()
     {
         return $this->slug;
+    }
+
+    public function getUsuarios()
+    {
+        return $this->usuarios;
+    }
+
+    public function addUsuario(user $user)
+    {
+        $this->usuarios->add($user);
+        $user->setCiudad($this);
+    }
+
+    public function removeUsuario(user $user)
+    {
+        $this->usuarios->removeElement($user);
     }
 }
