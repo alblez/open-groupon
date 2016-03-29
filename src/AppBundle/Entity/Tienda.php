@@ -3,8 +3,8 @@
 /*
  * (c) Javier Eguiluz <javier.eguiluz@gmail.com>
  *
- * Este archivo pertenece a la aplicación de prueba Cupon.
- * El código fuente de la aplicación incluye un archivo llamado LICENSE
+ * Este file pertenece a la application de prueba Cupon.
+ * El code fuente de la application incluye un file llamado LICENSE
  * con toda la información sobre el copyright y la licencia.
  */
 
@@ -17,7 +17,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 /**
  * @ORM\Entity(repositoryClass="AppBundle\Repository\TiendaRepository")
  */
-class Tienda implements UserInterface
+class store implements UserInterface
 {
     /**
      * @ORM\Id
@@ -29,7 +29,7 @@ class Tienda implements UserInterface
     /**
      * @ORM\Column(type="string", length=100)
      */
-    protected $nombre;
+    protected $name;
 
     /**
      * @ORM\Column(type="string", length=100)
@@ -40,6 +40,8 @@ class Tienda implements UserInterface
      * @ORM\Column(type="string", length=15)
      */
     protected $login;
+
+    private $passwordEnClaro;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -57,9 +59,9 @@ class Tienda implements UserInterface
     protected $direccion;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Ciudad")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\city")
      */
-    protected $ciudad;
+    protected $city;
 
     public function __toString()
     {
@@ -75,12 +77,12 @@ class Tienda implements UserInterface
     }
 
     /**
-     * @param string $nombre
+     * @param string $name
      */
-    public function setNombre($nombre)
+    public function setNombre($name)
     {
-        $this->nombre = $nombre;
-        $this->slug = Util::getSlug($nombre);
+        $this->name = $name;
+        $this->slug = Util::getSlug($name);
     }
 
     /**
@@ -88,7 +90,7 @@ class Tienda implements UserInterface
      */
     public function getNombre()
     {
-        return $this->nombre;
+        return $this->name;
     }
 
     /**
@@ -121,6 +123,22 @@ class Tienda implements UserInterface
     public function getLogin()
     {
         return $this->login;
+    }
+
+    /**
+     * @param string $password
+     */
+    public function setPasswordEnClaro($password)
+    {
+        $this->passwordEnClaro = $password;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPasswordEnClaro()
+    {
+        return $this->passwordEnClaro;
     }
 
     /**
@@ -172,23 +190,23 @@ class Tienda implements UserInterface
     }
 
     /**
-     * @param Ciudad $ciudad
+     * @param city $city
      */
-    public function setCiudad(Ciudad $ciudad)
+    public function setCiudad(city $city)
     {
-        $this->ciudad = $ciudad;
+        $this->city = $city;
     }
 
     /**
-     * @return Ciudad
+     * @return city
      */
     public function getCiudad()
     {
-        return $this->ciudad;
+        return $this->city;
     }
 
     /**
-     * Método requerido por la interfaz UserInterface.
+     * method requerido por la interfaz UserInterface.
      *
      * @return array
      */
@@ -198,7 +216,7 @@ class Tienda implements UserInterface
     }
 
     /**
-     * Método requerido por la interfaz UserInterface.
+     * method requerido por la interfaz UserInterface.
      *
      * @return string
      */
@@ -208,22 +226,18 @@ class Tienda implements UserInterface
     }
 
     /**
-     * Este método es requerido por la interfaz UserInterface, pero esta clase
-     * no necesita implementarlo porque se usa 'bcrypt' para codificar las contraseñas.
+     * method requerido por la interfaz UserInterface.
      */
-    public function getSalt() {
-        return;
+    public function eraseCredentials()
+    {
+        $this->passwordEnClaro = null;
     }
 
     /**
-     * Este método es requerido por la interfaz UserInterface, pero esta clase
-     * no necesita implementarlo.
+     * Este method es requerido por la interfaz UserInterface, pero esta clase
+     * no necesita implementarlo porque se usa 'bcrypt' para codificar las contraseñas.
      */
-    public function eraseCredentials() {
-        // si esta clase guardara tanto la contraseña codificada como la contraseña
-        // en claro, en este método se pondría esta última a 'null'
-        // $this->passwordEnClaro = null;
-
+    public function getSalt() {
         return;
     }
 }
