@@ -27,10 +27,11 @@ class UsuarioType extends AbstractType
     {
         $builder
             ->add('name')
-            ->add('apellidos')
+            ->add('apellidos', null, array('attr' => array('class' => 'largo')))
             ->add('email', 'Symfony\Component\Form\Extension\Core\Type\EmailType', array(
                 'label' => 'email electrónico',
                 'attr' => array(
+                    'class' => 'largo',
                     'placeholder' => 'user@servidor',
                 ),
             ))
@@ -41,14 +42,14 @@ class UsuarioType extends AbstractType
                 'second_options' => array('label' => 'Repite password'),
                 'required' => false,
             ))
-            ->add('direccion')
+            ->add('direccion', null, array('label' => 'address postal', 'attr' => array('class' => 'mediana')))
             ->add('permiteEmail', 'Symfony\Component\Form\Extension\Core\Type\CheckboxType', array('required' => false))
-            ->add(
-                'fechaNacimiento', 'Symfony\Component\Form\Extension\Core\Type\BirthdayType', array(
+            ->add('fechaNacimiento', 'Symfony\Component\Form\Extension\Core\Type\BirthdayType', array(
+                'label' => 'date de nacimiento',
                 'years' => range(date('Y') - 18, date('Y') - 18 - 120),
             ))
-            ->add('dni')
-            ->add('numeroTarjeta', null, array('label' => 'Tarjeta de Crédito'))
+            ->add('dni', null, array('label' => 'DNI', 'attr' => array('class' => 'corto')))
+            ->add('numeroTarjeta', null, array('label' => 'number de tarjeta de crédito'))
             ->add('city', 'Symfony\Bridge\Doctrine\Form\Type\EntityType', array(
                 'class' => 'AppBundle\\Entity\\city',
                 'placeholder' => 'Selecciona una city',
@@ -60,7 +61,10 @@ class UsuarioType extends AbstractType
         ;
 
         if ('crear_usuario' === $options['accion']) {
-            $builder->add('registrarme', 'Symfony\Component\Form\Extension\Core\Type\SubmitType');
+            $builder->add('registrarme', 'Symfony\Component\Form\Extension\Core\Type\SubmitType', array(
+                'label' => 'Registrarme',
+                'attr' => array('class' => 'boton'),
+            ));
         } elseif ('modificar_perfil' === $options['accion']) {
             $builder->add('guardar', 'Symfony\Component\Form\Extension\Core\Type\SubmitType', array(
                 'label' => 'Guardar cambios',
@@ -72,17 +76,9 @@ class UsuarioType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-<<<<<<< HEAD:src/AppBundle/Form/Frontend/UsuarioRegistroType.php
-            'data_class' => 'AppBundle\Entity\user',
-            'validation_groups' => array('default', 'record'),
-||||||| parent of cd05d74 (Simplificado el formulario para registrar usuarios y editar perfiles de usuario):src/AppBundle/Form/Frontend/UsuarioRegistroType.php
-            'data_class' => 'AppBundle\Entity\Usuario',
-            'validation_groups' => array('default', 'registro'),
-=======
             'accion' => 'modificar_perfil',
-            'data_class' => 'AppBundle\Entity\Usuario',
+            'data_class' => 'AppBundle\Entity\user',
             'validation_groups' => array('default'),
->>>>>>> cd05d74 (Simplificado el formulario para registrar usuarios y editar perfiles de usuario):src/AppBundle/Form/UsuarioType.php
         ));
     }
 
