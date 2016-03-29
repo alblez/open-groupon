@@ -19,8 +19,7 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Fixtures de la entity store.
- * creates para cada city entre 2 y 5 tiendas con información muy realista.
+ * creates los datos de prueba para la entity store.
  */
 class Tiendas extends AbstractFixture implements OrderedFixtureInterface, ContainerAwareInterface
 {
@@ -109,7 +108,7 @@ class Tiendas extends AbstractFixture implements OrderedFixtureInterface, Contai
     /**
      * Generador aleatorio de direcciones postales.
      *
-     * @param city $city Objeto de la city para la que se genera una address postal.
+     * @param city $city
      *
      * @return string
      */

@@ -34,20 +34,20 @@ class OfertaType extends AbstractType
             ->add('discount', 'Symfony\Component\Form\Extension\Core\Type\MoneyType')
             ->add('umbral')
 |||||||| parent of 700a8c3 (Simplificados los formularios de la extranet):src/AppBundle/Form/Extranet/OfertaType.php
-            ->add('nombre')
+            ->add('name')
             ->add('descripcion')
             ->add('condiciones')
-            ->add('foto', 'Symfony\Component\Form\Extension\Core\Type\FileType', array('required' => false))
-            ->add('precio', 'Symfony\Component\Form\Extension\Core\Type\MoneyType')
-            ->add('descuento', 'Symfony\Component\Form\Extension\Core\Type\MoneyType')
+            ->add('photo', 'Symfony\Component\Form\Extension\Core\Type\FileType', array('required' => false))
+            ->add('price', 'Symfony\Component\Form\Extension\Core\Type\MoneyType')
+            ->add('discount', 'Symfony\Component\Form\Extension\Core\Type\MoneyType')
             ->add('umbral')
 ========
-            ->add('nombre', null, array('attr' => array('class' => 'largo')))
-            ->add('descripcion', null, array('label' => 'Descripción'))
+            ->add('name', null, array('attr' => array('class' => 'largo')))
+            ->add('descripcion', null, array('label' => 'description'))
             ->add('condiciones', null, array('label' => 'Condiciones', 'attr' => array('class' => 'mediana')))
-            ->add('foto', 'Symfony\Component\Form\Extension\Core\Type\FileType', array('label' => 'Fotografía', 'required' => false))
-            ->add('precio', 'Symfony\Component\Form\Extension\Core\Type\MoneyType', array('attr' => array('class' => 'corto')))
-            ->add('descuento', 'Symfony\Component\Form\Extension\Core\Type\MoneyType', array('attr' => array('class' => 'corto')))
+            ->add('photo', 'Symfony\Component\Form\Extension\Core\Type\FileType', array('label' => 'Fotografía', 'required' => false))
+            ->add('price', 'Symfony\Component\Form\Extension\Core\Type\MoneyType', array('attr' => array('class' => 'corto')))
+            ->add('discount', 'Symfony\Component\Form\Extension\Core\Type\MoneyType', array('attr' => array('class' => 'corto')))
             ->add('umbral', null, array('label' => 'Compras necesarias', 'attr' => array('class' => 'corto')))
 >>>>>>>> 700a8c3 (Simplificados los formularios de la extranet):src/AppBundle/Form/OfertaType.php
             ->add('guardar', 'Symfony\Component\Form\Extension\Core\Type\SubmitType', array(
@@ -78,6 +78,6 @@ class OfertaType extends AbstractType
 
     public function getBlockPrefix()
     {
-        return 'oferta_tienda';
+        return 'offer';
     }
 }

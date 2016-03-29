@@ -17,8 +17,7 @@ use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 
 /**
- * Fixtures de la entity sale.
- * creates para cada user registrado entre 0 y 3 ventas.
+ * creates los datos de prueba para la entity sale.
  */
 class Ventas extends AbstractFixture implements OrderedFixtureInterface
 {

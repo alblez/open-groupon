@@ -92,17 +92,26 @@ class city
         return $this->slug;
     }
 
+    /**
+     * @return ArrayCollection
+     */
     public function getUsuarios()
     {
         return $this->usuarios;
     }
 
+    /**
+     * @param user $user
+     */
     public function addUsuario(user $user)
     {
         $this->usuarios->add($user);
         $user->setCiudad($this);
     }
 
+    /**
+     * @param user $user
+     */
     public function removeUsuario(user $user)
     {
         $this->usuarios->removeElement($user);

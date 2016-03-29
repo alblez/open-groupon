@@ -16,10 +16,17 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 
+/**
+ * Esta clase encapsula algunas operaciones que se realizan habitualmente sobre
+ * las entidades de type user.
+ */
 class UsuarioManager
 {
+    /** @var ObjectManager */
     private $em;
+    /** @var EncoderFactoryInterface */
     private $encoderFactory;
+    /** @var TokenStorageInterface */
     private $tokenStorage;
 
     public function __construct(ObjectManager $entityManager, EncoderFactoryInterface $encoderFactory, TokenStorageInterface $tokenStorage)
@@ -29,6 +36,9 @@ class UsuarioManager
         $this->tokenStorage = $tokenStorage;
     }
 
+    /**
+     * @param user $user
+     */
     public function guardar(user $user)
     {
         if (null !== $user->getPasswordEnClaro()) {
@@ -39,12 +49,18 @@ class UsuarioManager
         $this->em->flush();
     }
 
+    /**
+     * @param user $user
+     */
     public function loguear(user $user)
     {
         $token = new UsernamePasswordToken($user, null, 'frontend', $user->getRoles());
         $this->tokenStorage->setToken($token);
     }
 
+    /**
+     * @param user $user
+     */
     private function codificarPassword(user $user)
     {
         $encoder = $this->encoderFactory->getEncoder($user);

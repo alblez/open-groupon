@@ -16,8 +16,7 @@ use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 
 /**
- * Fixtures de la entity city.
- * creates 25 ciudades para poder probar la application.
+ * creates los datos de prueba para la entity city.
  */
 class Ciudades extends AbstractFixture implements OrderedFixtureInterface
 {

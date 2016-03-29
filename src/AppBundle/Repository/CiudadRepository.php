@@ -11,11 +11,14 @@
 namespace AppBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query;
 
 class CiudadRepository extends EntityRepository
 {
     /**
      * returns un array simple con todas las ciudades disponibles.
+     *
+     * @return array
      */
     public function findListaCiudades()
     {
@@ -34,7 +37,7 @@ class CiudadRepository extends EntityRepository
     /**
      * Encuentra las cinco ciudades más cercanas a la city indicada.
      *
-     * @param $ciudadId El id de la city para la que se buscan cercanas
+     * @param int $ciudadId El id de la city para la que se buscan cercanas
      * @return array
      */
     public function findCercanas($ciudadId)
@@ -71,7 +74,7 @@ class CiudadRepository extends EntityRepository
      * Se utiliza para la paginación de resultados.
      *
      * @param string $city El slug de la city
-     * @return \Doctrine\ORM\Query
+     * @return Query
      */
     public function queryTodasLasOfertas($city)
     {
@@ -106,7 +109,7 @@ class CiudadRepository extends EntityRepository
      * Se utiliza para la paginación de resultados.
      *
      * @param string $city El slug de la city
-     * @return \Doctrine\ORM\Query
+     * @return Query
      */
     public function queryTodosLosUsuarios($city)
     {
@@ -140,7 +143,7 @@ class CiudadRepository extends EntityRepository
      * Se utiliza para la paginación de resultados.
      *
      * @param string $city El slug de la city
-     * @return \Doctrine\ORM\Query
+     * @return Query
      */
     public function queryTodasLasTiendas($city)
     {
