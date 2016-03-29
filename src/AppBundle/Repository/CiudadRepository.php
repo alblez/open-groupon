@@ -3,8 +3,8 @@
 /*
  * (c) Javier Eguiluz <javier.eguiluz@gmail.com>
  *
- * Este archivo pertenece a la aplicación de prueba Cupon.
- * El código fuente de la aplicación incluye un archivo llamado LICENSE
+ * Este file pertenece a la application de prueba Cupon.
+ * El code fuente de la application incluye un file llamado LICENSE
  * con toda la información sobre el copyright y la licencia.
  */
 
@@ -15,139 +15,139 @@ use Doctrine\ORM\EntityRepository;
 class CiudadRepository extends EntityRepository
 {
     /**
-     * Devuelve un array simple con todas las ciudades disponibles.
+     * returns un array simple con todas las ciudades disponibles.
      */
     public function findListaCiudades()
     {
         $em = $this->getEntityManager();
 
-        $consulta = $em->createQuery('
+        $query = $em->createQuery('
             SELECT c
-            FROM AppBundle:Ciudad c
-            ORDER BY c.nombre
+            FROM AppBundle:city c
+            ORDER BY c.name
         ');
-        $consulta->useResultCache(true, 3600);
+        $query->useResultCache(true, 3600);
 
-        return $consulta->getArrayResult();
+        return $query->getArrayResult();
     }
 
     /**
-     * Encuentra las cinco ciudades más cercanas a la ciudad indicada.
+     * Encuentra las cinco ciudades más cercanas a la city indicada.
      *
-     * @param string $ciudad_id El id de la ciudad para la que se buscan cercanas
+     * @param string $ciudad_id El id de la city para la que se buscan cercanas
      */
-    public function findCercanas($ciudad_id)
+    public function findCercanas($ciudadId)
     {
         $em = $this->getEntityManager();
 
-        $consulta = $em->createQuery('
+        $query = $em->createQuery('
             SELECT c
-            FROM AppBundle:Ciudad c
+            FROM AppBundle:city c
             WHERE c.id != :id
-            ORDER BY c.nombre ASC
+            ORDER BY c.name ASC
         ');
-        $consulta->setMaxResults(5);
-        $consulta->setParameter('id', $ciudad_id);
-        $consulta->useResultCache(true, 3600);
+        $query->setMaxResults(5);
+        $query->setParameter('id', $ciudadId);
+        $query->useResultCache(true, 3600);
 
-        return $consulta->getResult();
+        return $query->getResult();
     }
 
     /**
-     * Encuentra todas las ofertas de la ciudad indicada.
+     * Encuentra todas las ofertas de la city indicada.
      *
-     * @param string $ciudad El slug de la ciudad para la que se buscan sus ofertas
+     * @param string $city El slug de la city para la que se buscan sus ofertas
      */
-    public function findTodasLasOfertas($ciudad)
+    public function findTodasLasOfertas($city)
     {
-        return $this->queryTodasLasOfertas($ciudad)->getResult();
+        return $this->queryTodasLasOfertas($city)->getResult();
     }
 
     /**
-     * Método especial asociado con `findTodasLasOfertas()` y que devuelve solamente
-     * la consulta necesaria para obtener todas las ofertas de la ciudad indicada.
+     * method especial asociado con `findTodasLasOfertas()` y que returns solamente
+     * la query necesaria para obtener todas las ofertas de la city indicada.
      * Se utiliza para la paginación de resultados.
      *
-     * @param string $ciudad El slug de la ciudad
+     * @param string $city El slug de la city
      */
-    public function queryTodasLasOfertas($ciudad)
+    public function queryTodasLasOfertas($city)
     {
         $em = $this->getEntityManager();
 
-        $consulta = $em->createQuery('
+        $query = $em->createQuery('
             SELECT o, t
-            FROM AppBundle:Oferta o JOIN o.tienda t JOIN o.ciudad c
-            WHERE c.slug = :ciudad
-            ORDER BY o.fecha_publicacion DESC
+            FROM AppBundle:offer o JOIN o.store t JOIN o.city c
+            WHERE c.slug = :city
+            ORDER BY o.fechaPublicacion DESC
         ');
-        $consulta->setParameter('ciudad', $ciudad);
-        $consulta->useResultCache(true, 600);
+        $query->setParameter('city', $city);
+        $query->useResultCache(true, 600);
 
-        return $consulta;
+        return $query;
     }
 
     /**
-     * Encuentra todos los usuarios asociados a la ciudad indicada.
+     * Encuentra todos los usuarios asociados a la city indicada.
      *
-     * @param string $ciudad El slug de la ciudad para la que se buscan sus usuarios
+     * @param string $city El slug de la city para la que se buscan sus usuarios
      */
-    public function findTodosLosUsuarios($ciudad)
+    public function findTodosLosUsuarios($city)
     {
-        return $this->queryTodosLosUsuarios($ciudad)->getResult();
+        return $this->queryTodosLosUsuarios($city)->getResult();
     }
 
     /**
-     * Método especial asociado con `findTodosLosUsuarios()` y que devuelve solamente
-     * la consulta necesaria para obtener todos los usuarios de la ciudad indicada.
+     * method especial asociado con `findTodosLosUsuarios()` y que returns solamente
+     * la query necesaria para obtener todos los usuarios de la city indicada.
      * Se utiliza para la paginación de resultados.
      *
-     * @param string $ciudad El slug de la ciudad
+     * @param string $city El slug de la city
      */
-    public function queryTodosLosUsuarios($ciudad)
+    public function queryTodosLosUsuarios($city)
     {
         $em = $this->getEntityManager();
 
-        $consulta = $em->createQuery('
+        $query = $em->createQuery('
             SELECT u
-            FROM UsuarioBundle:Usuario u JOIN u.ciudad c
-            WHERE c.slug = :ciudad
+            FROM UsuarioBundle:user u JOIN u.city c
+            WHERE c.slug = :city
             ORDER BY u.apellidos ASC
         ');
-        $consulta->setParameter('ciudad', $ciudad);
+        $query->setParameter('city', $city);
 
-        return $consulta;
+        return $query;
     }
 
     /**
-     * Encuentra todas las tiendas asociadas a la ciudad indicada.
+     * Encuentra todas las tiendas asociadas a la city indicada.
      *
-     * @param string $ciudad El slug de la ciudad para la que se buscan sus tiendas
+     * @param string $city El slug de la city para la que se buscan sus tiendas
      */
-    public function findTodasLasTiendas($ciudad)
+    public function findTodasLasTiendas($city)
     {
-        return $this->queryTodasLasTiendas($ciudad)->getResult();
+        return $this->queryTodasLasTiendas($city)->getResult();
     }
 
     /**
-     * Método especial asociado con `findTodasLasTiendas()` y que devuelve solamente
-     * la consulta necesaria para obtener todas las tiendas de la ciudad indicada.
+     * method especial asociado con `findTodasLasTiendas()` y que returns solamente
+     * la query necesaria para obtener todas las tiendas de la city indicada.
      * Se utiliza para la paginación de resultados.
      *
-     * @param string $ciudad El slug de la ciudad
+     * @param string $city El slug de la city
      */
-    public function queryTodasLasTiendas($ciudad)
+    public function queryTodasLasTiendas($city)
     {
         $em = $this->getEntityManager();
 
-        $consulta = $em->createQuery('
+        $query = $em->createQuery('
             SELECT t
-            FROM AppBundle:Tienda t JOIN t.ciudad c
-            WHERE c.slug = :ciudad
-            ORDER BY t.nombre ASC
+            FROM AppBundle:store t JOIN t.city c
+            WHERE c.slug = :city
+            ORDER BY t.name ASC
         ');
-        $consulta->setParameter('ciudad', $ciudad);
-        $consulta->useResultCache(true, 600);
+        $query->setParameter('city', $city);
+        $query->useResultCache(true, 600);
 
-        return $consulta;
+        return $query;
     }
 }
