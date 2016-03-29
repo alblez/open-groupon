@@ -24,8 +24,16 @@ class TiendaType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name', null, array('attr' => array('class' => 'largo')))
-            ->add('login', null, array('label' => 'name de user', 'attr' => array('readonly' => true)))
+<<<<<<<< HEAD:src/AppBundle/Form/Extranet/TiendaType.php
+            ->add('name')
+            ->add('login', null, array('attr' => array('readonly' => true)))
+|||||||| parent of 700a8c3 (Simplificados los formularios de la extranet):src/AppBundle/Form/Extranet/TiendaType.php
+            ->add('nombre')
+            ->add('login', null, array('attr' => array('readonly' => true)))
+========
+            ->add('nombre', null, array('attr' => array('class' => 'largo')))
+            ->add('login', null, array('label' => 'Nombre de usuario', 'attr' => array('readonly' => true)))
+>>>>>>>> 700a8c3 (Simplificados los formularios de la extranet):src/AppBundle/Form/TiendaType.php
             ->add('passwordEnClaro', 'Symfony\Component\Form\Extension\Core\Type\RepeatedType', array(
                 'type' => 'Symfony\Component\Form\Extension\Core\Type\PasswordType',
                 'invalid_message' => 'Las dos contraseñas deben coincidir',
@@ -33,7 +41,7 @@ class TiendaType extends AbstractType
                 'second_options' => array('label' => 'Repite password'),
                 'required' => false,
             ))
-            ->add('descripcion', null, array('label' => 'description'))
+            ->add('descripcion', null, array('label' => 'Descripción'))
             ->add('direccion')
             ->add('city')
             ->add('guardar', 'Symfony\Component\Form\Extension\Core\Type\SubmitType', array(
@@ -52,6 +60,6 @@ class TiendaType extends AbstractType
 
     public function getBlockPrefix()
     {
-        return 'store';
+        return 'cupon_tiendabundle_tiendatype';
     }
 }
