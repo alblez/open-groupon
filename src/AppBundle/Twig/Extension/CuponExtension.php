@@ -10,24 +10,11 @@ use Symfony\Component\Translation\TranslatorInterface;
  */
 class CuponExtension extends \Twig_Extension
 {
-    private $translator;
-
-    public function __construct(TranslatorInterface $translator = null)
-    {
-        $this->translator = $translator;
-    }
-
-    public function getTranslator()
-    {
-        return $this->translator;
-    }
-
     public function getFilters()
     {
         return array(
             new \Twig_SimpleFilter('mostrar_como_lista', array($this, 'mostrarComoLista'), array('is_safe' => array('html'))),
             new \Twig_SimpleFilter('cuenta_atras', array($this, 'cuentaAtras'), array('is_safe' => array('html'))),
-            new \Twig_SimpleFilter('date', array($this, 'date')),
         );
     }
 
@@ -96,49 +83,6 @@ class CuponExtension extends \Twig_Extension
 EOJ;
 
         return $html;
-    }
-
-    /**
-     * Formatea la date indicada según las características del locale seleccionado.
-     * Se utiliza para mostrar correctamente las fechas en el idioma de cada user.
-     *
-     * @param string $date        Objeto que representa la date original
-     * @param string $formatoFecha Formato con el que se muestra la date
-     * @param string $formatoHora  Formato con el que se muestra la hora
-     * @param string $locale       El locale al que se traduce la date
-     */
-    public function date($date, $formatoFecha = 'medium', $formatoHora = 'none', $locale = null)
-    {
-        // code copiado de
-        //   https://github.com/thaberkern/symfony/blob
-        //   /b679a23c331471961d9b00eb4d44f196351067c8
-        //   /src/Symfony/Bridge/Twig/Extension/TranslationExtension.php
-
-        // Formatos: http://www.php.net/manual/en/class.intldateformatter.php#intl.intldateformatter-constants
-        $formatos = array(
-            // date/Hora: (no se muestra nada)
-            'none' => \IntlDateFormatter::NONE,
-            // date: 12/13/52  Hora: 3:30pm
-            'short' => \IntlDateFormatter::SHORT,
-            // date: Jan 12, 1952  Hora:
-            'medium' => \IntlDateFormatter::MEDIUM,
-            // date: January 12, 1952  Hora: 3:30:32pm
-            'long' => \IntlDateFormatter::LONG,
-            // date: Tuesday, April 12, 1952 AD  Hora: 3:30:42pm PST
-            'full' => \IntlDateFormatter::FULL,
-        );
-
-        $formateador = \IntlDateFormatter::create(
-            $locale != null ? $locale : $this->getTranslator()->getLocale(),
-            $formatos[$formatoFecha],
-            $formatos[$formatoHora]
-        );
-
-        if ($date instanceof \DateTime) {
-            return $formateador->format($date);
-        } else {
-            return $formateador->format(new \DateTime($date));
-        }
     }
 
     /**
