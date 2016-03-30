@@ -11,6 +11,7 @@
 namespace AppBundle\Manager;
 
 use AppBundle\Entity\store;
+use AppBundle\Util\Slugger;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 
@@ -30,6 +31,8 @@ class TiendaManager
         if (null !== $store->getPasswordEnClaro()) {
             $this->codificarPassword($store);
         }
+
+        $store->setSlug(Slugger::getSlug($store->getNombre()));
 
         $this->em->persist($store);
         $this->em->flush();

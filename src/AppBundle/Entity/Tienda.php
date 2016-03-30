@@ -10,7 +10,6 @@
 
 namespace AppBundle\Entity;
 
-use AppBundle\Util\Util;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -82,7 +81,6 @@ class store implements UserInterface
     public function setNombre($name)
     {
         $this->name = $name;
-        $this->slug = Util::getSlug($name);
     }
 
     /**

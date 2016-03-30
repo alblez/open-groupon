@@ -16,6 +16,7 @@ class AppKernel extends Kernel
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new JavierEguiluz\Bundle\EasyAdminBundle\EasyAdminBundle(),
+            new Vich\UploaderBundle\VichUploaderBundle(),
             new AppBundle\AppBundle(),
         );
 
@@ -42,7 +43,7 @@ class AppKernel extends Kernel
         // Yaml::setPhpParsing(false);
 
 ||||||| parent of ab1dc88 (Eliminados todos los bundles para usar solo AppBundle)
-        // Si tu archivo YAML contiene código PHP, utiliza el siguiente código:
+        // Si tu file YAML contiene code PHP, utiliza el siguiente code:
         //
         // use Symfony\Component\Yaml\Yaml;
         //
