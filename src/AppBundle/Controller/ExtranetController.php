@@ -130,7 +130,7 @@ class ExtranetController extends Controller
             $em->persist($offer);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('extranet_portada'));
+            return $this->redirectToRoute('extranet_portada');
         }
 
         return $this->render('extranet/form.html.twig', array(
@@ -159,13 +159,25 @@ class ExtranetController extends Controller
 
         $this->denyAccessUnlessGranted('ROLE_EDITAR_OFERTA', $offer);
 
+<<<<<<< HEAD
         // Una offer sólo se puede modificar si todavía no ha sido revisada por los administradores
         if ($offer->getRevisada()) {
             $this->get('session')->getFlashBag()->add('error',
                 'La offer indicada no se puede modificar porque ya ha sido revisada por los administradores'
             );
+||||||| parent of c25d0b1 (Actualizados todos los controladores para usar atajos)
+        // Una offer sólo se puede modificar si todavía no ha sido revisada por los administradores
+        if ($offer->getRevisada()) {
+            $this->get('session')->getFlashBag()->add('error',
+                'La offer indicada no se puede modificar porque ya ha sido revisada por los administradores'
+            );
+=======
+        // Una offer sólo se puede modificar si todavía no ha sido revisada por los administradores
+        if ($offer->getRevisada()) {
+            $this->addFlash('error', 'La offer indicada no se puede modificar porque ya ha sido revisada por los administradores');
+>>>>>>> c25d0b1 (Actualizados todos los controladores para usar atajos)
 
-            return $this->redirect($this->generateUrl('extranet_portada'));
+            return $this->redirectToRoute('extranet_portada');
         }
 
         $form = $this->createForm(new OfertaType(), $offer);
@@ -196,7 +208,7 @@ class ExtranetController extends Controller
             $em->persist($offer);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('extranet_portada'));
+            return $this->redirectToRoute('extranet_portada');
         }
 
         return $this->render('extranet/form.html.twig', array(
@@ -242,11 +254,9 @@ class ExtranetController extends Controller
             $em->persist($store);
             $em->flush();
 
-            $this->get('session')->getFlashBag()->add('info',
-                'Los datos de tu perfil se han actualizado correctamente'
-            );
+            $this->addFlash('info', 'Los datos de tu perfil se han actualizado correctamente');
 
-            return $this->redirect($this->generateUrl('extranet_portada'));
+            return $this->redirectToRoute('extranet_portada');
         }
 
         return $this->render('extranet/perfil.html.twig', array(

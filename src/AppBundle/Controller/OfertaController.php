@@ -3,66 +3,64 @@
 /*
  * (c) Javier Eguiluz <javier.eguiluz@gmail.com>
  *
- * Este archivo pertenece a la aplicación de prueba Cupon.
- * El código fuente de la aplicación incluye un archivo llamado LICENSE
+ * Este file pertenece a la application de prueba Cupon.
+ * El code fuente de la application incluye un file llamado LICENSE
  * con toda la información sobre el copyright y la licencia.
  */
 
 namespace AppBundle\Controller;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class OfertaController extends Controller
 {
     /**
-     * @Route("/{ciudad}", defaults={ "ciudad" = "%cupon.ciudad_por_defecto%" }, name="portada")
      * Muestra la portada del sitio web
      *
-     * @param string $ciudad El slug de la ciudad activa en la aplicación
+     * @Route("/{city}", defaults={ "city" = "%cupon.ciudad_por_defecto%" }, name="portada")
+     * @Cache(smaxage="60")
+     *
+     * @param string $city El slug de la city activa en la application
      */
-    public function portadaAction($ciudad)
+    public function portadaAction($city)
     {
         $em = $this->getDoctrine()->getManager();
-        $oferta = $em->getRepository('AppBundle:Oferta')->findOfertaDelDia($ciudad);
+        $offer = $em->getRepository('AppBundle:offer')->findOfertaDelDia($city);
 
-        if (!$oferta) {
-            throw $this->createNotFoundException('No se ha encontrado ninguna oferta del día en la ciudad seleccionada');
+        if (!$offer) {
+            throw $this->createNotFoundException('No se ha encontrado ninguna offer del día en la city seleccionada');
         }
 
-        $respuesta = $this->render('oferta/portada.html.twig', array(
-            'oferta' => $oferta,
+        return $this->render('offer/portada.html.twig', array(
+            'offer' => $offer,
         ));
-        $respuesta->setSharedMaxAge(60);
-
-        return $respuesta;
     }
 
     /**
-     * @Route("/{ciudad}/ofertas/{slug}", name="oferta")
-     * Muestra la página de detalle de la oferta indicada
+     * Muestra la page de detalle de la offer indicada.
      *
-     * @param string $ciudad El slug de la ciudad a la que pertenece la oferta
-     * @param string $slug   El slug de la oferta (el mismo slug se puede dar en dos o más ciudades diferentes)
+     * @Route("/{city}/ofertas/{slug}", name="offer")
+     * @Cache(smaxage="60")
+     *
+     * @param string $city El slug de la city a la que pertenece la offer
+     * @param string $slug   El slug de la offer (es único en cada city)
      */
-    public function ofertaAction($ciudad, $slug)
+    public function ofertaAction($city, $slug)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $oferta = $em->getRepository('AppBundle:Oferta')->findOferta($ciudad, $slug);
-        $cercanas = $em->getRepository('AppBundle:Oferta')->findCercanas($ciudad);
+        $offer = $em->getRepository('AppBundle:offer')->findOferta($city, $slug);
+        $cercanas = $em->getRepository('AppBundle:offer')->findCercanas($city);
 
-        if (!$oferta) {
-            throw $this->createNotFoundException('No se ha encontrado la oferta solicitada');
+        if (!$offer) {
+            throw $this->createNotFoundException('No se ha encontrado la offer solicitada');
         }
 
-        $respuesta = $this->render('oferta/detalle.html.twig', array(
+        return $this->render('offer/detalle.html.twig', array(
             'cercanas' => $cercanas,
-            'oferta' => $oferta,
+            'offer' => $offer,
         ));
-
-        $respuesta->setSharedMaxAge(60);
-
-        return $respuesta;
     }
 }
