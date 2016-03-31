@@ -8,7 +8,7 @@
  * con toda la información sobre el copyright y la licencia.
  */
 
-namespace AppBundle\Form\Frontend;
+namespace AppBundle\Form;
 
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
@@ -21,7 +21,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  * Como se utiliza en la parte pública del sitio, algunas propiedades de
  * la entity no se incluyen en el form.
  */
-class UsuarioRegistroType extends AbstractType
+class UsuarioType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -57,15 +57,32 @@ class UsuarioRegistroType extends AbstractType
                         ->orderBy('c.name', 'ASC');
                 },
             ))
-            ->add('registrarme', 'Symfony\Component\Form\Extension\Core\Type\SubmitType')
         ;
+
+        if ('crear_usuario' === $options['accion']) {
+            $builder->add('registrarme', 'Symfony\Component\Form\Extension\Core\Type\SubmitType');
+        } elseif ('modificar_perfil' === $options['accion']) {
+            $builder->add('guardar', 'Symfony\Component\Form\Extension\Core\Type\SubmitType', array(
+                'label' => 'Guardar cambios',
+                'attr' => array('class' => 'boton'),
+            ));
+        }
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
+<<<<<<< HEAD:src/AppBundle/Form/Frontend/UsuarioRegistroType.php
             'data_class' => 'AppBundle\Entity\user',
             'validation_groups' => array('default', 'record'),
+||||||| parent of cd05d74 (Simplificado el formulario para registrar usuarios y editar perfiles de usuario):src/AppBundle/Form/Frontend/UsuarioRegistroType.php
+            'data_class' => 'AppBundle\Entity\Usuario',
+            'validation_groups' => array('default', 'registro'),
+=======
+            'accion' => 'modificar_perfil',
+            'data_class' => 'AppBundle\Entity\Usuario',
+            'validation_groups' => array('default'),
+>>>>>>> cd05d74 (Simplificado el formulario para registrar usuarios y editar perfiles de usuario):src/AppBundle/Form/UsuarioType.php
         ));
     }
 
