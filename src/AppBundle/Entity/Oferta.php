@@ -3,8 +3,8 @@
 /*
  * (c) Javier Eguiluz <javier.eguiluz@gmail.com>
  *
- * Este archivo pertenece a la aplicación de prueba Cupon.
- * El código fuente de la aplicación incluye un archivo llamado LICENSE
+ * Este file pertenece a la application de prueba Cupon.
+ * El code fuente de la application incluye un file llamado LICENSE
  * con toda la información sobre el copyright y la licencia.
  */
 
@@ -18,7 +18,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity(repositoryClass="AppBundle\Repository\OfertaRepository")
  */
-class Oferta
+class offer
 {
     /**
      * @ORM\Id
@@ -32,7 +32,7 @@ class Oferta
      *
      * @Assert\NotBlank()
      */
-    protected $nombre;
+    protected $name;
 
     /**
      * @ORM\Column(type="string")
@@ -62,19 +62,19 @@ class Oferta
     /**
      * @Assert\Image(maxSize = "500k")
      */
-    protected $foto;
+    protected $photo;
 
     /**
      * @ORM\Column(type="decimal", scale=2)
      *
      * @Assert\Range(min = 0)
      */
-    protected $precio;
+    protected $price;
 
     /**
      * @ORM\Column(type="decimal", scale=2)
      */
-    protected $descuento;
+    protected $discount;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
@@ -111,18 +111,24 @@ class Oferta
     protected $revisada;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Ciudad")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\city")
      */
-    protected $ciudad;
+    protected $city;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Tienda")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\store")
      */
-    protected $tienda;
+    protected $store;
 
     public function __toString()
     {
         return $this->getNombre();
+    }
+
+    public function __construct()
+    {
+        $this->compras = 0;
+        $this->revisada = false;
     }
 
     /**
@@ -134,12 +140,12 @@ class Oferta
     }
 
     /**
-     * @param string $nombre
+     * @param string $name
      */
-    public function setNombre($nombre)
+    public function setNombre($name)
     {
-        $this->nombre = $nombre;
-        $this->slug = Util::getSlug($nombre);
+        $this->name = $name;
+        $this->slug = Util::getSlug($name);
     }
 
     /**
@@ -147,7 +153,7 @@ class Oferta
      */
     public function getNombre()
     {
-        return $this->nombre;
+        return $this->name;
     }
 
     /**
@@ -215,11 +221,11 @@ class Oferta
     }
 
     /**
-     * @param UploadedFile $foto
+     * @param UploadedFile $photo
      */
-    public function setFoto(UploadedFile $foto = null)
+    public function setFoto(UploadedFile $photo = null)
     {
-        $this->foto = $foto;
+        $this->photo = $photo;
     }
 
     /**
@@ -227,15 +233,15 @@ class Oferta
      */
     public function getFoto()
     {
-        return $this->foto;
+        return $this->photo;
     }
 
     /**
-     * @param float $precio
+     * @param float $price
      */
-    public function setPrecio($precio)
+    public function setPrecio($price)
     {
-        $this->precio = $precio;
+        $this->price = $price;
     }
 
     /**
@@ -243,15 +249,15 @@ class Oferta
      */
     public function getPrecio()
     {
-        return $this->precio;
+        return $this->price;
     }
 
     /**
-     * @param float $descuento
+     * @param float $discount
      */
-    public function setDescuento($descuento)
+    public function setDescuento($discount)
     {
-        $this->descuento = $descuento;
+        $this->discount = $discount;
     }
 
     /**
@@ -259,7 +265,7 @@ class Oferta
      */
     public function getDescuento()
     {
-        return $this->descuento;
+        return $this->discount;
     }
 
     /**
@@ -343,39 +349,39 @@ class Oferta
     }
 
     /**
-     * @param Ciudad $ciudad
+     * @param city $city
      */
-    public function setCiudad(Ciudad $ciudad)
+    public function setCiudad(city $city)
     {
-        $this->ciudad = $ciudad;
+        $this->city = $city;
     }
 
     /**
-     * @return Ciudad
+     * @return city
      */
     public function getCiudad()
     {
-        return $this->ciudad;
+        return $this->city;
     }
 
     /**
-     * @param Tienda $tienda
+     * @param store $store
      */
-    public function setTienda(Tienda $tienda)
+    public function setTienda(store $store)
     {
-        $this->tienda = $tienda;
+        $this->store = $store;
     }
 
     /**
-     * @return Tienda
+     * @return store
      */
     public function getTienda()
     {
-        return $this->tienda;
+        return $this->store;
     }
 
     /**
-     * @Assert\IsTrue(message = "La fecha de expiración debe ser posterior a la fecha de publicación")
+     * @Assert\IsTrue(message = "La date de expiración debe ser posterior a la date de publicación")
      */
     public function isFechaValida()
     {
@@ -387,10 +393,10 @@ class Oferta
     }
 
     /**
-     * Sube la foto de la oferta copiándola en el directorio que se indica y
-     * guardando en la entidad la ruta hasta la foto.
+     * Sube la photo de la offer copiándola en el directorio que se indica y
+     * guardando en la entity la ruta hasta la photo.
      *
-     * @param string $directorioDestino Ruta completa del directorio al que se sube la foto
+     * @param string $directorioDestino Ruta completa del directorio al que se sube la photo
      */
     public function subirFoto($directorioDestino)
     {
