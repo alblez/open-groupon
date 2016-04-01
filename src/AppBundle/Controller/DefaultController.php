@@ -2,168 +2,54 @@
 
 namespace AppBundle\Controller;
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class DefaultController extends Controller
 {
     /**
-     * @Route(
-     *     "/sitio/{slug}",
-     *     defaults={ "_locale"="%locale%" },
-     *     requirements={ "slug"="ayuda|privacidad|sobre_nosotros" },
-     *     name="pagina"
-     * )
+     * Muestra el formulario de contacto y también procesa el envío de emails.
      *
-     * Muestra las páginas estáticas con información sobre el sitio (Privacidad, Condiciones, etc.)
-     *
-     * @param Request $request
-     *
-     * @return Response
-     */
-    public function paginaAction($slug)
-    {
-        return $this->render(sprintf('sitio/%s.html.twig', $slug));
-    }
-
-    /**
      * @Route("/contacto", defaults={ "_locale"="es" }, name="contacto")
-     *
-     * Muestra el form de contacto y también procesa el envío de emails.
-     *
-     * @param Request $request
-     *
-     * @return RedirectResponse|Response
      */
     public function contactoAction(Request $request)
     {
-        // Se creates un form "in situ", sin clase asociada
-        $form = $this->createFormBuilder()
-            ->add('remitente', 'Symfony\Component\Form\Extension\Core\Type\EmailType', array('label' => 'Tu address de email'))
-            ->add('message', 'Symfony\Component\Form\Extension\Core\Type\TextareaType')
-            ->add('enviar', 'Symfony\Component\Form\Extension\Core\Type\SubmitType', array('label' => 'Enviar message'))
+        // Se crea un formulario "in situ", sin clase asociada
+        $formulario = $this->createFormBuilder()
+            ->add('remitente', 'Symfony\Component\Form\Extension\Core\Type\EmailType', array('label' => 'Tu dirección de email'))
+            ->add('mensaje', 'Symfony\Component\Form\Extension\Core\Type\TextareaType')
+            ->add('enviar', 'Symfony\Component\Form\Extension\Core\Type\SubmitType', array('label' => 'Enviar mensaje'))
             ->getForm()
         ;
 
-        $form->handleRequest($request);
+        $formulario->handleRequest($request);
 
-        if ($form->isValid()) {
-            $datos = $form->getData();
+        if ($formulario->isValid()) {
+            $datos = $formulario->getData();
 
-            $contenido = sprintf(" Remitente: %s \n\n message: %s \n\n Navegador: %s \n address IP: %s \n",
+            $contenido = sprintf(" Remitente: %s \n\n Mensaje: %s \n\n Navegador: %s \n Dirección IP: %s \n",
                 $datos['remitente'],
-                htmlspecialchars($datos['message']),
+                htmlspecialchars($datos['mensaje']),
                 $request->server->get('HTTP_USER_AGENT'),
                 $request->server->get('REMOTE_ADDR')
             );
 
-            $message = \Swift_Message::newInstance()
+            $mensaje = \Swift_Message::newInstance()
                 ->setSubject('Contacto')
                 ->setFrom($datos['remitente'])
                 ->setTo('contacto@cupon')
                 ->setBody($contenido)
             ;
 
-            $this->container->get('mailer')->send($message);
-            $this->addFlash('info', 'Tu message se ha enviado correctamente.');
+            $this->container->get('mailer')->send($mensaje);
+            $this->get('session')->setFlash('info', 'Tu mensaje se ha enviado correctamente.');
 
             return $this->redirectToRoute('portada');
         }
 
         return $this->render('sitio/contacto.html.twig', array(
-            'form' => $form->createView(),
+            'formulario' => $formulario->createView(),
         ));
     }
-
-    /**
-     * @Route("/{city}", defaults={ "city" = "%app.ciudad_por_defecto%" }, name="portada")
-     * @Cache(smaxage="60")
-     *
-     * Muestra la portada del sitio web.
-     *
-     * @param string $city El slug de la city activa en la application
-     *
-     * @return Response
-     *
-     * @throws NotFoundHttpException
-     */
-    public function portadaAction($city)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $offer = $em->getRepository('AppBundle:offer')->findOfertaDelDia($city);
-
-        if (!$offer) {
-            throw $this->createNotFoundException('No se ha encontrado ninguna offer del día en la city seleccionada');
-        }
-
-        return $this->render('portada.html.twig', array(
-            'offer' => $offer,
-        ));
-    }
-||||||| parent of ab1dc88 (Eliminados todos los bundles para usar solo AppBundle)
-=======
-||||||| parent of c25d0b1 (Actualizados todos los controladores para usar atajos)
-=======
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
->>>>>>> c25d0b1 (Actualizados todos los controladores para usar atajos)
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
-
-class DefaultController extends Controller
-{
-<<<<<<< HEAD
->>>>>>> ab1dc88 (Eliminados todos los bundles para usar solo AppBundle)
-||||||| parent of c25d0b1 (Actualizados todos los controladores para usar atajos)
-=======
-    /**
-     * Muestra el form de contacto y también procesa el envío de emails.
-     *
-     * @Route("/contacto", defaults={ "_locale"="es" }, name="contacto")
-     */
-    public function contactoAction(Request $request)
-    {
-        // Se creates un form "in situ", sin clase asociada
-        $form = $this->createFormBuilder()
-            ->add('remitente', 'Symfony\Component\Form\Extension\Core\Type\EmailType')
-            ->add('message', 'Symfony\Component\Form\Extension\Core\Type\TextareaType')
-            ->getForm()
-        ;
-
-        $form->handleRequest($request);
-
-        if ($form->isValid()) {
-            $datos = $form->getData();
-
-            $contenido = sprintf(" Remitente: %s \n\n message: %s \n\n Navegador: %s \n address IP: %s \n",
-                $datos['remitente'],
-                htmlspecialchars($datos['message']),
-                $request->server->get('HTTP_USER_AGENT'),
-                $request->server->get('REMOTE_ADDR')
-            );
-
-            $message = \Swift_Message::newInstance()
-                ->setSubject('Contacto')
-                ->setFrom($datos['remitente'])
-                ->setTo('contacto@cupon')
-                ->setBody($contenido)
-            ;
-
-            $this->container->get('mailer')->send($message);
-            $this->get('session')->setFlash('info', 'Tu message se ha enviado correctamente.');
-
-            return $this->redirectToRoute('portada');
-        }
-
-        return $this->render('sitio/contacto.html.twig', array(
-            'form' => $form->createView(),
-        ));
-    }
->>>>>>> c25d0b1 (Actualizados todos los controladores para usar atajos)
 }
