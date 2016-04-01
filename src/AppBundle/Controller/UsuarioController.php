@@ -115,11 +115,8 @@ class UsuarioController extends Controller
      */
     public function perfilAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
-
         $user = $this->get('security.token_storage')->getToken()->getUser();
         $form = $this->createForm('AppBundle\Form\Frontend\UsuarioPerfilType', $user);
-        $passwordOriginal = $form->getData()->getPassword();
 
         $form->handleRequest($request);
 
