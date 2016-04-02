@@ -1,79 +1,67 @@
 imports:
-    - { resource: parameters.ini }
+    - { resource: parameters.yml }
     - { resource: security.yml }
     - { resource: services.yml }
+    - { resource: admin.yml }
+
+# Parámetros globales del contenedor de dependencias
+parameters:
+    app.ciudad_por_defecto:  'barcelona'
+    app.ruta.fotos_ofertas:  '/uploads/images/'
 
 # Configuración general del framework
 framework:
+    default_locale:  '%locale%'
     esi:             { enabled: true }
     translator:      { fallback: es }
-    secret:          %secret%
-    charset:         UTF-8
+    secret:          '%secret%'
     router:          { resource: "%kernel.root_dir%/config/routing.yml" }
     form:            true
     csrf_protection: true
+    trusted_hosts:   ~
     validation:      { enable_annotations: true }
-    templating:      { engines: ['twig'] } #assets_version: SomeVersionScheme
-    session:
-        default_locale: %locale%
-        auto_start:     true
+    templating:      { engines: ['twig'] }
+    session:         ~
+    assets:
+        packages:
+            ofertas:
+                base_path: '%app.ruta.fotos_ofertas%'
 
 # Configuración de Twig
 twig:
-    debug:            %kernel.debug%
-    strict_variables: %kernel.debug%
+    debug:            '%kernel.debug%'
+    strict_variables: '%kernel.debug%'
     globals:
-        ciudad_por_defecto:  %cupon.ciudad_por_defecto%
-        directorio_imagenes: '/uploads/images/'
-
-# Configuración de Assetic
-assetic:
-    debug:          %kernel.debug%
-    use_controller: false
-    filters:
-        cssrewrite: ~
-        yui_css:
-            jar:      %kernel.root_dir%/Resources/java/yuicompressor-2.4.6.jar
-            apply_to: \.css$
-        yui_js:
-            jar:      %kernel.root_dir%/Resources/java/yuicompressor-2.4.6.jar
-            apply_to: \.js$
-
-#        optipng:
-#            bin: /usr/local/bin/optipng
-#
-#    twig:
-#        functions:
-#            optipng: ~
+        ciudad_por_defecto: '%app.ciudad_por_defecto%'
 
 # Configuración de Doctrine
 doctrine:
     dbal:
-        driver:   %database_driver%
-        host:     %database_host%
-        port:     %database_port%
-        dbname:   %database_name%
-        user:     %database_user%
-        password: %database_password%
+        driver:   '%database_driver%'
         charset:  UTF8
+        # Si NO usas SQLite, comenta esta línea
+        path:     '%database_path%'
+        # Si usas MySQL, descomenta estas líneas
+        # host:     '%database_host%'
+        # port:     '%database_port%'
+        # dbname:   '%database_name%'
+        # user:     '%database_user%'
+        # password: '%database_password%'
 
     orm:
-        auto_generate_proxy_classes: %kernel.debug%
+        auto_generate_proxy_classes: '%kernel.debug%'
         auto_mapping:                true
 
 # Configuración de Swiftmailer
 swiftmailer:
-    transport: %mailer_transport%
-    host:      %mailer_host%
-    username:  %mailer_user%
-    password:  %mailer_password%
+    transport: '%mailer_transport%'
+    host:      '%mailer_host%'
+    username:  '%mailer_user%'
+    password:  '%mailer_password%'
 
-# Configuración del bundle JMS\SecurityExtraBundle
-jms_security_extra:
-    secure_controllers:  false
-    secure_all_services: false
-
-# Parámetros globales del contenedor de dependencias
-parameters:
-    cupon.ciudad_por_defecto:  'barcelona'
-    cupon.directorio.imagenes: %kernel.root_dir%/../web/uploads/images/
+vich_uploader:
+    db_driver: orm
+    mappings:
+        fotos_ofertas:
+            uri_prefix:         '%app.ruta.fotos_ofertas%'
+            upload_destination: '%kernel.root_dir%/../web/uploads/images/'
