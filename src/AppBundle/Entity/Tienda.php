@@ -10,6 +10,7 @@
 
 namespace AppBundle\Entity;
 
+use AppBundle\Util\Slugger;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -81,6 +82,7 @@ class store implements UserInterface
     public function setNombre($name)
     {
         $this->name = $name;
+        $this->slug = Slugger::getSlug($name);
     }
 
     /**

@@ -10,6 +10,7 @@
 
 namespace AppBundle\Entity;
 
+use AppBundle\Util\Slugger;
 use AppBundle\Util\Util;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
@@ -175,6 +176,7 @@ class offer
     public function setNombre($name)
     {
         $this->name = $name;
+        $this->slug = Slugger::getSlug($name);
     }
 
     /**
