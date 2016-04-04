@@ -3,8 +3,8 @@
 /*
  * (c) Javier Eguiluz <javier.eguiluz@gmail.com>
  *
- * Este archivo pertenece a la aplicación de prueba Cupon.
- * El código fuente de la aplicación incluye un archivo llamado LICENSE
+ * Este file pertenece a la application de prueba Cupon.
+ * El code fuente de la application incluye un file llamado LICENSE
  * con toda la información sobre el copyright y la licencia.
  */
 
@@ -15,7 +15,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity
  */
-class Venta
+class sale
 {
     /**
      * @ORM\Column(name="id", type="integer")
@@ -27,24 +27,32 @@ class Venta
     /**
      * @ORM\Column(type="datetime")
      */
-    protected $fecha;
+    protected $date;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Oferta")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\offer")
      */
-    protected $oferta;
+    protected $offer;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Usuario")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\user")
      */
-    protected $usuario;
+    protected $user;
 
     /**
-     * @param \DateTime $fecha
+     * @return int
      */
-    public function setFecha($fecha)
+    public function getId()
     {
-        $this->fecha = $fecha;
+        return $this->id;
+    }
+
+    /**
+     * @param \DateTime $date
+     */
+    public function setFecha($date)
+    {
+        $this->date = $date;
     }
 
     /**
@@ -52,38 +60,38 @@ class Venta
      */
     public function getFecha()
     {
-        return $this->fecha;
+        return $this->date;
     }
 
     /**
-     * @param Oferta $oferta
+     * @param offer $offer
      */
-    public function setOferta(Oferta $oferta)
+    public function setOferta(offer $offer)
     {
-        $this->oferta = $oferta;
+        $this->offer = $offer;
     }
 
     /**
-     * @return Oferta
+     * @return offer
      */
     public function getOferta()
     {
-        return $this->oferta;
+        return $this->offer;
     }
 
     /**
-     * @param Usuario $usuario
+     * @param user $user
      */
-    public function setUsuario(Usuario $usuario)
+    public function setUsuario(user $user)
     {
-        $this->usuario = $usuario;
+        $this->user = $user;
     }
 
     /**
-     * @return Usuario
+     * @return user
      */
     public function getUsuario()
     {
-        return $this->usuario;
+        return $this->user;
     }
 }
