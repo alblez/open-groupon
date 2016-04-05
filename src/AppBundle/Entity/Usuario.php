@@ -412,5 +412,4 @@ class user implements UserInterface
     {
         return $this->fechaNacimiento <= new \DateTime('today - 18 years');
     }
-
 }

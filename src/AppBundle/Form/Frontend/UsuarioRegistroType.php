@@ -32,7 +32,7 @@ class UsuarioRegistroType extends AbstractType
                 'label' => 'email electrónico',
                 'attr' => array(
                     'placeholder' => 'user@servidor',
-                )
+                ),
             ))
             ->add('passwordEnClaro', 'Symfony\Component\Form\Extension\Core\Type\RepeatedType', array(
                 'type' => 'Symfony\Component\Form\Extension\Core\Type\PasswordType',
@@ -54,7 +54,7 @@ class UsuarioRegistroType extends AbstractType
                 'attr' => array(
                     'pattern' => '^[0-9]{13,16}$',
                     'placeholder' => 'Entre 13 y 16 numeros',
-                )
+                ),
             ))
             ->add('city', 'Symfony\Bridge\Doctrine\Form\Type\EntityType', array(
                 'class' => 'AppBundle\\Entity\\city',

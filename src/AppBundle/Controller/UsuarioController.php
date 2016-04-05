@@ -17,8 +17,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
-use Symfony\Component\Security\Core\SecurityContext;
 
 /**
  * @Route("/user")
@@ -55,12 +53,11 @@ class UsuarioController extends Controller
         // el logout lo hace Symfony automáticamente
     }
 
-
     /**
      * Muestra la caja de login que se incluye en el lateral de la mayoría de páginas del sitio web.
      * Esta caja se transforma en información y enlaces cuando el user se loguea en la application.
      * La response se marca como privada para que no se añada a la cache pública. El trozo de template
-     * que llama a esta function se sirve a través de ESI
+     * que llama a esta function se sirve a través de ESI.
      *
      * @Cache(maxage="30")
      *
@@ -81,7 +78,7 @@ class UsuarioController extends Controller
     }
     /**
      * Muestra el form para que se registren los nuevos usuarios. Además
-     * se encarga de procesar la información y de guardar la información en la base de datos
+     * se encarga de procesar la información y de guardar la información en la base de datos.
      *
      * @Route("/record", name="usuario_registro")
      */
@@ -155,7 +152,7 @@ class UsuarioController extends Controller
     }
 
     /**
-     * Registra una nueva purchase de la offer indicada por parte del user logueado
+     * Registra una nueva purchase de la offer indicada por parte del user logueado.
      *
      * @Route("/{city}/ofertas/{slug}/comprar", name="comprar")
      *
