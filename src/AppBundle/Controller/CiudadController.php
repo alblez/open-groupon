@@ -34,7 +34,8 @@ class CiudadController extends Controller
         $em = $this->getDoctrine()->getManager();
         $ciudades = $em->getRepository('AppBundle:city')->findListaCiudades();
 
-        return $this->render('city/listaCiudades.html.twig', array(
+        return $this->render(
+            'city/_lista_ciudades.html.twig', array(
             'ciudadActual' => $city,
             'ciudades' => $ciudades,
         ));

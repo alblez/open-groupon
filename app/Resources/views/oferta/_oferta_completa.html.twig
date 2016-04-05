@@ -18,7 +18,7 @@
 <section class="estado {{ expirada ? 'expirada' }}">
 {% if not expirada %}
     <div class="tiempo">
-        {% trans with { '%tiempo%': oferta.fechaExpiracion|cuenta_atras } %}
+        {% trans with { '%tiempo%': oferta.fechaExpiracion | cuenta_atras } %}
             <strong>Faltan</strong>: %tiempo%
         {% endtrans %}
     </div>
@@ -41,7 +41,7 @@
     </div>
 {% else %}
     <div class="tiempo">
-        {% trans with { '%fecha%': oferta.fechaExpiracion|fecha('long') } %}
+        {% trans with { '%fecha%': oferta.fechaExpiracion|localizeddate('long', 'none') } %}
             <strong>Finalizada</strong> el %fecha%
         {% endtrans %}
     </div>
