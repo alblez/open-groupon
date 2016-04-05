@@ -18,7 +18,7 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 /**
  * Este voter decide si la offer puede ser editada por la store actualmente logueada.
  */
-class OwnerVoter extends Voter
+class CreadorOfertaVoter extends Voter
 {
     public function supports($attribute, $subject)
     {
