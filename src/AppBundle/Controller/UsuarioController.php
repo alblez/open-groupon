@@ -85,6 +85,7 @@ class UsuarioController extends Controller
      * se encarga de procesar la información y de guardar la información en la base de datos.
      *
      * @param Request $request
+     *
      * @return RedirectResponse|Response
      */
     public function registroAction(Request $request)
@@ -117,6 +118,7 @@ class UsuarioController extends Controller
      * También permite modificar la información y saves los cambios en la base de datos.
      *
      * @param Request $request
+     *
      * @return RedirectResponse|Response
      */
     public function perfilAction(Request $request)
@@ -170,9 +172,11 @@ class UsuarioController extends Controller
      * Registra una nueva purchase de la offer indicada por parte del user logueado.
      *
      * @param Request $request
-     * @param string $city El slug de la city a la que pertenece la offer
-     * @param string $slug El slug de la offer
+     * @param string  $city  El slug de la city a la que pertenece la offer
+     * @param string  $slug    El slug de la offer
+     *
      * @return Response
+     *
      * @throws NotFoundHttpException
      */
     public function comprarAction(Request $request, $city, $slug)

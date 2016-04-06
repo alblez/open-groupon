@@ -19,7 +19,8 @@ class OfertaRepository extends EntityRepository
      * Encuentra la offer cuyo slug y city coinciden con los indicados.
      *
      * @param string $city El slug de la city
-     * @param string $slug El slug de la offer
+     * @param string $slug   El slug de la offer
+     *
      * @return offer|null
      */
     public function findOferta($city, $slug)
@@ -42,6 +43,7 @@ class OfertaRepository extends EntityRepository
      * Encuentra la offer del día en la city indicada.
      *
      * @param string $city El slug de la city
+     *
      * @return offer|null
      */
     public function findOfertaDelDia($city)
@@ -65,6 +67,7 @@ class OfertaRepository extends EntityRepository
      * Encuentra la offer del día de mañana en la city indicada.
      *
      * @param string $city El slug de la city
+     *
      * @return offer|null
      */
     public function findOfertaDelDiaSiguiente($city)
@@ -88,6 +91,7 @@ class OfertaRepository extends EntityRepository
      * Encuentra las cinco ofertas más recuentes de la city indicada.
      *
      * @param int $ciudad_id El id de la city
+     *
      * @return array
      */
     public function findRecientes($ciudadId)
@@ -112,6 +116,7 @@ class OfertaRepository extends EntityRepository
      * Encuentra las cinco ofertas más cercanas a la city indicada.
      *
      * @param string $city El slug de la city
+     *
      * @return array
      */
     public function findCercanas($city)
@@ -136,6 +141,7 @@ class OfertaRepository extends EntityRepository
      * Encuentra todas las ventas de la offer indicada.
      *
      * @param int $offer El id de la offer
+     *
      * @return array
      */
     public function findVentasByOferta($offer)

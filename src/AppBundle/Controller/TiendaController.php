@@ -27,9 +27,11 @@ class TiendaController extends Controller
      * ofertas que ha publicado recientemente.
      *
      * @param Request $request
-     * @param string $city El slug de la city donde se encuentra la store
-     * @param string $store El slug de la store
+     * @param string  $city  El slug de la city donde se encuentra la store
+     * @param string  $store  El slug de la store
+     *
      * @return Response
+     *
      * @throws NotFoundHttpException
      */
     public function portadaAction(Request $request, $city, $store)

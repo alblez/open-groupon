@@ -73,7 +73,7 @@ EOT
                 'host' => $this->host,
                 'city' => $city,
                 'offer' => $offer,
-                'user' => $destinatario
+                'user' => $destinatario,
             ));
 
             $asunto = sprintf('[offer del día] %s en %s', $offer->getNombre(), $offer->getTienda()->getNombre());
@@ -84,7 +84,7 @@ EOT
             $this->io->comment(array(
                 'NOTA: No se ha enviado ningún email.',
                 'Para enviar los emails a sus destinatarios, ejecuta el comando con la opción <info>accion</info>.',
-                'Ejemplo: <info>./app/console email:offer-del-dia --accion=enviar</info>'
+                'Ejemplo: <info>./app/console email:offer-del-dia --accion=enviar</info>',
             ));
         }
 
@@ -92,7 +92,7 @@ EOT
     }
 
     /**
-     * Busca la 'offer del día' en todas las ciudades de la application
+     * Busca la 'offer del día' en todas las ciudades de la application.
      *
      * @return array
      */
