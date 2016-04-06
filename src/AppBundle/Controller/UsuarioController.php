@@ -27,8 +27,9 @@ class UsuarioController extends Controller
     /**
      * @Route("/login", name="usuario_login")
      * Muestra el form de login
+     * @return Response
      */
-    public function loginAction(Request $request)
+    public function loginAction()
     {
         $authUtils = $this->get('security.authentication_utils');
 
@@ -72,11 +73,14 @@ class UsuarioController extends Controller
             'user' => $user,
         ));
     }
+
     /**
      * Muestra el form para que se registren los nuevos usuarios. Además
      * se encarga de procesar la información y de guardar la información en la base de datos.
      *
      * @Route("/record", name="usuario_registro")
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
      */
     public function registroAction(Request $request)
     {
@@ -106,6 +110,8 @@ class UsuarioController extends Controller
      * También permite modificar la información y saves los cambios en la base de datos.
      *
      * @Route("/perfil", name="usuario_perfil")
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
      */
     public function perfilAction(Request $request)
     {
@@ -155,9 +161,9 @@ class UsuarioController extends Controller
      * @Route("/{city}/ofertas/{slug}/comprar", name="comprar")
      * @Security("is_granted('ROLE_USUARIO')")
      *
+     * @param Request $request
      * @param string $city El slug de la city a la que pertenece la offer
-     * @param string $slug   El slug de la offer
-     *
+     * @param string $slug El slug de la offer
      * @return Response
      */
     public function comprarAction(Request $request, $city, $slug)

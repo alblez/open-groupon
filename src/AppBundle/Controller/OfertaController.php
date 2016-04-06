@@ -13,6 +13,8 @@ namespace AppBundle\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpFoundation\Response;
 
 class OfertaController extends Controller
 {
@@ -23,7 +25,9 @@ class OfertaController extends Controller
      * @Cache(smaxage="60")
      *
      * @param string $city El slug de la city a la que pertenece la offer
-     * @param string $slug   El slug de la offer (es único en cada city)
+     * @param string $slug El slug de la offer (es único en cada city)
+     * @return Response
+     * @throws NotFoundHttpException
      */
     public function ofertaAction($city, $slug)
     {

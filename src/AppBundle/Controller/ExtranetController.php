@@ -20,8 +20,9 @@ class ExtranetController extends Controller
     /**
      * @Route("/login", name="extranet_login")
      * Muestra el form de login
+     * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function loginAction(Request $request)
+    public function loginAction()
     {
         $authUtils = $this->get('security.authentication_utils');
 
@@ -71,6 +72,8 @@ class ExtranetController extends Controller
      * Muestra las ventas registradas para la offer indicada.
      *
      * @Route("/offer/ventas/{id}", name="extranet_oferta_ventas")
+     * @param offer $offer
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function ofertaVentasAction(offer $offer)
     {
@@ -89,6 +92,8 @@ class ExtranetController extends Controller
      * entidades de type offer.
      *
      * @Route("/offer/nueva", name="extranet_oferta_nueva")
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
     public function ofertaNuevaAction(Request $request)
     {
@@ -117,6 +122,9 @@ class ExtranetController extends Controller
      * datos de las entidades de type offer.
      *
      * @Route("/offer/editar/{id}", requirements={ "city" = ".+" }, name="extranet_oferta_editar")
+     * @param Request $request
+     * @param offer $offer
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
     public function ofertaEditarAction(Request $request, offer $offer)
     {
@@ -152,6 +160,8 @@ class ExtranetController extends Controller
      * guardar las modificaciones en la base de datos.
      *
      * @Route("/perfil", name="extranet_perfil")
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
     public function perfilAction(Request $request)
     {

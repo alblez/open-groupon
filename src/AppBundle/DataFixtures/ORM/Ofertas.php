@@ -32,7 +32,6 @@ class Ofertas extends AbstractFixture implements OrderedFixtureInterface
     {
         // Obtener todas las tiendas y ciudades de la base de datos
         $ciudades = $manager->getRepository('AppBundle:city')->findAll();
-        $tiendas = $manager->getRepository('AppBundle:store')->findAll();
 
         foreach ($ciudades as $city) {
             $tiendas = $manager->getRepository('AppBundle:store')->findByCiudad(
@@ -45,9 +44,9 @@ class Ofertas extends AbstractFixture implements OrderedFixtureInterface
                 $offer->setNombre($this->getNombre());
                 $offer->setDescripcion($this->getDescripcion());
                 $offer->setCondiciones($this->getCondiciones());
-                $offer->setRutaFoto('photo'.rand(1, 20).'.jpg');
-                $offer->setPrecio(number_format(rand(100, 10000) / 100, 2));
-                $offer->setDescuento($offer->getPrecio() * (rand(10, 70) / 100));
+                $offer->setRutaFoto('photo'.mt_rand(1, 20).'.jpg');
+                $offer->setPrecio(number_format(mt_rand(100, 10000) / 100, 2));
+                $offer->setDescuento($offer->getPrecio() * (mt_rand(10, 70) / 100));
 
                 // Una offer se publica hoy, el resto se reparte entre el pasado y el futuro
                 if (1 === $j) {
@@ -56,7 +55,7 @@ class Ofertas extends AbstractFixture implements OrderedFixtureInterface
                 } elseif ($j < 10) {
                     $date = 'now - '.($j - 1).' days';
                     // el 80% de las ofertas pasadas se marcan como revisadas
-                    $offer->setRevisada((rand(1, 1000) % 10) < 8);
+                    $offer->setRevisada((mt_rand(1, 1000) % 10) < 8);
                 } else {
                     $date = 'now + '.($j - 10 + 1).' days';
                     $offer->setRevisada(true);
@@ -74,7 +73,7 @@ class Ofertas extends AbstractFixture implements OrderedFixtureInterface
                 $offer->setFechaPublicacion($fechaPublicacion);
                 $offer->setFechaExpiracion($fechaExpiracion);
 
-                $offer->setUmbral(rand(25, 100));
+                $offer->setUmbral(mt_rand(25, 100));
 
                 $offer->setCiudad($city);
 
@@ -103,7 +102,7 @@ class Ofertas extends AbstractFixture implements OrderedFixtureInterface
             'Aliquam', 'Dapibus', 'Lacinia',
         ));
 
-        $numeroPalabras = rand(4, 8);
+        $numeroPalabras = mt_rand(4, 8);
 
         return implode(' ', array_rand($palabras, $numeroPalabras));
     }
@@ -133,7 +132,7 @@ class Ofertas extends AbstractFixture implements OrderedFixtureInterface
             'Donec ornare lacus vitae dolor imperdiet vitae ultricies nibh congue.',
         ));
 
-        $numeroFrases = rand(4, 7);
+        $numeroFrases = mt_rand(4, 7);
 
         return implode("\n", array_rand($frases, $numeroFrases));
     }
@@ -145,8 +144,6 @@ class Ofertas extends AbstractFixture implements OrderedFixtureInterface
      */
     private function getCondiciones()
     {
-        $condiciones = '';
-
         $frases = array_flip(array(
             'Máximo 1 consumición por persona.',
             'No acumulable a otras ofertas.',
@@ -158,7 +155,7 @@ class Ofertas extends AbstractFixture implements OrderedFixtureInterface
             'Válido solamente para comidas, no para cenas.',
         ));
 
-        $numeroFrases = rand(2, 4);
+        $numeroFrases = mt_rand(2, 4);
 
         return implode(' ', array_rand($frases, $numeroFrases));
     }

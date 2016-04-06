@@ -7,8 +7,8 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * Este archivo pertenece a la aplicación de prueba Cupon.
- * El código fuente de la aplicación incluye un archivo llamado LICENSE
+ * Este file pertenece a la application de prueba Cupon.
+ * El code fuente de la application incluye un file llamado LICENSE
  * con toda la información sobre el copyright y la licencia.
  */
 
@@ -19,17 +19,18 @@ use Doctrine\ORM\EntityRepository;
 class UsuarioRepository extends EntityRepository
 {
     /**
-     * Encuentra todas las compras del usuario indicado
+     * Encuentra todas las compras del user indicado
      *
-     * @param string $usuario El id del usuario
+     * @param string $user El id del user
+     * @return array
      */
-    public function findTodasLasCompras($usuario)
+    public function findTodasLasCompras($user)
     {
         $em = $this->getEntityManager();
 
-        $consulta = $em->createQuery('SELECT v, o, t FROM OfertaBundle:Venta v JOIN v.oferta o JOIN o.tienda t WHERE v.usuario = :id ORDER BY v.fecha DESC');
-        $consulta->setParameter('id', $usuario);
+        $query = $em->createQuery('SELECT v, o, t FROM OfertaBundle:sale v JOIN v.offer o JOIN o.store t WHERE v.user = :id ORDER BY v.date DESC');
+        $query->setParameter('id', $user);
 
-        return $consulta->getResult();
+        return $query->getResult();
     }
 }

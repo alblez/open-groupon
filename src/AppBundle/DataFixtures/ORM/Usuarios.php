@@ -53,15 +53,15 @@ class Usuarios extends AbstractFixture implements OrderedFixtureInterface, Conta
             $user->setPasswordEnClaro('user'.$i);
             $user->setDni($this->getDni());
             $user->setNumeroTarjeta('1234567890123456');
-            $user->setFechaAlta(new \DateTime('now - '.rand(1, 150).' days'));
-            $user->setFechaNacimiento(new \DateTime('now - '.rand(7000, 20000).' days'));
+            $user->setFechaAlta(new \DateTime('now - '.mt_rand(1, 150).' days'));
+            $user->setFechaNacimiento(new \DateTime('now - '.mt_rand(7000, 20000).' days'));
 
             $city = $ciudades[array_rand($ciudades)];
             $user->setDireccion($this->getDireccion($city));
             $user->setCiudad($city);
 
             // El 60% de los usuarios permite email
-            $user->setPermiteEmail((rand(1, 1000) % 10) < 6);
+            $user->setPermiteEmail((mt_rand(1, 1000) % 10) < 6);
 
             $this->container->get('app.manager.usuario_manager')->guardar($user);
         }
@@ -93,7 +93,7 @@ class Usuarios extends AbstractFixture implements OrderedFixtureInterface, Conta
             'Lucía', 'Mercedes', 'Manuela', 'Elena', 'Rosa María',
         );
 
-        if (rand() % 2) {
+        if (mt_rand() % 2) {
             return $hombres[array_rand($hombres)];
         } else {
             return $mujeres[array_rand($mujeres)];
@@ -139,7 +139,7 @@ class Usuarios extends AbstractFixture implements OrderedFixtureInterface, Conta
             'Blandit', 'Ligula', 'Eget', 'Hendrerit', 'Malesuada', 'Enimsit',
         );
 
-        return $prefijos[array_rand($prefijos)].' '.$nombres[array_rand($nombres)].', '.rand(1, 100)."\n"
+        return $prefijos[array_rand($prefijos)].' '.$nombres[array_rand($nombres)].', '.mt_rand(1, 100)."\n"
                .$this->getCodigoPostal().' '.$city->getNombre();
     }
 
@@ -150,7 +150,7 @@ class Usuarios extends AbstractFixture implements OrderedFixtureInterface, Conta
      */
     private function getCodigoPostal()
     {
-        return sprintf('%02s%03s', rand(1, 52), rand(0, 999));
+        return sprintf('%02s%03s', mt_rand(1, 52), mt_rand(0, 999));
     }
 
     /**
@@ -160,7 +160,7 @@ class Usuarios extends AbstractFixture implements OrderedFixtureInterface, Conta
      */
     private function getDni()
     {
-        $numeroDni = substr(rand(), 0, 8);
+        $numeroDni = substr(mt_rand(), 0, 8);
         $dni = $numeroDni.substr('TRWAGMYFPDXBNJZSQVHLCKE', strtr($numeroDni, 'XYZ', '012') % 23, 1);
 
         return $dni;
