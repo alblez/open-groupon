@@ -20,6 +20,7 @@ class UsuarioControllerTest extends BaseTestCase
 {
     /**
      * @dataProvider usuarios
+     * @param $usuario
      */
     public function testRegistroPerfilBaja($user)
     {
@@ -67,7 +68,7 @@ class UsuarioControllerTest extends BaseTestCase
                 array(
                     'frontend_usuario[name]' => 'Anónimo',
                     'frontend_usuario[apellidos]' => 'Apellido1 Apellido2',
-                    'frontend_usuario[email]' => 'anonimo'.uniqid().'@localhost.localdomain',
+                    'frontend_usuario[email]' => 'anonimo'.uniqid('', true).'@localhost.localdomain',
                     'frontend_usuario[passwordEnClaro][first]' => 'anonimo1234',
                     'frontend_usuario[passwordEnClaro][second]' => 'anonimo1234',
                     'frontend_usuario[direccion]' => 'Mi calle, Mi city, 01001',

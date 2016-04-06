@@ -239,6 +239,5 @@ class store implements UserInterface
      */
     public function getSalt()
     {
-        return;
     }
 }

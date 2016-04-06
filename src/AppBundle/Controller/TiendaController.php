@@ -25,9 +25,9 @@ class TiendaController extends Controller
      * @Route("/{city}/tiendas/{store}", requirements={ "city" = ".+" }, name="tienda_portada")
      * @Cache(smaxage="3600")
      *
+     * @param Request $request
      * @param string $city El slug de la city donde se encuentra la store
      * @param string $store El slug de la store
-     *
      * @return Response
      */
     public function portadaAction(Request $request, $city, $store)

@@ -63,8 +63,8 @@ class CiudadController extends Controller
      * @Route("/{city}/recientes", name="ciudad_recientes")
      * @Cache(smaxage="3600")
      *
+     * @param Request $request
      * @param string $city El slug de la city
-     *
      * @return Response
      */
     public function recientesAction(Request $request, $city)
