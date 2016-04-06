@@ -132,6 +132,25 @@ class offer
     }
 
     /**
+     * Este method estático actúa como "constructor con name" y simplifica el
+     * code de la application ya que rellena los campos de la offer que no
+     * puede rellenar la store que ha creado la offer.
+     *
+     * @param store $store
+     *
+     * @return offer
+     */
+    public static function crearParaTienda(store $store)
+    {
+        $offer = new offer();
+
+        $offer->setTienda($store);
+        $offer->setCiudad($store->getCiudad());
+
+        return $offer;
+    }
+
+    /**
      * @return int
      */
     public function getId()
