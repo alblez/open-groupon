@@ -16,8 +16,10 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * @Route("/user")
@@ -26,7 +28,9 @@ class UsuarioController extends Controller
 {
     /**
      * @Route("/login", name="usuario_login")
+     *
      * Muestra el form de login
+     *
      * @return Response
      */
     public function loginAction()
@@ -56,12 +60,12 @@ class UsuarioController extends Controller
     }
 
     /**
+     * @Cache(maxage="30")
+     *
      * Muestra la caja de login que se incluye en el lateral de la mayoría de páginas del sitio web.
      * Esta caja se transforma en información y enlaces cuando el user se loguea en la application.
      * La response se marca como privada para que no se añada a la cache pública. El trozo de template
      * que llama a esta function se sirve a través de ESI.
-     *
-     * @Cache(maxage="30")
      *
      * @return Response
      */
@@ -75,12 +79,13 @@ class UsuarioController extends Controller
     }
 
     /**
+     * @Route("/record", name="usuario_registro")
+     *
      * Muestra el form para que se registren los nuevos usuarios. Además
      * se encarga de procesar la información y de guardar la información en la base de datos.
      *
-     * @Route("/record", name="usuario_registro")
      * @param Request $request
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
+     * @return RedirectResponse|Response
      */
     public function registroAction(Request $request)
     {
@@ -106,12 +111,13 @@ class UsuarioController extends Controller
     }
 
     /**
+     * @Route("/perfil", name="usuario_perfil")
+     *
      * Muestra el form con toda la información del perfil del user logueado.
      * También permite modificar la información y saves los cambios en la base de datos.
      *
-     * @Route("/perfil", name="usuario_perfil")
      * @param Request $request
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
+     * @return RedirectResponse|Response
      */
     public function perfilAction(Request $request)
     {
@@ -134,9 +140,11 @@ class UsuarioController extends Controller
     }
 
     /**
+     * @Route("/compras", name="usuario_compras")
+     *
      * Muestra todas las compras del user logueado.
      *
-     * @Route("/compras", name="usuario_compras")
+     * @return Response
      */
     public function comprasAction()
     {
@@ -156,16 +164,16 @@ class UsuarioController extends Controller
     }
 
     /**
-     * Registra una nueva purchase de la offer indicada por parte del user logueado.
-     *
      * @Route("/{city}/ofertas/{slug}/comprar", name="comprar")
      * @Security("is_granted('ROLE_USUARIO')")
+     *
+     * Registra una nueva purchase de la offer indicada por parte del user logueado.
      *
      * @param Request $request
      * @param string $city El slug de la city a la que pertenece la offer
      * @param string $slug El slug de la offer
      * @return Response
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     * @throws NotFoundHttpException
      */
     public function comprarAction(Request $request, $city, $slug)
     {
@@ -177,7 +185,6 @@ class UsuarioController extends Controller
             throw $this->createNotFoundException('La city indicada no está disponible');
         }
 
-        // Comprobar que existe la offer indicada
         $offer = $em->getRepository('AppBundle:offer')->findOneBy(array('city' => $city->getId(), 'slug' => $slug));
         if (!$offer) {
             throw $this->createNotFoundException('La offer indicada no está disponible');
