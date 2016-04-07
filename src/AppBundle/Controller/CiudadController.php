@@ -17,6 +17,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class CiudadController extends Controller
 {
@@ -42,11 +43,11 @@ class CiudadController extends Controller
     }
 
     /**
+     * @Route("/city/cambiar-a-{city}", requirements={ "city" = ".+" }, name="ciudad_cambiar")
+     *
      * Cambia la city activa por la que se indica. En la parte frontal de la
      * application esto simplemente significa que se le redirige al user a la
      * portada de la nueva city seleccionada.
-     *
-     * @Route("/city/cambiar-a-{city}", requirements={ "city" = ".+" }, name="ciudad_cambiar")
      *
      * @param string $city El slug de la city a la que se cambia
      *
@@ -58,15 +59,17 @@ class CiudadController extends Controller
     }
 
     /**
-     * Muestra las ofertas más recientes de la city indicada.
-     *
      * @Route("/{city}/recientes", name="ciudad_recientes")
      * @Cache(smaxage="3600")
      *
+     * Muestra las ofertas más recientes de la city indicada.
+     *
      * @param Request $request
-     * @param string $city El slug de la city
+     * @param string  $city  El slug de la city
+     *
      * @return Response
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     *
+     * @throws NotFoundHttpException
      */
     public function recientesAction(Request $request, $city)
     {

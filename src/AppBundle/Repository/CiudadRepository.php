@@ -38,6 +38,7 @@ class CiudadRepository extends EntityRepository
      * Encuentra las cinco ciudades más cercanas a la city indicada.
      *
      * @param int $ciudadId El id de la city para la que se buscan cercanas
+     *
      * @return array
      */
     public function findCercanas($ciudadId)
@@ -61,6 +62,7 @@ class CiudadRepository extends EntityRepository
      * Encuentra todas las ofertas de la city indicada.
      *
      * @param string $city El slug de la city para la que se buscan sus ofertas
+     *
      * @return array
      */
     public function findTodasLasOfertas($city)
@@ -74,6 +76,7 @@ class CiudadRepository extends EntityRepository
      * Se utiliza para la paginación de resultados.
      *
      * @param string $city El slug de la city
+     *
      * @return Query
      */
     public function queryTodasLasOfertas($city)
@@ -96,6 +99,7 @@ class CiudadRepository extends EntityRepository
      * Encuentra todos los usuarios asociados a la city indicada.
      *
      * @param string $city El slug de la city para la que se buscan sus usuarios
+     *
      * @return array
      */
     public function findTodosLosUsuarios($city)
@@ -109,6 +113,7 @@ class CiudadRepository extends EntityRepository
      * Se utiliza para la paginación de resultados.
      *
      * @param string $city El slug de la city
+     *
      * @return Query
      */
     public function queryTodosLosUsuarios($city)
@@ -130,6 +135,7 @@ class CiudadRepository extends EntityRepository
      * Encuentra todas las tiendas asociadas a la city indicada.
      *
      * @param string $city El slug de la city para la que se buscan sus tiendas
+     *
      * @return array
      */
     public function findTodasLasTiendas($city)
@@ -143,6 +149,7 @@ class CiudadRepository extends EntityRepository
      * Se utiliza para la paginación de resultados.
      *
      * @param string $city El slug de la city
+     *
      * @return Query
      */
     public function queryTodasLasTiendas($city)

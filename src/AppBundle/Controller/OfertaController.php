@@ -19,14 +19,16 @@ use Symfony\Component\HttpFoundation\Response;
 class OfertaController extends Controller
 {
     /**
-     * Muestra la page de detalle de la offer indicada.
-     *
      * @Route("/{city}/ofertas/{slug}", name="offer")
      * @Cache(smaxage="60")
      *
+     * Muestra la page de detalle de la offer indicada.
+     *
      * @param string $city El slug de la city a la que pertenece la offer
-     * @param string $slug El slug de la offer (es único en cada city)
+     * @param string $slug   El slug de la offer (es único en cada city)
+     *
      * @return Response
+     *
      * @throws NotFoundHttpException
      */
     public function ofertaAction($city, $slug)

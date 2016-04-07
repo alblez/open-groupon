@@ -15,21 +15,24 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class TiendaController extends Controller
 {
     /**
-     * Muestra la portada de cada store, que muestra su información y las
-     * ofertas que ha publicado recientemente.
-     *
      * @Route("/{city}/tiendas/{store}", requirements={ "city" = ".+" }, name="tienda_portada")
      * @Cache(smaxage="3600")
      *
+     * Muestra la portada de cada store, que muestra su información y las
+     * ofertas que ha publicado recientemente.
+     *
      * @param Request $request
-     * @param string $city El slug de la city donde se encuentra la store
-     * @param string $store El slug de la store
+     * @param string  $city  El slug de la city donde se encuentra la store
+     * @param string  $store  El slug de la store
+     *
      * @return Response
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     *
+     * @throws NotFoundHttpException
      */
     public function portadaAction(Request $request, $city, $store)
     {

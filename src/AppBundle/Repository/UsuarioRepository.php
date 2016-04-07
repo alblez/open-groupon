@@ -18,6 +18,7 @@ class UsuarioRepository extends EntityRepository
      * Encuentra todas las compras del user indicado.
      *
      * @param int $user El id del user
+     *
      * @return array
      */
     public function findTodasLasCompras($user)
