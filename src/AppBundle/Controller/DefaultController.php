@@ -9,46 +9,47 @@ use Symfony\Component\HttpFoundation\Request;
 class DefaultController extends Controller
 {
     /**
-     * Muestra el form de contacto y también procesa el envío de emails.
+     * Muestra el formulario de contacto y también procesa el envío de emails.
      *
      * @Route("/contacto", defaults={ "_locale"="es" }, name="contacto")
      */
     public function contactoAction(Request $request)
     {
-        // Se creates un form "in situ", sin clase asociada
-        $form = $this->createFormBuilder()
-            ->add('remitente', 'Symfony\Component\Form\Extension\Core\Type\EmailType')
-            ->add('message', 'Symfony\Component\Form\Extension\Core\Type\TextareaType')
+        // Se crea un formulario "in situ", sin clase asociada
+        $formulario = $this->createFormBuilder()
+            ->add('remitente', 'Symfony\Component\Form\Extension\Core\Type\EmailType', array('label' => 'Tu dirección de email'))
+            ->add('mensaje', 'Symfony\Component\Form\Extension\Core\Type\TextareaType')
+            ->add('enviar', 'Symfony\Component\Form\Extension\Core\Type\SubmitType', array('label' => 'Enviar mensaje'))
             ->getForm()
         ;
 
-        $form->handleRequest($request);
+        $formulario->handleRequest($request);
 
-        if ($form->isValid()) {
-            $datos = $form->getData();
+        if ($formulario->isValid()) {
+            $datos = $formulario->getData();
 
-            $contenido = sprintf(" Remitente: %s \n\n message: %s \n\n Navegador: %s \n address IP: %s \n",
+            $contenido = sprintf(" Remitente: %s \n\n Mensaje: %s \n\n Navegador: %s \n Dirección IP: %s \n",
                 $datos['remitente'],
-                htmlspecialchars($datos['message']),
+                htmlspecialchars($datos['mensaje']),
                 $request->server->get('HTTP_USER_AGENT'),
                 $request->server->get('REMOTE_ADDR')
             );
 
-            $message = \Swift_Message::newInstance()
+            $mensaje = \Swift_Message::newInstance()
                 ->setSubject('Contacto')
                 ->setFrom($datos['remitente'])
                 ->setTo('contacto@cupon')
                 ->setBody($contenido)
             ;
 
-            $this->container->get('mailer')->send($message);
-            $this->get('session')->setFlash('info', 'Tu message se ha enviado correctamente.');
+            $this->container->get('mailer')->send($mensaje);
+            $this->get('session')->setFlash('info', 'Tu mensaje se ha enviado correctamente.');
 
             return $this->redirectToRoute('portada');
         }
 
         return $this->render('sitio/contacto.html.twig', array(
-            'form' => $form->createView(),
+            'formulario' => $formulario->createView(),
         ));
     }
 }
