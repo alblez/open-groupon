@@ -17,6 +17,7 @@ use AppBundle\Entity\offer;
 use AppBundle\Entity\store;
 use AppBundle\Entity\user;
 use AppBundle\Entity\sale;
+use AppBundle\Util\Slugger;
 
 /**
  * Versión simplificada de los fixtures completos de la application.
@@ -100,6 +101,7 @@ class Basico implements FixtureInterface, ContainerAwareInterface
                 $offer = new offer();
 
                 $offer->setNombre('offer #'.$numOferta.' lorem ipsum dolor sit amet');
+                $offer->setSlug(Slugger::getSlug($offer->getNombre()));
                 $offer->setDescripcion(
                     "Lorem ipsum dolor sit amet, consectetur adipisicing.\n"
                     ."Elit, sed do eiusmod tempor incididunt.\n"

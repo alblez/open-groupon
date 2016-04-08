@@ -105,7 +105,7 @@ class ExtranetController extends Controller
         }
 
         return $this->render(
-            'offer/_oferta_completa.html.twig', array(
+            'extranet/offer.html.twig', array(
             'accion' => 'crear',
             'form' => $form->createView(),
         ));
@@ -130,39 +130,16 @@ class ExtranetController extends Controller
         }
 
         $form = $this->createForm('AppBundle\Form\Extranet\OfertaType', $offer);
-
-        // Guardar la ruta de la photo original de la offer
-        $rutaFotoOriginal = $form->getData()->getRutaFoto();
-
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            // Si el user no ha modificado la photo, su value actual es null
-            if (null == $offer->getFoto()) {
-                // Guardar la ruta original de la photo en la offer y no hacer nada más
-                $offer->setRutaFoto($rutaFotoOriginal);
-            }
-            // El user ha cambiado la photo
-            else {
-                // Copiar la photo subida y guardar la nueva ruta
-                $offer->subirFoto($this->container->getParameter('cupon.directorio.imagenes'));
-
-                // Borrar la photo anterior
-                if (!empty($rutaFotoOriginal)) {
-                    $fs = new Filesystem();
-                    $fs->remove($this->container->getParameter('cupon.directorio.imagenes').$rutaFotoOriginal);
-                }
-            }
-
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($offer);
-            $em->flush();
+            $this->get('app.manager.oferta_manager')->guardar($offer);
 
             return $this->redirectToRoute('extranet_portada');
         }
 
         return $this->render(
-            'offer/_oferta_completa.html.twig', array(
+            'extranet/offer.html.twig', array(
             'accion' => 'editar',
             'offer' => $offer,
             'form' => $form->createView(),

@@ -10,7 +10,7 @@
 
 namespace AppBundle\Entity;
 
-use AppBundle\Util\Util;
+use AppBundle\Util\Slugger;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -65,7 +65,7 @@ class city
     public function setNombre($name)
     {
         $this->name = $name;
-        $this->slug = Util::getSlug($name);
+        $this->slug = Slugger::getSlug($name);
     }
 
     /**

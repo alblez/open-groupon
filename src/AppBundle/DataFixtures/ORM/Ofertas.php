@@ -11,6 +11,7 @@
 namespace AppBundle\DataFixtures\ORM;
 
 use AppBundle\Entity\offer;
+use AppBundle\Util\Slugger;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -43,6 +44,7 @@ class Ofertas extends AbstractFixture implements OrderedFixtureInterface
                 $offer = new offer();
 
                 $offer->setNombre($this->getNombre());
+                $offer->setSlug(Slugger::getSlug($offer->getNombre()));
                 $offer->setDescripcion($this->getDescripcion());
                 $offer->setCondiciones($this->getCondiciones());
                 $offer->setRutaFoto('photo'.rand(1, 20).'.jpg');
