@@ -1,170 +1,137 @@
-Aplicación de prueba Cupon para Symfony 2.8
-===========================================
+Open Groupon — Self-hosted Daily Deals Platform
+================================================
 
-**Cupon** es una aplicación de prueba desarrollada para aprender a programar con
-Symfony 2.8. Se trata de un clon simplificado de Groupon, de ahí el nombre.
-Esta aplicación es la base del libro [Desarrollo web ágil con Symfony](http://www.symfony.es/libro/)
-publicado por Javier Eguiluz.
+**Open Groupon** is a self-hosted daily deals and coupons platform built with
+Symfony 2.8. It provides a complete frontend for browsing deals by city, an
+extranet for store owners to manage their offers, and an admin backend.
 
-Si descubres algún error, por favor utiliza [la página de issues de
-Github](https://github.com/javiereguiluz/Cupon/issues) para avisarnos.
+Inspired by [javiereguiluz/Cupon](https://github.com/javiereguiluz/Cupon), a
+Symfony demo application originally created by Javier Eguiluz for his book
+[Desarrollo web ágil con Symfony](http://www.symfony.es/libro/).
 
-Instalando la aplicación
-------------------------
+If you find any bugs, please open an issue on the
+[issue tracker](https://github.com/alblez/open-groupon/issues).
 
-En el libro [Desarrollo web ágil con Symfony](http://www.symfony.es/libro/) se
-expica detalladamente cómo instalar bien Symfony y la aplicación Cupon. A
-continuación sólo se indican los principales pasos necesarios.
+Installation
+------------
 
-En **primer lugar** debes tener Composer instalador globalmente. Si utilizas
-Linux o Mac OS X, ejecuta los siguientes comandos:
+First, make sure [Composer](https://getcomposer.org/) is installed globally.
+On Linux or Mac OS X:
 
 ```bash
 $ curl -sS https://getcomposer.org/installer | php
 $ sudo mv composer.phar /usr/local/bin/composer
 ```
 
-Si utilizas Windows, descárgate el [instalador ejecutable de
-Composer](https://getcomposer.org/download) y sigue los pasos indicados por el
-instalador.
+On Windows, download the [Composer installer](https://getcomposer.org/download)
+and follow the instructions.
 
-Una vez instalado **Composer**, ejecuta los siguientes comandos para descargar e
-instalar la aplicación **Cupon**:
+Then clone the project and install dependencies:
 
 ```bash
-# clona el código de la aplicación
-$ cd proyectos/
-$ git clone git://github.com/javiereguiluz/Cupon.git
-
-# instala las dependencias del proyecto (incluyendo Symfony)
-$ cd Cupon/
+$ git clone git://github.com/alblez/open-groupon.git
+$ cd open-groupon/
 $ composer install
 ```
 
-Probando la aplicación
-----------------------
+Running the Application
+-----------------------
 
-La forma más sencilla de probar la aplicación, ejecuta el siguiente comando, que
-arranca el servidor web interno de PHP y hace que tu aplicación se pueda
-ejecutar sin necesidad de usar Apache o Nginx:
+The simplest way to try it out is with PHP's built-in web server:
 
 ```bash
 $ php app/console server:run
 Server running on http://localhost:8000
 ```
 
-Ahora ya puedes abrir tu navegador y acceder a `http://localhost:8000` para
-probar la aplicación.
+Open your browser and go to `http://localhost:8000`.
 
-El comando anterior requiere PHP 5.4. Si utilizas una versión anterior de PHP,
-tendrás que configurar un *virtual host* en tu servidor web, tal y como se
-explica con detalle en el libro.
+This requires PHP 5.4+. For older versions, set up a virtual host in Apache
+or Nginx as described in the Symfony documentation.
 
-### Solución a los problemas comunes
+### Troubleshooting
 
-Al empezar a programar con Symfony, es común no saber la causa exacta de algunos
-de los errores que se producen. En estos casos es útil borrar la caché de la
-aplicación ejecutando los siguientes comandos:
+If you run into issues, start by clearing the application cache:
 
-  * Entorno de desarrollo: `php app/console cache:clear`
-  * Entorno de producción: `php app/console cache:clear --env=prod`
+  * Development: `php app/console cache:clear`
+  * Production: `php app/console cache:clear --env=prod`
 
-Si aún así siguen persistiendo los errores, al principio también suele ser útil
-borrar completamente los directorios dentro de `app/cache/` (por ejemplo con el
-comando `rm -fr app/cache/*`).
+If problems persist, try removing the cache directories entirely:
+`rm -rf app/cache/*`
 
-**1. Si solamente ves una página en blanco**, es posible que se trate de un
-problema de permisos. En el libro se explica detalladamente cómo solucionarlo,
-pero una solución rápida puede ser ejecutar el siguiente comando:
+**1. Blank page**
+
+Likely a permissions issue. Quick fix:
 
 ```bash
-$ cd proyectos/Cupon/
 $ chmod -R 777 app/cache app/logs
 ```
 
-Si no te funciona esta solución, también puedes consultar el artículo [Cómo
-solucionar el problema de los permisos de
-Symfony](http://symfony.es/documentacion/como-solucionar-el-problema-de-los-
-permisos-de-symfony2/).
+**2. Database errors**
 
-**2. Si ves un error relacionado con la base de datos**, es posible que tu
-instalación de PHP no tenga instalada o activada la extensión para SQLite.
+Your PHP installation may be missing the SQLite extension. SQLite is used by
+default to simplify setup. To use MySQL instead:
 
-Para facilitar la instalación de la aplicación, SQLite se usa por defecto. Si
-prefieres usar una base de datos como MySQL, sigue estos pasos:
-
-  1. Edita el archivo `app/config/parameters.yml` comentando todo lo relacionado
-     con SQLite y descomentando todo lo relacionado con MySQL.
-  2. Edita el archivo `app/config/config.yml` y en la sección `dbal`, comenta
-     todo lo relacionado con SQLite y descomenta todo lo relacionado con MySQL.
-  3. Ejecuta los siguientes comandos para crear la base de datos y rellenarla
-     con datos de prueba:
+  1. Edit `app/config/parameters.yml` — comment out the SQLite settings and
+     uncomment MySQL.
+  2. Edit `app/config/config.yml` — in the `dbal` section, switch from SQLite
+     to MySQL.
+  3. Run:
 
 ```bash
 $ php app/console doctrine:database:create
 $ php app/console doctrine:schema:create
 $ php app/console doctrine:fixtures:load
 
-# si este último comando da error, ejecuta en su lugar:
+# if the last command fails, try:
 $ php app/console doctrine:fixtures:load --append
 
-# si estás desarrollando la aplicación desde cero, ejecuta lo siguiente
-# para cargar los datos de prueba simplificados que no utilizan la seguridad
+# for simplified test data (without security), use:
 $ php app/console doctrine:fixtures:load --fixtures=app/Resources
 ```
 
-**3. Si no puedes subir imágenes al crear una oferta**
+**3. Cannot upload images when creating an offer**
 
-Asegúrate de que el directorio `web/uploads/images/` tiene permisos de escritura.
+Make sure `web/uploads/images/` is writable.
 
-Test unitarios y funcionales
-----------------------------
+Running Tests
+-------------
 
-La aplicación incluye varios test unitarios y funcionales de ejemplo. Para
-ejecutarlos debes tener la herramienta
-[PHPUnit](https://github.com/sebastianbergmann/phpunit/) instalada. Después,
-ejecuta el siguiente comando en el directorio raíz del proyecto:
+The project includes unit and functional tests. Install
+[PHPUnit](https://github.com/sebastianbergmann/phpunit/) and run:
 
 ```bash
 $ phpunit -c app
 ```
 
-Frontend
---------
+Access Points
+-------------
 
-  * URL:
-    * Entorno de desarrollo: `http://localhost:8000`
-    * Entorno de producción: `http://localhost:8000/app.php`
-  * Credenciales de usuarios:
-    * Nombre de usuario: `usuarioN@localhost` siendo `N` un número entre `1` y `100`
-    * Contraseña: `usuarioN` siendo `N` el mismo valor que el del nombre de usuario
+### Frontend
 
-Extranet
---------
+  * Development: `http://localhost:8000`
+  * Production: `http://localhost:8000/app.php`
+  * Credentials: `user1@localhost` / `user1` (replace `1` with any number 1–100)
 
-  * URL:
-    * Entorno de desarrollo: `http://localhost:8000/extranet`
-    * Entorno de producción: `http://localhost:8000/app.php/extranet`
-  * Credenciales de usuarios:
-    * Nombre de usuario: `tiendaN` siendo `N` un número entre `1` y `80` aproximadamente
-    (el límite superior es aleatorio)
-    * Contraseña: la misma que el nombre de usuario
+### Extranet (Store Owners)
 
-Backend
--------
+  * Development: `http://localhost:8000/extranet`
+  * Production: `http://localhost:8000/app.php/extranet`
+  * Credentials: `store1` / `store1` (replace `1` with any number 1–80 approx.)
 
-  * URL:
-    * Entorno de desarrollo: `http://localhost:8000/backend`
-    * Entorno de producción: `http://localhost:8000/app.php/backend`
-  * Credenciales de usuarios:
-    * Nombre de usuario: `admin`
-    * Contraseña: `1234`
+### Backend (Admin)
 
+  * Development: `http://localhost:8000/backend`
+  * Production: `http://localhost:8000/app.php/backend`
+  * Credentials: `admin` / `1234`
 
-## Development Requirements
+## Requirements
 
 - PHP >= 5.3.3
 - Composer
 - SQLite or MySQL
 
-> Requires PHP 5.3.3+ and Composer.
+## License
+
+See [LICENSE.md](LICENSE.md). Original application code copyright (c) 2011
+Javier Eguiluz. This project must remain open source per the license terms.
