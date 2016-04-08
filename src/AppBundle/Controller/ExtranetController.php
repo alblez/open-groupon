@@ -104,7 +104,8 @@ class ExtranetController extends Controller
             return $this->redirectToRoute('extranet_portada');
         }
 
-        return $this->render('extranet/form.html.twig', array(
+        return $this->render(
+            'offer/_oferta_completa.html.twig', array(
             'accion' => 'crear',
             'form' => $form->createView(),
         ));
@@ -160,7 +161,8 @@ class ExtranetController extends Controller
             return $this->redirectToRoute('extranet_portada');
         }
 
-        return $this->render('extranet/form.html.twig', array(
+        return $this->render(
+            'offer/_oferta_completa.html.twig', array(
             'accion' => 'editar',
             'offer' => $offer,
             'form' => $form->createView(),
