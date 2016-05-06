@@ -11,6 +11,7 @@
 namespace Cupon\BackendBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 use Cupon\OfertaBundle\Entity\offer;
 use Cupon\BackendBundle\Form\OfertaType;
 use Symfony\Component\HttpFoundation\File\File;
@@ -30,7 +31,7 @@ class OfertaController extends Controller
     {
         // Si el user no ha seleccionado ninguna city, seleccionar
         // la city por defecto
-        $sesion = $this->getRequest()->getSession();
+        $sesion = $this->container->get('request_stack')->getCurrentRequest()->getSession();
         if (null == $slug = $sesion->get('city')) {
             $slug = $this->container->getParameter('cupon.ciudad_por_defecto');
             $sesion->set('city', $slug);
@@ -84,7 +85,7 @@ class OfertaController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $city = $em->getRepository('CiudadBundle:city')->findOneBySlug(
-            $this->getRequest()->getSession()->get('city')
+            $this->container->get('request_stack')->getCurrentRequest()->getSession()->get('city')
         );
 
         $entity->setCiudad($city);
@@ -108,7 +109,7 @@ class OfertaController extends Controller
     public function createAction()
     {
         $entity  = new offer();
-        $request = $this->getRequest();
+        $request = $this->container->get('request_stack')->getCurrentRequest();
         $form    = $this->createForm(new OfertaType(), $entity);
 
         $form->handleRequest($request);
@@ -171,7 +172,7 @@ class OfertaController extends Controller
         $editForm   = $this->createForm(new OfertaType(), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
-        $request = $this->getRequest();
+        $request = $this->container->get('request_stack')->getCurrentRequest();
 
         // Guardar la ruta de la foto original de la oferta
         $rutaFotoOriginal = $editForm->getData()->getRutaFoto();
@@ -214,7 +215,7 @@ class OfertaController extends Controller
     public function deleteAction($id)
     {
         $form = $this->createDeleteForm($id);
-        $request = $this->getRequest();
+        $request = $this->container->get('request_stack')->getCurrentRequest();
 
         $form->handleRequest($request);
 

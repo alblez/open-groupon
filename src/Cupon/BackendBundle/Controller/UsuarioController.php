@@ -11,6 +11,7 @@
 namespace Cupon\BackendBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 use Cupon\UsuarioBundle\Entity\user;
 use Cupon\BackendBundle\Form\UsuarioType;
 
@@ -29,7 +30,7 @@ class UsuarioController extends Controller
         $em = $this->getDoctrine()->getManager();
         $paginador = $this->get('ideup.simple_paginator');
 
-        $slug = $this->getRequest()->getSession()->get('city');
+        $slug = $this->container->get('request_stack')->getCurrentRequest()->getSession()->get('city');
 
         $entities  = $paginador->paginate(
             $em->getRepository('CiudadBundle:city')->queryTodosLosUsuarios($slug)
@@ -85,7 +86,7 @@ class UsuarioController extends Controller
     public function createAction()
     {
         $entity  = new user();
-        $request = $this->getRequest();
+        $request = $this->container->get('request_stack')->getCurrentRequest();
         $form    = $this->createForm(new UsuarioType(), $entity);
 
         $form->handleRequest($request);
@@ -146,7 +147,7 @@ class UsuarioController extends Controller
         $editForm   = $this->createForm(new UsuarioType(), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
-        $request = $this->getRequest();
+        $request = $this->container->get('request_stack')->getCurrentRequest();
 
         $editForm->handleRequest($request);
 
@@ -171,7 +172,7 @@ class UsuarioController extends Controller
     public function deleteAction($id)
     {
         $form = $this->createDeleteForm($id);
-        $request = $this->getRequest();
+        $request = $this->container->get('request_stack')->getCurrentRequest();
 
         $form->handleRequest($request);
 

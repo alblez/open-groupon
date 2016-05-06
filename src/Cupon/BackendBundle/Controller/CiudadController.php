@@ -11,6 +11,7 @@
 namespace Cupon\BackendBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 use Cupon\CiudadBundle\Entity\city;
 use Cupon\BackendBundle\Form\CiudadType;
 
@@ -79,7 +80,7 @@ class CiudadController extends Controller
     public function createAction()
     {
         $entity  = new city();
-        $request = $this->getRequest();
+        $request = $this->container->get('request_stack')->getCurrentRequest();
         $form    = $this->createForm(new CiudadType(), $entity);
 
         $form->handleRequest($request);
@@ -139,7 +140,7 @@ class CiudadController extends Controller
         $editForm   = $this->createForm(new CiudadType(), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
-        $request = $this->getRequest();
+        $request = $this->container->get('request_stack')->getCurrentRequest();
 
         $editForm->handleRequest($request);
 
@@ -164,7 +165,7 @@ class CiudadController extends Controller
     public function deleteAction($id)
     {
         $form = $this->createDeleteForm($id);
-        $request = $this->getRequest();
+        $request = $this->container->get('request_stack')->getCurrentRequest();
 
         $form->handleRequest($request);
 

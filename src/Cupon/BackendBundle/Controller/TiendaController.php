@@ -11,6 +11,7 @@
 namespace Cupon\BackendBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 use Cupon\TiendaBundle\Entity\store;
 use Cupon\BackendBundle\Form\TiendaType;
 
@@ -28,7 +29,7 @@ class TiendaController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $slug = $this->getRequest()->getSession()->get('city');
+        $slug = $this->container->get('request_stack')->getCurrentRequest()->getSession()->get('city');
         $entities = $em->getRepository('CiudadBundle:city')->findTodasLasTiendas($slug);
 
         return $this->render('BackendBundle:store:index.html.twig', array(
@@ -80,7 +81,7 @@ class TiendaController extends Controller
     public function createAction()
     {
         $entity  = new store();
-        $request = $this->getRequest();
+        $request = $this->container->get('request_stack')->getCurrentRequest();
         $form    = $this->createForm(new TiendaType(), $entity);
 
         $form->handleRequest($request);
@@ -141,7 +142,7 @@ class TiendaController extends Controller
         $editForm   = $this->createForm(new TiendaType(), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
-        $request = $this->getRequest();
+        $request = $this->container->get('request_stack')->getCurrentRequest();
 
         $editForm->handleRequest($request);
 
@@ -166,7 +167,7 @@ class TiendaController extends Controller
     public function deleteAction($id)
     {
         $form = $this->createDeleteForm($id);
-        $request = $this->getRequest();
+        $request = $this->container->get('request_stack')->getCurrentRequest();
 
         $form->handleRequest($request);
 
