@@ -47,7 +47,7 @@ class UsuarioType extends AbstractType
         ));
     }
 
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'cupon_backendbundle_usuariotype';
     }

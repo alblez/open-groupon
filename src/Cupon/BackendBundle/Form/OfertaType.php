@@ -49,7 +49,7 @@ class OfertaType extends AbstractType
         ));
     }
 
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'cupon_backendbundle_ofertatype';
     }
