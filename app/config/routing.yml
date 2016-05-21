@@ -29,9 +29,8 @@ _extranet:
     type:     annotation
     prefix:   /extranet
 
-# Ruta de la portada básica del sitio (sin ningún parámetro)
-# esta ruta es opcional, ya que la aplicación puede funcionar bien
-# solamente con la ruta 'portada' y sus valores por defecto
+# Homepage redirect (no locale prefix)
+# Redirects / to the default city's homepage
 _portada:
      path:  /
      defaults:

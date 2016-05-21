@@ -9,7 +9,7 @@ parameters:
     app.ciudad_por_defecto:  'barcelona'
     app.ruta.fotos_ofertas:  '/uploads/images/'
 
-# Configuración general del framework
+# Configuration general del framework
 framework:
     default_locale:  %locale%
     esi:             { enabled: true }
@@ -27,14 +27,14 @@ framework:
             ofertas:
                 base_path: %app.ruta.fotos_ofertas%
 
-# Configuración de Twig
+# Configuration de Twig
 twig:
     debug:            %kernel.debug%
     strict_variables: %kernel.debug%
     globals:
         ciudad_por_defecto:  %app.ciudad_por_defecto%
 
-# Configuración de Doctrine
+# Configuration de Doctrine
 doctrine:
     dbal:
         # strict_mode: ~
@@ -53,7 +53,7 @@ doctrine:
         auto_generate_proxy_classes: %kernel.debug%
         auto_mapping:                true
 
-# Configuración de Swiftmailer
+# Configuration de Swiftmailer
 swiftmailer:
     transport: %mailer_transport%
     host:      %mailer_host%
