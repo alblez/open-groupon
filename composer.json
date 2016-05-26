@@ -1,6 +1,6 @@
 {
-    "name": "javiereguiluz/cupon",
-    "description": "Aplicación de prueba para aprender a programar con Symfony 2.8",
+    "name": "alblez/open-groupon",
+    "description": "Self-hosted daily deals platform built with Symfony",
     "type": "project",
     "license": "MIT",
     "autoload": {
@@ -13,22 +13,22 @@
         ]
     },
     "require": {
-        "php"                                  : ">=5.3.3",
-        "symfony/symfony"                      : "2.8.*",
-        "doctrine/orm"                         : "^2.4.8",
-        "doctrine/doctrine-bundle"             : "~1.4",
-        "incenteev/composer-parameter-handler" : "~2.0",
-        "javiereguiluz/easyadmin-bundle"       : "^1.11",
-        "sensio/distribution-bundle"           : "~5.0",
-        "sensio/framework-extra-bundle"        : "^3.0.2",
-        "symfony/monolog-bundle"               : "~2.4",
-        "symfony/swiftmailer-bundle"           : "~2.3",
-        "vich/uploader-bundle"                 : "^0.14.0"
+        "php": ">=5.6",
+        "symfony/symfony": "2.8.*",
+        "doctrine/orm": "^2.4.8",
+        "doctrine/doctrine-bundle": "~1.4",
+        "incenteev/composer-parameter-handler": "~2.0",
+        "javiereguiluz/easyadmin-bundle": "^1.11",
+        "sensio/distribution-bundle": "~5.0",
+        "sensio/framework-extra-bundle": "^3.0.2",
+        "symfony/monolog-bundle": "~2.4",
+        "symfony/swiftmailer-bundle": "~2.3",
+        "vich/uploader-bundle": "^0.14.0"
     },
     "require-dev": {
-        "sensio/generator-bundle"              : "~3.0",
-        "symfony/phpunit-bridge"               : "^2.8",
-        "doctrine/doctrine-fixtures-bundle"    : "^2.3"
+        "sensio/generator-bundle": "~3.0",
+        "symfony/phpunit-bridge": "^2.8",
+        "doctrine/doctrine-fixtures-bundle": "^2.3"
     },
     "scripts": {
         "post-install-cmd": [
@@ -51,7 +51,7 @@
     "config": {
         "bin-dir": "bin",
         "platform": {
-            "php": "5.3.9"
+            "php": "5.6"
         }
     },
     "extra": {
