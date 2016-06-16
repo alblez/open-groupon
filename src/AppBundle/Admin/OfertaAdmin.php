@@ -10,7 +10,7 @@
  * con toda la información sobre el copyright y la licencia.
  */
 
-// namespace Cupon\OfertaBundle\Admin;
+// namespace AppBundle\Admin;
 
 // use Sonata\AdminBundle\Admin\Admin;
 // use Sonata\AdminBundle\Form\FormMapper;

@@ -8,12 +8,12 @@
  * con toda la información sobre el copyright y la licencia.
  */
 
-namespace Cupon\BackendBundle\Controller;
+namespace AppBundle\Controller\Backend;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Cupon\OfertaBundle\Entity\offer;
-use Cupon\BackendBundle\Form\OfertaType;
+use AppBundle\Form\Backend\OfertaType;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Filesystem\Filesystem;
 

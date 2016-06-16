@@ -8,34 +8,24 @@
  * con toda la información sobre el copyright y la licencia.
  */
 
-namespace Cupon\BackendBundle\Form;
+namespace AppBundle\Form\Backend;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * form para crear y manipular entidades de type user.
+ * form para crear y manipular entidades de type city.
  * Como se utiliza en el backend, el form incluye todas las propiedades
  * de la entity.
  */
-class UsuarioType extends AbstractType
+class CiudadType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
             ->add('name')
-            ->add('apellidos')
-            ->add('email')
-            ->add('password')
-            ->add('salt')
-            ->add('direccion')
-            ->add('permite_email', null, array('required' => false))
-            ->add('fecha_alta', 'datetime')
-            ->add('fecha_nacimiento', 'birthday')
-            ->add('dni')
-            ->add('numero_tarjeta')
-            ->add('city')
+            ->add('slug')
             ->add('guardar', 'submit', array('attr' => array('class' => 'boton')))
         ;
     }
@@ -43,12 +33,12 @@ class UsuarioType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Cupon\UsuarioBundle\Entity\user',
+            'data_class' => 'Cupon\CiudadBundle\Entity\city',
         ));
     }
 
     public function getBlockPrefix()
     {
-        return 'cupon_backendbundle_usuariotype';
+        return 'cupon_backendbundle_ciudadtype';
     }
 }

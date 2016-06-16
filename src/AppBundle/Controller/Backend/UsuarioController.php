@@ -8,80 +8,86 @@
  * con toda la información sobre el copyright y la licencia.
  */
 
-namespace Cupon\BackendBundle\Controller;
+namespace AppBundle\Controller\Backend;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Cupon\CiudadBundle\Entity\city;
-use Cupon\BackendBundle\Form\CiudadType;
+use Cupon\UsuarioBundle\Entity\user;
+use AppBundle\Form\Backend\UsuarioType;
 
 /**
- * city controller.
+ * user controller.
  *
  */
-class CiudadController extends Controller
+class UsuarioController extends Controller
 {
     /**
-     * Lists all city entities.
+     * Lists all user entities.
      *
      */
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
+        $paginador = $this->get('ideup.simple_paginator');
 
-        $entities = $em->getRepository('CiudadBundle:city')->findAll();
+        $slug = $this->container->get('request_stack')->getCurrentRequest()->getSession()->get('city');
 
-        return $this->render('BackendBundle:city:index.html.twig', array(
-            'entities' => $entities
+        $entities  = $paginador->paginate(
+            $em->getRepository('CiudadBundle:city')->queryTodosLosUsuarios($slug)
+        )->getResult();
+
+        return $this->render('BackendBundle:user:index.html.twig', array(
+            'entities'  => $entities,
+            'paginador' => $paginador
         ));
     }
 
     /**
-     * Finds and displays a city entity.
+     * Finds and displays a user entity.
      *
      */
     public function showAction($id)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('CiudadBundle:city')->find($id);
+        $entity = $em->getRepository('UsuarioBundle:user')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('No se ha encontrado la city solicitada');
+            throw $this->createNotFoundException('No se ha encontrado el user solicitado');
         }
 
         $deleteForm = $this->createDeleteForm($id);
 
-        return $this->render('BackendBundle:city:show.html.twig', array(
+        return $this->render('BackendBundle:user:show.html.twig', array(
             'entity'      => $entity,
             'delete_form' => $deleteForm->createView(),
         ));
     }
 
     /**
-     * Displays a form to create a new city entity.
+     * Displays a form to create a new user entity.
      *
      */
     public function newAction()
     {
-        $entity = new city();
-        $form   = $this->createForm(new CiudadType(), $entity);
+        $entity = new user();
+        $form   = $this->createForm(new UsuarioType(), $entity);
 
-        return $this->render('BackendBundle:city:new.html.twig', array(
+        return $this->render('BackendBundle:user:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView()
         ));
     }
 
     /**
-     * Creates a new city entity.
+     * Creates a new user entity.
      *
      */
     public function createAction()
     {
-        $entity  = new city();
+        $entity  = new user();
         $request = $this->container->get('request_stack')->getCurrentRequest();
-        $form    = $this->createForm(new CiudadType(), $entity);
+        $form    = $this->createForm(new UsuarioType(), $entity);
 
         $form->handleRequest($request);
 
@@ -90,33 +96,34 @@ class CiudadController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('backend_ciudad_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('backend_usuario_show', array('id' => $entity->getId())));
+
         }
 
-        return $this->render('BackendBundle:city:new.html.twig', array(
+        return $this->render('BackendBundle:user:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView()
         ));
     }
 
     /**
-     * Displays a form to edit an existing city entity.
+     * Displays a form to edit an existing user entity.
      *
      */
     public function editAction($id)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('CiudadBundle:city')->find($id);
+        $entity = $em->getRepository('UsuarioBundle:user')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('No se ha encontrado la city solicitada');
+            throw $this->createNotFoundException('No se ha encontrado el user solicitado');
         }
 
-        $editForm = $this->createForm(new CiudadType(), $entity);
+        $editForm = $this->createForm(new UsuarioType(), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
-        return $this->render('BackendBundle:city:edit.html.twig', array(
+        return $this->render('BackendBundle:user:edit.html.twig', array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
@@ -124,20 +131,20 @@ class CiudadController extends Controller
     }
 
     /**
-     * Edits an existing city entity.
+     * Edits an existing user entity.
      *
      */
     public function updateAction($id)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('CiudadBundle:city')->find($id);
+        $entity = $em->getRepository('UsuarioBundle:user')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('No se ha encontrado la city solicitada');
+            throw $this->createNotFoundException('No se ha encontrado el user solicitado');
         }
 
-        $editForm   = $this->createForm(new CiudadType(), $entity);
+        $editForm   = $this->createForm(new UsuarioType(), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
         $request = $this->container->get('request_stack')->getCurrentRequest();
@@ -148,10 +155,10 @@ class CiudadController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('backend_ciudad_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('backend_usuario_edit', array('id' => $id)));
         }
 
-        return $this->render('BackendBundle:city:edit.html.twig', array(
+        return $this->render('BackendBundle:user:edit.html.twig', array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
@@ -159,7 +166,7 @@ class CiudadController extends Controller
     }
 
     /**
-     * Deletes a city entity.
+     * Deletes a user entity.
      *
      */
     public function deleteAction($id)
@@ -171,17 +178,17 @@ class CiudadController extends Controller
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('CiudadBundle:city')->find($id);
+            $entity = $em->getRepository('UsuarioBundle:user')->find($id);
 
             if (!$entity) {
-                throw $this->createNotFoundException('No se ha encontrado la city solicitada');
+                throw $this->createNotFoundException('No se ha encontrado el user solicitado');
             }
 
             $em->remove($entity);
             $em->flush();
         }
 
-        return $this->redirect($this->generateUrl('backend_ciudad'));
+        return $this->redirect($this->generateUrl('backend_usuario'));
     }
 
     private function createDeleteForm($id)

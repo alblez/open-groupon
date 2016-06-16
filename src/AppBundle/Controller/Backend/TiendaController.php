@@ -8,86 +8,81 @@
  * con toda la información sobre el copyright y la licencia.
  */
 
-namespace Cupon\BackendBundle\Controller;
+namespace AppBundle\Controller\Backend;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Cupon\UsuarioBundle\Entity\user;
-use Cupon\BackendBundle\Form\UsuarioType;
+use Cupon\TiendaBundle\Entity\store;
+use AppBundle\Form\Backend\TiendaType;
 
 /**
- * user controller.
+ * store controller.
  *
  */
-class UsuarioController extends Controller
+class TiendaController extends Controller
 {
     /**
-     * Lists all user entities.
+     * Lists all store entities.
      *
      */
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
-        $paginador = $this->get('ideup.simple_paginator');
 
         $slug = $this->container->get('request_stack')->getCurrentRequest()->getSession()->get('city');
+        $entities = $em->getRepository('CiudadBundle:city')->findTodasLasTiendas($slug);
 
-        $entities  = $paginador->paginate(
-            $em->getRepository('CiudadBundle:city')->queryTodosLosUsuarios($slug)
-        )->getResult();
-
-        return $this->render('BackendBundle:user:index.html.twig', array(
-            'entities'  => $entities,
-            'paginador' => $paginador
+        return $this->render('BackendBundle:store:index.html.twig', array(
+            'entities' => $entities
         ));
     }
 
     /**
-     * Finds and displays a user entity.
+     * Finds and displays a store entity.
      *
      */
     public function showAction($id)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('UsuarioBundle:user')->find($id);
+        $entity = $em->getRepository('TiendaBundle:store')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('No se ha encontrado el user solicitado');
+            throw $this->createNotFoundException('No se ha encontrado la store solicitada');
         }
 
         $deleteForm = $this->createDeleteForm($id);
 
-        return $this->render('BackendBundle:user:show.html.twig', array(
+        return $this->render('BackendBundle:store:show.html.twig', array(
             'entity'      => $entity,
             'delete_form' => $deleteForm->createView(),
         ));
     }
 
     /**
-     * Displays a form to create a new user entity.
+     * Displays a form to create a new store entity.
      *
      */
     public function newAction()
     {
-        $entity = new user();
-        $form   = $this->createForm(new UsuarioType(), $entity);
+        $entity = new store();
+        $form   = $this->createForm(new TiendaType(), $entity);
 
-        return $this->render('BackendBundle:user:new.html.twig', array(
+        return $this->render('BackendBundle:store:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView()
         ));
     }
 
     /**
-     * Creates a new user entity.
+     * Creates a new store entity.
      *
      */
     public function createAction()
     {
-        $entity  = new user();
+        $entity  = new store();
         $request = $this->container->get('request_stack')->getCurrentRequest();
-        $form    = $this->createForm(new UsuarioType(), $entity);
+        $form    = $this->createForm(new TiendaType(), $entity);
 
         $form->handleRequest($request);
 
@@ -96,34 +91,34 @@ class UsuarioController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('backend_usuario_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('backend_tienda_show', array('id' => $entity->getId())));
 
         }
 
-        return $this->render('BackendBundle:user:new.html.twig', array(
+        return $this->render('BackendBundle:store:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView()
         ));
     }
 
     /**
-     * Displays a form to edit an existing user entity.
+     * Displays a form to edit an existing store entity.
      *
      */
     public function editAction($id)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('UsuarioBundle:user')->find($id);
+        $entity = $em->getRepository('TiendaBundle:store')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('No se ha encontrado el user solicitado');
+            throw $this->createNotFoundException('No se ha encontrado la store solicitada');
         }
 
-        $editForm = $this->createForm(new UsuarioType(), $entity);
+        $editForm = $this->createForm(new TiendaType(), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
-        return $this->render('BackendBundle:user:edit.html.twig', array(
+        return $this->render('BackendBundle:store:edit.html.twig', array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
@@ -131,20 +126,20 @@ class UsuarioController extends Controller
     }
 
     /**
-     * Edits an existing user entity.
+     * Edits an existing store entity.
      *
      */
     public function updateAction($id)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('UsuarioBundle:user')->find($id);
+        $entity = $em->getRepository('TiendaBundle:store')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('No se ha encontrado el user solicitado');
+            throw $this->createNotFoundException('No se ha encontrado la store solicitada');
         }
 
-        $editForm   = $this->createForm(new UsuarioType(), $entity);
+        $editForm   = $this->createForm(new TiendaType(), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
         $request = $this->container->get('request_stack')->getCurrentRequest();
@@ -155,10 +150,10 @@ class UsuarioController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('backend_usuario_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('backend_tienda_edit', array('id' => $id)));
         }
 
-        return $this->render('BackendBundle:user:edit.html.twig', array(
+        return $this->render('BackendBundle:store:edit.html.twig', array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
@@ -166,7 +161,7 @@ class UsuarioController extends Controller
     }
 
     /**
-     * Deletes a user entity.
+     * Deletes a store entity.
      *
      */
     public function deleteAction($id)
@@ -178,17 +173,17 @@ class UsuarioController extends Controller
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('UsuarioBundle:user')->find($id);
+            $entity = $em->getRepository('TiendaBundle:store')->find($id);
 
             if (!$entity) {
-                throw $this->createNotFoundException('No se ha encontrado el user solicitado');
+                throw $this->createNotFoundException('No se ha encontrado la store solicitada');
             }
 
             $em->remove($entity);
             $em->flush();
         }
 
-        return $this->redirect($this->generateUrl('backend_usuario'));
+        return $this->redirect($this->generateUrl('backend_tienda'));
     }
 
     private function createDeleteForm($id)

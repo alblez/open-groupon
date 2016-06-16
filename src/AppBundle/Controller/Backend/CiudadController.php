@@ -8,81 +8,80 @@
  * con toda la información sobre el copyright y la licencia.
  */
 
-namespace Cupon\BackendBundle\Controller;
+namespace AppBundle\Controller\Backend;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Cupon\TiendaBundle\Entity\store;
-use Cupon\BackendBundle\Form\TiendaType;
+use Cupon\CiudadBundle\Entity\city;
+use AppBundle\Form\Backend\CiudadType;
 
 /**
- * store controller.
+ * city controller.
  *
  */
-class TiendaController extends Controller
+class CiudadController extends Controller
 {
     /**
-     * Lists all store entities.
+     * Lists all city entities.
      *
      */
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
 
-        $slug = $this->container->get('request_stack')->getCurrentRequest()->getSession()->get('city');
-        $entities = $em->getRepository('CiudadBundle:city')->findTodasLasTiendas($slug);
+        $entities = $em->getRepository('CiudadBundle:city')->findAll();
 
-        return $this->render('BackendBundle:store:index.html.twig', array(
+        return $this->render('BackendBundle:city:index.html.twig', array(
             'entities' => $entities
         ));
     }
 
     /**
-     * Finds and displays a store entity.
+     * Finds and displays a city entity.
      *
      */
     public function showAction($id)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('TiendaBundle:store')->find($id);
+        $entity = $em->getRepository('CiudadBundle:city')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('No se ha encontrado la store solicitada');
+            throw $this->createNotFoundException('No se ha encontrado la city solicitada');
         }
 
         $deleteForm = $this->createDeleteForm($id);
 
-        return $this->render('BackendBundle:store:show.html.twig', array(
+        return $this->render('BackendBundle:city:show.html.twig', array(
             'entity'      => $entity,
             'delete_form' => $deleteForm->createView(),
         ));
     }
 
     /**
-     * Displays a form to create a new store entity.
+     * Displays a form to create a new city entity.
      *
      */
     public function newAction()
     {
-        $entity = new store();
-        $form   = $this->createForm(new TiendaType(), $entity);
+        $entity = new city();
+        $form   = $this->createForm(new CiudadType(), $entity);
 
-        return $this->render('BackendBundle:store:new.html.twig', array(
+        return $this->render('BackendBundle:city:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView()
         ));
     }
 
     /**
-     * Creates a new store entity.
+     * Creates a new city entity.
      *
      */
     public function createAction()
     {
-        $entity  = new store();
+        $entity  = new city();
         $request = $this->container->get('request_stack')->getCurrentRequest();
-        $form    = $this->createForm(new TiendaType(), $entity);
+        $form    = $this->createForm(new CiudadType(), $entity);
 
         $form->handleRequest($request);
 
@@ -91,34 +90,33 @@ class TiendaController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('backend_tienda_show', array('id' => $entity->getId())));
-
+            return $this->redirect($this->generateUrl('backend_ciudad_show', array('id' => $entity->getId())));
         }
 
-        return $this->render('BackendBundle:store:new.html.twig', array(
+        return $this->render('BackendBundle:city:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView()
         ));
     }
 
     /**
-     * Displays a form to edit an existing store entity.
+     * Displays a form to edit an existing city entity.
      *
      */
     public function editAction($id)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('TiendaBundle:store')->find($id);
+        $entity = $em->getRepository('CiudadBundle:city')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('No se ha encontrado la store solicitada');
+            throw $this->createNotFoundException('No se ha encontrado la city solicitada');
         }
 
-        $editForm = $this->createForm(new TiendaType(), $entity);
+        $editForm = $this->createForm(new CiudadType(), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
-        return $this->render('BackendBundle:store:edit.html.twig', array(
+        return $this->render('BackendBundle:city:edit.html.twig', array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
@@ -126,20 +124,20 @@ class TiendaController extends Controller
     }
 
     /**
-     * Edits an existing store entity.
+     * Edits an existing city entity.
      *
      */
     public function updateAction($id)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('TiendaBundle:store')->find($id);
+        $entity = $em->getRepository('CiudadBundle:city')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('No se ha encontrado la store solicitada');
+            throw $this->createNotFoundException('No se ha encontrado la city solicitada');
         }
 
-        $editForm   = $this->createForm(new TiendaType(), $entity);
+        $editForm   = $this->createForm(new CiudadType(), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
         $request = $this->container->get('request_stack')->getCurrentRequest();
@@ -150,10 +148,10 @@ class TiendaController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('backend_tienda_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('backend_ciudad_edit', array('id' => $id)));
         }
 
-        return $this->render('BackendBundle:store:edit.html.twig', array(
+        return $this->render('BackendBundle:city:edit.html.twig', array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
@@ -161,7 +159,7 @@ class TiendaController extends Controller
     }
 
     /**
-     * Deletes a store entity.
+     * Deletes a city entity.
      *
      */
     public function deleteAction($id)
@@ -173,17 +171,17 @@ class TiendaController extends Controller
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('TiendaBundle:store')->find($id);
+            $entity = $em->getRepository('CiudadBundle:city')->find($id);
 
             if (!$entity) {
-                throw $this->createNotFoundException('No se ha encontrado la store solicitada');
+                throw $this->createNotFoundException('No se ha encontrado la city solicitada');
             }
 
             $em->remove($entity);
             $em->flush();
         }
 
-        return $this->redirect($this->generateUrl('backend_tienda'));
+        return $this->redirect($this->generateUrl('backend_ciudad'));
     }
 
     private function createDeleteForm($id)
