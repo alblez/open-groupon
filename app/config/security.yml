@@ -1,12 +1,12 @@
 security:
     firewalls:
-        # Firewall de la parte de administración o backend
+        # Backend firewall (admin area)
         backend:
             pattern:        ^/admin
             provider:       administradores
             http_basic:     ~
 
-        # Firewall de la extranet a la que se conectan las tiendas
+        # Extranet firewall (store owners)
         extranet:
             pattern:        ^/extranet
             provider:       tiendas
@@ -18,7 +18,7 @@ security:
                 path:       /extranet/logout
                 target:     /extranet
 
-        # Firewall global utilizado en la parte pública o frontend
+        # Frontend firewall (public area)
         frontend:
             pattern:        ^/*
             provider:       usuarios
@@ -30,7 +30,7 @@ security:
                 path:       usuario_logout
             remember_me:
                 secret:     cupon1234
-                lifetime:   604800  # 604.800 = 3.600 * 24 * 7 = 1 semana
+                lifetime:   604800  # 1 week
 
     access_control:
         - { path: ^/(es|en)/usuario/(login|registro), roles: IS_AUTHENTICATED_ANONYMOUSLY }
@@ -45,20 +45,20 @@ security:
         Symfony\Component\Security\Core\User\User: { algorithm: bcrypt, cost: 8 }
 
     providers:
-        # Usuarios del frontend
+        # Frontend users
         usuarios:
             entity: { class: AppBundle\Entity\Usuario, property: email }
-        # Usuarios de la extranet
+        # Extranet users (stores)
         tiendas:
             entity: { class: AppBundle\Entity\Tienda, property: login }
-        # Usuarios del backend
+        # Backend admin users
         administradores:
             memory:
                 users:
-                    # usuario = admin, contraseña = 1234
+                    # admin / 1234
                     admin: { password: '$2y$13$w700yeSs8FxMLrEXaCATgehosZf9vx09RbwKddswl9LN/22dKL2qO', roles: ROLE_ADMIN }
 
     role_hierarchy:
         ROLE_ADMIN: [ROLE_TIENDA, ROLE_USUARIO, ROLE_ALLOWED_TO_SWITCH]
 
-# Access control handled by Symfony firewall
+
