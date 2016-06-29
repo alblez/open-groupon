@@ -1,6 +1,11 @@
 # Configuración global de los servicios de la aplicación
 # Este archivo se importa desde app/config/config.yml
 services:
+    _defaults:
+        autowire: false
+        autoconfigure: false
+        public: true
+
     app.manager.usuario_manager:
         class: AppBundle\Manager\UsuarioManager
         arguments: ["@doctrine.orm.entity_manager", "@security.encoder_factory", "@security.token_storage"]
