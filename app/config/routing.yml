@@ -37,3 +37,8 @@ _portada:
           _controller: FrameworkBundle:Redirect:redirect
           route: portada
           ciudad: '%app.ciudad_por_defecto%'
+
+_api:
+    resource: '@AppBundle/Controller/ApiController.php'
+    type:     annotation
+    prefix:   /api
