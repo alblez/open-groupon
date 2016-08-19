@@ -125,6 +125,20 @@ Access Points
   * Production: `http://localhost:8000/app.php/backend`
   * Credentials: `admin` / `1234`
 
+## Docker Setup
+
+The quickest way to get started is with Docker:
+
+```bash
+$ docker-compose up -d
+$ docker-compose exec web composer install
+$ docker-compose exec web php app/console doctrine:database:create
+$ docker-compose exec web php app/console doctrine:schema:create
+$ docker-compose exec web php app/console doctrine:fixtures:load
+```
+
+Then open `http://localhost:8080` in your browser.
+
 ## Requirements
 
 - PHP >= 5.3.3
