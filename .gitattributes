@@ -1,0 +1,23 @@
+# Auto detect text files and perform LF normalization
+* text=auto
+
+# PHP files
+*.php text diff=php
+
+# Templates
+*.twig text
+
+# Config
+*.yml text
+*.xml text
+*.json text
+
+# Shell scripts
+*.sh text eol=lf
+
+# Exclude from export
+/.travis.yml export-ignore
+/phpunit.xml.dist export-ignore
+/tests export-ignore
+/Dockerfile export-ignore
+/docker-compose.yml export-ignore
