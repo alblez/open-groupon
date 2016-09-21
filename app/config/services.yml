@@ -39,3 +39,10 @@ services:
         class: Twig_Extensions_Extension_Intl
         tags:
             - { name: twig.extension }
+
+    app.login_form_authenticator:
+        class: AppBundle\Security\LoginFormAuthenticator
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@router'
+            - '@security.password_encoder'
