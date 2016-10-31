@@ -11,7 +11,6 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\user;
-use AppBundle\Entity\sale;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -123,7 +122,7 @@ class UsuarioController extends Controller
      */
     public function perfilAction(Request $request)
     {
-        $user = $this->get('security.token_storage')->getToken()->getUser();
+        $user = $this->getUser();
         $form = $this->createForm('AppBundle\Form\UsuarioType', $user);
 
         $form->handleRequest($request);
@@ -151,7 +150,7 @@ class UsuarioController extends Controller
     public function comprasAction()
     {
         $em = $this->getDoctrine()->getManager();
-        $user = $this->get('security.token_storage')->getToken()->getUser();
+        $user = $this->getUser();
 
         $cercanas = $em->getRepository('AppBundle:city')->findCercanas(
             $user->getCiudad()->getId()
