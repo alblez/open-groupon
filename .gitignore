@@ -20,3 +20,6 @@
 
 # Docker
 .docker/
+
+# Dependencies
+composer.lock
